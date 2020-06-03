@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "bugzilla-dishboard": {
+    "bugboard": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/bugzilla-dishboard",
+            "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -70,18 +70,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "bugzilla-dishboard:build"
+            "browserTarget": "bugboard:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "bugzilla-dishboard:build:production"
+              "browserTarget": "bugboard:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "bugzilla-dishboard:build"
+            "browserTarget": "bugboard:build"
           }
         },
         "test": {
@@ -120,16 +120,16 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "bugzilla-dishboard:serve"
+            "devServerTarget": "bugboard:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "bugzilla-dishboard:serve:production"
+              "devServerTarget": "bugboard:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "bugzilla-dishboard"
+  "defaultProject": "bugboard"
 }
