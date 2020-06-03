@@ -1,0 +1,43 @@
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import {HttpClientModule} from '@angular/common/http';
+
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LoginPageComponent } from './login-page/login-page.component';
+import { MainPageComponent } from './main-page/main-page.component';
+import { AuthGuardService } from './guards/auth-guard.service';
+import { HttpService } from './services/http-request.service';
+import { BugzillaService } from './services/bugzilla.service';
+import { MaterialModule } from './material/material.module';
+import { SearchPageComponent } from './search-page/search-page.component';
+import {ScrollingModule} from '@angular/cdk/scrolling';
+import { BugDetailsComponent } from './bug-details/bug-details.component';
+import { BugDetailService } from './bug-details/bug-detail.service';
+import 'rxjs/Rx';
+
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    LoginPageComponent,
+    MainPageComponent,
+    SearchPageComponent,
+    BugDetailsComponent
+  ],
+  imports: [
+    HttpClientModule,
+    MaterialModule,
+    BrowserModule,
+    AppRoutingModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    BrowserAnimationsModule,
+    ScrollingModule,
+  ],
+  providers: [AuthGuardService, HttpService, BugzillaService, BugDetailService],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }

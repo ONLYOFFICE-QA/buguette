@@ -1,0 +1,80 @@
+<div class="search-space">
+  <div class="actions-for-filter">
+    <div class="filter-block">
+      <div class="product-select-block">
+        <mat-card class="filter-item" (click)="product.active = !product.active" *ngFor="let product of products"
+          [ngClass]="{'mat-elevation-z21': product.active, 'mat-elevation-z0': !product.active}"
+          [ngStyle]="{'background-color': product.active?product.color:'#e2e2e2'}">
+          {{product.name}}
+        </mat-card>
+      </div>
+      <div class="search-field-block">
+        <mat-form-field appearance="fill" class="search-field">
+          <mat-label>Filter</mat-label>
+          <input matInput type="search" [(ngModel)]="value" autocomplete="off">
+          <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+    </div>
+    <mat-divider class="filter-block-divider" [vertical]="true"></mat-divider>
+    <div class="filter-block">
+      <div class="statuses-block">
+        <mat-card class="filter-item" (click)="status.active = !status.active" *ngFor="let status of statuses"
+          [ngClass]="{'mat-elevation-z10 active': status.active, 'mat-elevation-z0': !status.active}"
+          [ngStyle]="{'background-color': status.active?'white':'#e2e2e2'}">
+          {{status.name}}
+        </mat-card>
+      </div>
+      <div class="importence-block">
+          <mat-form-field>
+            <mat-label>Severity</mat-label>
+            <mat-select [formControl]="severityControl" multiple>
+              <mat-select-trigger>
+                {{severityControl.value ? severityControl.value[0]?.name : ''}}
+                <span *ngIf="severityControl.value?.length > 1">
+                  (+{{severityControl.value.length - 1}} {{severityControl.value?.length === 2 ? 'other' : 'others'}})
+                </span>
+              </mat-select-trigger>
+              <mat-option *ngFor="let severity of severities" [value]="severity">{{severity.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Priority</mat-label>
+            <mat-select [formControl]="priorityControl" multiple>
+              <mat-select-trigger>
+                {{priorityControl.value ? priorityControl.value[0]?.name : ''}}
+                <span *ngIf="priorityControl.value?.length > 1">
+                  (+{{priorityControl.value.length - 1}} {{priorityControl.value?.length === 2 ? 'other' : 'others'}})
+                </span>
+              </mat-select-trigger>
+              <mat-option *ngFor="let priority of priorities" [value]="priority">{{priority.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div class="actions-for-search">
+    <button (click)="search()" mat-fab color="primary" aria-label="Example icon button with a delete icon">
+      <mat-icon>search</mat-icon>
+    </button>
+  </div>
+</div>
+
+<div class="result-space">
+
+  <div class="result-list" *ngIf="(bugs$ | async) as bugs">
+    <mat-spinner *ngIf="loading" style="margin: auto;"></mat-spinner>
+    <mat-card *ngIf="bugs == []">Use search for load more bugs from Bugzilla</mat-card>
+
+    <cdk-virtual-scroll-viewport [itemSize]="50" class="result-list-view">
+      <mat-card (click)="get_details(bug)" [ngClass]="{'mat-elevation-z10': (bugDetail$ | async)?.id == bug.id}"
+
+        routerLinkActive="active" class="result-item" *cdkVirtualFor="let bug of bugs"><b>{{bug.id}}</b> {{bug.summary}}
+      </mat-card>
+    </cdk-virtual-scroll-viewport>
+  </div>
+  <router-outlet></router-outlet>
+</div>

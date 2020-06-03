@@ -1,0 +1,84 @@
+:host {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding-top: 1em;
+  overflow: hidden;
+}
+.product-select-block {
+  display: inline-block;
+}
+
+.filter-block-divider {
+  margin: 0 0.5em 0 0.5em;
+}
+
+.actions-for-search {
+  display: flex;
+  margin: auto;
+}
+
+.actions-for-filter {
+  display: flex;
+
+}
+
+.filter-item, .product-filter {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  margin-right: 3px;
+  cursor: pointer;
+  user-select: none;
+  display: inline-block;
+  margin: 0.2em;
+}
+
+.search-space {
+  margin: 0.5em;
+  margin-left: 10.5em;
+  margin: 0.5em;
+  margin-left: 10.5em;
+  display: flex;
+  flex-direction: row;
+}
+
+.search-field-block {
+  padding-top: 1em;
+  display: grid;
+}
+
+.result-space {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  overflow: hidden;
+}
+
+.result-list, .result {
+  display: flex;
+  flex: 1
+}
+
+.result-list {
+  flex-direction: column;
+  overflow: auto;
+  padding-left: 10em;
+}
+
+.result {
+  background-color: grey;
+}
+.result-list-view {
+  flex: 1;
+}
+
+.result-item {
+  margin: 0.5em;
+  cursor: pointer;
+}
+
+.active {
+
+
+
+}
