@@ -1,6 +1,6 @@
 {
-  "name": "BugBoard",
-  "short_name": "BugBoard",
+  "name": "Buguette",
+  "short_name": "buguette",
   "theme_color": "#1976d2",
   "background_color": "#fafafa",
   "display": "standalone",

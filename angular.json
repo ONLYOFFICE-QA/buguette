@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "bugboard": {
+    "buguette": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -70,18 +70,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "bugboard:build"
+            "browserTarget": "buguette:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "bugboard:build:production"
+              "browserTarget": "buguette:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "bugboard:build"
+            "browserTarget": "buguette:build"
           }
         },
         "test": {
@@ -120,16 +120,16 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "bugboard:serve"
+            "devServerTarget": "buguette:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "bugboard:serve:production"
+              "devServerTarget": "buguette:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "bugboard"
+  "defaultProject": "buguette"
 }

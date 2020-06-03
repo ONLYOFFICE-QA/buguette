@@ -1,3 +1,6 @@
 
  /usr/local/bin/ng e2e
- 
+ docker build . --tag app
+docker run -itd -p 80:80 app
+
+
