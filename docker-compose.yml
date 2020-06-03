@@ -1,0 +1,16 @@
+version: '3'
+services:
+  buguette-server:
+    image: nginx:1.16.0
+    ports:
+      - "80:80"
+    tty: true
+    volumes:
+      - ./buguette.conf/:/etc/nginx/conf.d/default.conf
+      - ./dist/:/buguette/dist/
+  buguette-build:
+    build: .
+    volumes:
+      - ./dist/:/buguette/dist/
+    command: ["npm", "run", "build"]
+    tty: true
