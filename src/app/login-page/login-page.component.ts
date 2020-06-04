@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BugzillaService, UserData, userParams } from '../services/bugzilla.service';
 
 @Component({
@@ -15,14 +15,14 @@ export class LoginPageComponent implements OnInit {
   public tokenInvalid: boolean;
   public loading = false;
   private formSubmitAttempt: boolean;
-
   constructor(
     private fb: FormBuilder,
     private router: Router,
+    private activatedRoute: ActivatedRoute,
     private bugzilla: BugzillaService,
   ) { }
 
-  async ngOnInit() {
+  ngOnInit() {
     this.form = this.fb.group({
       username: ['', Validators.email],
       password: ['', Validators.required]
@@ -34,14 +34,17 @@ export class LoginPageComponent implements OnInit {
     });
   }
 
-  async onSubmit() {
+  onSubmit() {
     this.loginInvalid = false;
     this.formSubmitAttempt = false;
     if (this.form.valid) {
       this.loading = true;
       const username = this.form.get('username').value;
       const password = this.form.get('password').value;
-      this.bugzilla.login(username, password).subscribe((res: UserData) => this.login(res), err => this.login_invalid(err));
+      this.bugzilla.login(username, password).subscribe((res: UserData) => {
+        this.login(res);
+        this.bugzilla.get_user({'names': username}).subscribe();
+      }, err => this.login_invalid(err));
     } else {
       this.formSubmitAttempt = true;
     }
