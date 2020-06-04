@@ -8,10 +8,20 @@ export class HttpService {
 
   constructor(private http: HttpClient) {}
 
-  getRequest(path: string, params: HttpParams): Observable<any> {
+  getRequest(path: string, params?: HttpParams): Observable<any> {
     if (localStorage.getItem('user_data')) {
-      params = params.append('token', JSON.parse(localStorage.getItem('user_data')).token);
+      params = this.auth_data(params);
     }
     return this.http.get('https://bugzilla.onlyoffice.com/rest' + path, { params: params });
+  }
+
+  auth_data(params: HttpParams): HttpParams {
+    const userdata = JSON.parse(localStorage.getItem('user_data'));
+    if (userdata.token) {
+      params = params.append('token', JSON.parse(localStorage.getItem('user_data')).token);
+    } else if (userdata.api_key) {
+      params = params.append('api_key', JSON.parse(localStorage.getItem('user_data')).api_key);
+    }
+    return params;
   }
 }
