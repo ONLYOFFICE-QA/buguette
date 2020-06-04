@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { BugzillaService, UserData } from '../services/bugzilla.service';
+import { Router } from '@angular/router';
+import { BugzillaService, UserData, userParams } from '../services/bugzilla.service';
 
 @Component({
   selector: 'app-login-page',
@@ -10,7 +10,7 @@ import { BugzillaService, UserData } from '../services/bugzilla.service';
 })
 export class LoginPageComponent implements OnInit {
   form: FormGroup;
-  formToken: FormGroup;
+  formKey: FormGroup;
   public loginInvalid: boolean;
   public tokenInvalid: boolean;
   public loading = false;
@@ -20,7 +20,7 @@ export class LoginPageComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private bugzilla: BugzillaService,
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.form = this.fb.group({
@@ -28,9 +28,9 @@ export class LoginPageComponent implements OnInit {
       password: ['', Validators.required]
     });
 
-    this.formToken = this.fb.group({
+    this.formKey = this.fb.group({
       username: ['', Validators.email],
-      token: [''],
+      key: [''],
     });
   }
 
@@ -48,15 +48,16 @@ export class LoginPageComponent implements OnInit {
   }
 
   onSubmitToken() {
-    if (this.formToken.valid) {
+    if (this.formKey.valid) {
       this.loading = true;
-      const username = this.formToken.get('username').value;
-      const apiKey = this.formToken.get('token').value;
-      this.bugzilla.get_user(username, apiKey).subscribe(res => {
-        this.api_token_authorize(username, apiKey);
+      const params: userParams = {};
+      params['names'] = this.formKey.get('username').value
+      params['apiKey'] = this.formKey.get('key').value
+      this.bugzilla.get_user(params).subscribe(res => {
+        this.api_token_authorize(params.names, params.apiKey);
       }, err => {
         this.token_invalid(err);
-        });
+      });
     } else {
       this.formSubmitAttempt = true;
     }
@@ -76,13 +77,13 @@ export class LoginPageComponent implements OnInit {
 
   login(res: UserData) {
     this.loading = false;
-    localStorage.setItem('user_data', JSON.stringify({id: res.id, token: res.token}));
+    localStorage.setItem('user_data', JSON.stringify({ id: res.id, token: res.token }));
     this.router.navigate(['/']);
   }
 
   api_token_authorize(username: string, apiKey: string) {
     this.loading = false;
-    localStorage.setItem('user_data', JSON.stringify({api_key: apiKey, username: username}));
+    localStorage.setItem('user_data', JSON.stringify({ api_key: apiKey, username: username }));
     this.router.navigate(['/']);
   }
 }

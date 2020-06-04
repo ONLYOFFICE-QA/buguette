@@ -10,12 +10,12 @@ export class HttpService {
 
   getRequest(path: string, params?: HttpParams): Observable<any> {
     if (localStorage.getItem('user_data')) {
-      params = this.auth_data(params);
+      params = this.user_data(params);
     }
     return this.http.get('https://bugzilla.onlyoffice.com/rest' + path, { params: params });
   }
 
-  auth_data(params: HttpParams): HttpParams {
+  user_data(params: HttpParams): HttpParams {
     const userdata = JSON.parse(localStorage.getItem('user_data'));
     if (userdata.token) {
       params = params.append('token', JSON.parse(localStorage.getItem('user_data')).token);

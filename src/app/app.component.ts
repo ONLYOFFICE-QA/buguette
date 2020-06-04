@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { BugzillaService } from './services/bugzilla.service';
+import { AuthGuardService } from './guards/auth-guard.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +9,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'Buguette';
+  constructor(private bugzilla: BugzillaService, public auth: AuthGuardService) {}
+
+  logout() {
+    this.bugzilla.logout();
+  }
 }

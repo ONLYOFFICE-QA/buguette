@@ -11,4 +11,8 @@ export class AuthGuardService implements CanActivate {
     }
     return true;
   }
+
+  is_authorized(): boolean {
+    return 'user_data' in localStorage;
+  }
 }

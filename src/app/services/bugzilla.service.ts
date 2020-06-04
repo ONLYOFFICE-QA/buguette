@@ -4,10 +4,12 @@ import { HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Observable, BehaviorSubject, of, ReplaySubject } from 'rxjs';
 import { Bug, BugResponceData } from '../models/bug';
 import { User, UserResponceData } from '../models/user';
+import { ActivatedRoute, Router } from '@angular/router';
 
 export interface UserData {
   id: number,
   token: string
+  api_key?: string
 }
 
 export interface SearchParams {
@@ -15,6 +17,13 @@ export interface SearchParams {
   statuses?: Array<string>,
   severities?: Array<string>,
   priorities?: Array<string>,
+}
+
+export interface userParams {
+  id?: string;
+  names?: string;
+  apiKey?: string;
+  email?: string;
 }
 
 export interface Severity {
@@ -76,7 +85,7 @@ export class BugzillaService {
                         { name: "P4", realName: "P4"},
                         { name: "P5", realName: "P5"}];
 
-  constructor(private httpService: HttpService) {
+  constructor(private httpService: HttpService, private router: Router) {
     this.products.forEach(product => {
       this.restructuredConstants.products[product.realName] = product;
     })
@@ -89,9 +98,18 @@ export class BugzillaService {
     return this.httpService.getRequest('/login', params);
   }
 
+  logout(): void {
+    const userdata = JSON.parse(localStorage.getItem('user_data'));
+    if (userdata?.token) {
+      let params = new HttpParams();
+      this.httpService.getRequest('/logout', params);
+    }
+    localStorage.removeItem('user_data');
+    this.router.navigate(['/login']);
+  }
+
   get_bugs(searchParams: SearchParams) {
     let params = new HttpParams();
-
 
     searchParams.products?.forEach((product: string) => {
       params = params.append('product', product);
@@ -129,10 +147,28 @@ export class BugzillaService {
     }))
   }
 
-  get_user(username: string, apiKey: string): Observable<any> {
+  get_user_by_api(username: string, apiKey: string): Observable<any> {
     let params = new HttpParams();
     params = params.append('api_key', apiKey);
     params = params.append('names', username);
+    return this.httpService.getRequest('/user', params).map(res => {
+      this.currentUser$.next(new User(res.users[0]));
+    })
+  }
+
+  get_user(userParams: userParams) {
+    let params = new HttpParams();
+    if (userParams.id) {
+      params = params.append('id', userParams.id);
+    }
+
+    if (userParams.names) {
+      params = params.append('names', userParams.names);
+    }
+
+    if (userParams.apiKey) {
+      params = params.append('api_key', userParams.apiKey);
+    }
     return this.httpService.getRequest('/user', params).map(res => {
       this.currentUser$.next(new User(res.users[0]));
     })

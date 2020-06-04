@@ -24,10 +24,10 @@
       </mat-card-content>
     </mat-card>
   </mat-tab>
-  <mat-tab label="API Token">
+  <mat-tab label="API Key">
     <mat-card>
       <mat-card-content>
-        <form [formGroup]="formToken" (ngSubmit)="onSubmitToken()">
+        <form [formGroup]="formKey" (ngSubmit)="onSubmitToken()">
           <h2>Sing in to Buguette</h2>
           <mat-error *ngIf="tokenInvalid">
             Api token is not found
@@ -36,9 +36,9 @@
             <input matInput placeholder="Email" formControlName="username" required>
           </mat-form-field>
           <mat-form-field class="full-width-input">
-            <input matInput placeholder="API Token" formControlName="token" required>
+            <input matInput placeholder="API key" formControlName="key" required>
             <mat-error>
-              Please provide a valid token
+              Please provide a valid key
             </mat-error>
           </mat-form-field>
           <button mat-raised-button color="primary">Sing in</button>
