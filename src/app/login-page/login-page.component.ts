@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BugzillaService, UserData, userParams } from '../services/bugzilla.service';
+import { User } from '../models/user';
 
 @Component({
   selector: 'app-login-page',
@@ -43,6 +44,7 @@ export class LoginPageComponent implements OnInit {
       const password = this.form.get('password').value;
       this.bugzilla.login(username, password).subscribe((res: UserData) => {
         this.login(res);
+        this.bugzilla.currentUser$.next(new User({'name': username, 'email': username}));
         this.bugzilla.get_user({'names': username}).subscribe();
       }, err => this.login_invalid(err));
     } else {

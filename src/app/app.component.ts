@@ -9,7 +9,7 @@ import { AuthGuardService } from './guards/auth-guard.service';
 })
 export class AppComponent {
   title = 'Buguette';
-  constructor(private bugzilla: BugzillaService, public auth: AuthGuardService) {}
+  constructor(public bugzilla: BugzillaService, public auth: AuthGuardService) {}
 
   logout() {
     this.bugzilla.logout();

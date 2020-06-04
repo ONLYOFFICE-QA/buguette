@@ -1,8 +1,8 @@
 
 export interface UserResponceData {
-  id: string;
+  id?: string;
   name: string;
-  real_name:string;
+  real_name?:string;
   email: string;
 }
 

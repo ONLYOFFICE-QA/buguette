@@ -105,6 +105,7 @@ export class BugzillaService {
       this.httpService.getRequest('/logout', params);
     }
     localStorage.removeItem('user_data');
+    this.currentUser$.next(undefined);
     this.router.navigate(['/login']);
   }
 
@@ -159,17 +160,15 @@ export class BugzillaService {
   get_user(userParams: userParams) {
     let params = new HttpParams();
     if (userParams.id) {
-      params = params.append('id', userParams.id);
+      params = params.append('ids', userParams.id);
     }
 
     if (userParams.names) {
       params = params.append('names', userParams.names);
     }
 
-    if (userParams.apiKey) {
-      params = params.append('api_key', userParams.apiKey);
-    }
     return this.httpService.getRequest('/user', params).map(res => {
+      console.log(res.users[0]);
       this.currentUser$.next(new User(res.users[0]));
     })
   }
