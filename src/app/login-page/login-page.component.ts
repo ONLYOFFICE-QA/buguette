@@ -10,7 +10,9 @@ import { BugzillaService, UserData } from '../services/bugzilla.service';
 })
 export class LoginPageComponent implements OnInit {
   form: FormGroup;
+  formToken: FormGroup;
   public loginInvalid: boolean;
+  public tokenInvalid: boolean;
   public loading = false;
   private formSubmitAttempt: boolean;
 
@@ -24,6 +26,11 @@ export class LoginPageComponent implements OnInit {
     this.form = this.fb.group({
       username: ['', Validators.email],
       password: ['', Validators.required]
+    });
+
+    this.formToken = this.fb.group({
+      username: ['', Validators.email],
+      token: [''],
     });
   }
 
@@ -40,15 +47,42 @@ export class LoginPageComponent implements OnInit {
     }
   }
 
+  onSubmitToken() {
+    if (this.formToken.valid) {
+      this.loading = true;
+      const username = this.formToken.get('username').value;
+      const apiKey = this.formToken.get('token').value;
+      this.bugzilla.get_user(username, apiKey).subscribe(res => {
+        this.api_token_authorize(username, apiKey);
+      }, err => {
+        this.token_invalid(err);
+        });
+    } else {
+      this.formSubmitAttempt = true;
+    }
+  }
+
   login_invalid(err) {
     this.loading = false;
     this.loginInvalid = true;
     console.error(err);
   }
 
+  token_invalid(err) {
+    this.loading = false;
+    this.tokenInvalid = true;
+    console.error(err);
+  }
+
   login(res: UserData) {
     this.loading = false;
     localStorage.setItem('user_data', JSON.stringify({id: res.id, token: res.token}));
+    this.router.navigate(['/']);
+  }
+
+  api_token_authorize(username: string, apiKey: string) {
+    this.loading = false;
+    localStorage.setItem('user_data', JSON.stringify({api_key: apiKey, username: username}));
     this.router.navigate(['/']);
   }
 }

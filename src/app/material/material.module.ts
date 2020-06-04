@@ -18,6 +18,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 // import { FlexLayoutModule } from "@angular/flex-layout/flexbox";
 import {ScrollingModule} from '@angular/cdk/scrolling';
+import {MatTabsModule} from '@angular/material/tabs';
+
 
 @NgModule({
   declarations: [],
@@ -29,6 +31,7 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
     ReactiveFormsModule,
     BrowserAnimationsModule,
     MatToolbarModule,
+    MatTabsModule,
     MatInputModule,
     MatCardModule,
     MatMenuModule,
@@ -49,7 +52,7 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    MatToolbarModule,
+    MatTabsModule,
     MatInputModule,
     MatCardModule,
     MatMenuModule,

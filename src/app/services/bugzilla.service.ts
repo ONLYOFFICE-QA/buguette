@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from './http-request.service';
 import { HttpErrorResponse, HttpParams } from '@angular/common/http';
-import { Observable, BehaviorSubject, of } from 'rxjs';
+import { Observable, BehaviorSubject, of, ReplaySubject } from 'rxjs';
 import { Bug, BugResponceData } from '../models/bug';
+import { User, UserResponceData } from '../models/user';
 
 export interface UserData {
   id: number,
@@ -49,6 +50,7 @@ export class BugzillaService {
   restructuredConstants = {products: {}};
 
   bugs$: BehaviorSubject<Bug[]> = new BehaviorSubject([]);
+  currentUser$: ReplaySubject<User> = new ReplaySubject(1);
   products: Product[] = [{ name: "Documents", color: "#cbcbff", active: false, realName: "Office Canvas Document Editor" },
                          { name: "Spreadsheets", color: "#c5ffc5", active: false, realName: "Office Canvas Spreadsheet Editor" },
                          { name: "Presentations", color: "#ffa7a7", active: false, realName: "Office Canvas Presentation Editor" },
@@ -125,6 +127,15 @@ export class BugzillaService {
       'summary': id + 'Conversion failed при попытки открытия пределенный файлов xps',
       'id': id + '', 'status': 'New', 'product': 'DocumentServer Installation', 'importance': 'P1', 'assain': 'Rotatyy Dmitriy'
     }))
+  }
+
+  get_user(username: string, apiKey: string): Observable<any> {
+    let params = new HttpParams();
+    params = params.append('api_key', apiKey);
+    params = params.append('names', username);
+    return this.httpService.getRequest('/user', params).map(res => {
+      this.currentUser$.next(new User(res.users[0]));
+    })
   }
 
   handleError(error: any): string {
