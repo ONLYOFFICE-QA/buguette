@@ -167,6 +167,10 @@ export class BugzillaService {
       params = params.append('names', userParams.names);
     }
 
+    if (userParams.apiKey) {
+      params = params.append('api_key', userParams.apiKey);
+    }
+
     return this.httpService.getRequest('/user', params).map(res => {
       console.log(res.users[0]);
       this.currentUser$.next(new User(res.users[0]));

@@ -18,7 +18,7 @@ export class MainPageComponent implements OnInit {
       if (userdata.id) {
         return this.bugzilla.get_user({id: userdata.id});
       } else {
-        return this.bugzilla.get_user({names: userdata.names});
+        return this.bugzilla.get_user({names: userdata.username});
       }
     }).subscribe();
   }
