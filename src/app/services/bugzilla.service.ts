@@ -74,7 +74,7 @@ export class BugzillaService {
                             { name: "Trivial", realName: "trivial" },
                             { name: "Enhancement", realName: "enhancement" }];
 
-  statuses: Status[] = [{ name: "New/Assain", realName: "NEW", addition: ["ASSIGNED"], active: false},
+  statuses: Status[] = [{ name: "New/Assigned", realName: "NEW", addition: ["ASSIGNED"], active: false},
                         { name: "Fixed", realName: "FIXED", active: false },
                         { name: "Verified", realName: "VERIFIED", active: false },
                         { name: "Reopen", realName: "REOPENED", active: false }];
@@ -130,6 +130,7 @@ export class BugzillaService {
     });
 
     params = params.append('include_fields', 'summary');
+    params = params.append('include_fields', 'product');
     params = params.append('include_fields', 'id');
 
      this.httpService.getRequest('/bug', params).subscribe((response: {bugs: BugResponceData[]}) => {
