@@ -69,9 +69,11 @@
     <mat-spinner *ngIf="loading" style="margin: auto;"></mat-spinner>
     <mat-card *ngIf="bugs == []">Use search for load more bugs from Bugzilla</mat-card>
 
-    <cdk-virtual-scroll-viewport [itemSize]="50" class="result-list-view">
+    <cdk-virtual-scroll-viewport
+      [itemSize]="50"
+      class="result-list-view">
       <mat-card (click)="get_details(bug)" [ngClass]="{'mat-elevation-z10': (bugDetail$ | async)?.id == bug.id}"
-
+        [ngStyle]="{'border-left': '0.3em solid ' + productsColoreRestructured[bug.product]}"
         routerLinkActive="active" class="result-item" *cdkVirtualFor="let bug of bugs"><b>{{bug.id}}</b> {{bug.summary}}
       </mat-card>
     </cdk-virtual-scroll-viewport>
