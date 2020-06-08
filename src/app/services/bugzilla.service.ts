@@ -77,7 +77,7 @@ export class BugzillaService {
   statuses: Status[] = [{ name: "New/Assain", realName: "NEW", addition: ["ASSIGNED"], active: false},
                         { name: "Fixed", realName: "FIXED", active: false },
                         { name: "Verified", realName: "VERIFIED", active: false },
-                        { name: "Reopen", realName: "REOPEN", active: false }];
+                        { name: "Reopen", realName: "REOPENED", active: false }];
 
   priorities: Priority[] = [{ name: "P1", realName: "P1"},
                         { name: "P2", realName: "P2"},
@@ -116,9 +116,10 @@ export class BugzillaService {
       params = params.append('product', product);
     });
 
-    searchParams.statuses?.forEach((status: string) => {
-      params = params.append('bug_status', status);
+    searchParams.statuses?.forEach((statusName: string) => {
+      params = this.append_status(params, statusName);
     });
+
 
     searchParams.severities?.forEach((severity: string) => {
       params = params.append('severity', severity);
@@ -139,6 +140,26 @@ export class BugzillaService {
          this.bugs$.next(_bugs.reverse());
        console.log(response)
      });
+  }
+
+  append_status(params: HttpParams, statusName: string) {
+    switch(statusName) {
+      case 'FIXED': {
+        params = params.append('bug_status', 'RESOLVED');
+        params = params.append('resolution', 'FIXED');
+        break;
+      }
+      case 'VERIFIED': {
+        params = params.append('bug_status', 'VERIFIED');
+        params = params.append('resolution', 'FIXED');
+        break;
+      }
+      default: {
+         params = params.append('bug_status', statusName);
+         break;
+      }
+   }
+    return params;
   }
 
   get_bug_by_id(id: number) {
