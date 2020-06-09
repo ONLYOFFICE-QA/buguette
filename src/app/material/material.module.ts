@@ -19,6 +19,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 // import { FlexLayoutModule } from "@angular/flex-layout/flexbox";
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import {MatTabsModule} from '@angular/material/tabs';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 
 @NgModule({
@@ -42,7 +43,8 @@ import {MatTabsModule} from '@angular/material/tabs';
     MatSlideToggleModule,
     MatSelectModule,
     MatProgressSpinnerModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatTooltipModule
   ],
   exports: [
     MatToolbarModule,
@@ -64,7 +66,8 @@ import {MatTabsModule} from '@angular/material/tabs';
     MatSelectModule,
     MatProgressSpinnerModule,
     MatProgressBarModule,
-    ScrollingModule
+    ScrollingModule,
+    MatTooltipModule
   ]
 })
 export class MaterialModule { }
