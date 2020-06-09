@@ -28,7 +28,9 @@ export interface userParams {
 
 export interface Severity {
   name: string;
+  color: string;
   realName: string;
+  isFeature?: boolean;
   addition?: String[]
 }
 
@@ -67,12 +69,12 @@ export class BugzillaService {
                          { name: "Builder", color: "#feffba", active: false, realName: "DocumentBuilder" }];
 
 
-  severities: Severity[] = [{ name: "Critical", realName: "critical", addition: ["blocker"] },
-                            { name: "Major", realName: "major" },
-                            { name: "Normal", realName: "normal" },
-                            { name: "Minor", realName: "minor" },
-                            { name: "Trivial", realName: "trivial" },
-                            { name: "Enhancement", realName: "enhancement" }];
+  severities: Severity[] = [{ name: "Critical", realName: "critical", addition: ["blocker"], color: "#ff0000"},
+                            { name: "Major", realName: "major", color: "#ff8922"},
+                            { name: "Normal", realName: "normal", color: "#000000" },
+                            { name: "Minor", realName: "minor", color: "#000000" },
+                            { name: "Trivial", realName: "trivial", color: "#000000" },
+                            { name: "Enhancement", realName: "enhancement", isFeature: true, color: "#30ac09" }];
 
   statuses: Status[] = [{ name: "New/Assigned", realName: "NEW", addition: ["ASSIGNED"], active: false},
                         { name: "Fixed", realName: "FIXED", active: false },
@@ -129,6 +131,7 @@ export class BugzillaService {
       params = params.append('priority', priority);
     });
 
+    params = params.append('include_fields', 'severity');
     params = params.append('include_fields', 'summary');
     params = params.append('include_fields', 'product');
     params = params.append('include_fields', 'id');

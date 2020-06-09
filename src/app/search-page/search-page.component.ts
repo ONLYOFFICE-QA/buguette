@@ -20,6 +20,7 @@ export class SearchPageComponent implements OnInit {
   bugs$: BehaviorSubject<Bug[]>;
   bugDetail$: BehaviorSubject<Bug>;
   productsColoreRestructured = {};
+  severitiesRestructured = {};
   loading = false;
 
   severityControl = new FormControl();
@@ -32,12 +33,17 @@ export class SearchPageComponent implements OnInit {
     this.bugs$ = this.bugzilla.bugs$;
 
     this.products = this.bugzilla.products;
+    this.severities = this.bugzilla.severities;
+
     // need for quick select in result list
     this.products.forEach(product => {
       this.productsColoreRestructured[product.realName] = product.color;
     });
+
+    this.severities.forEach(severity => {
+      this.severitiesRestructured[severity.realName] = severity;
+    });
     this.statuses = this.bugzilla.statuses;
-    this.severities = this.bugzilla.severities;
     this.priorities = this.bugzilla.priorities;
     this.bugs$.subscribe(_ => {
       this.loading = false;

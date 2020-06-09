@@ -74,7 +74,14 @@
       class="result-list-view">
       <mat-card (click)="get_details(bug)" [ngClass]="{'mat-elevation-z10': (bugDetail$ | async)?.id == bug.id}"
         [ngStyle]="{'border-left': '0.3em solid ' + productsColoreRestructured[bug.product]}"
-        routerLinkActive="active" class="result-item" *cdkVirtualFor="let bug of bugs"><b>{{bug.id}}</b> {{bug.summary}}
+        routerLinkActive="active" class="result-item" *cdkVirtualFor="let bug of bugs">
+        <mat-icon matTooltip={{bug.severity}}
+                  aria-hidden="false"
+                  [ngStyle]="{'color': this.severitiesRestructured[bug.severity].color}"
+                  >{{this.severitiesRestructured[bug.severity].isFeature?"insights":"bug_report"}}</mat-icon>
+        <div class="bug-summary">
+          <span style="font-weight: 500;">{{bug.id}}</span>&nbsp;{{bug.summary}}
+        </div>
       </mat-card>
     </cdk-virtual-scroll-viewport>
   </div>
