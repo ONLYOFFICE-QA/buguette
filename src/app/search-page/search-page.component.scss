@@ -56,17 +56,18 @@
 
 .result-list, .result {
   display: flex;
-  flex: 1
 }
 
 .result-list {
   flex-direction: column;
   overflow: auto;
+  flex: 3;
   padding-left: 10em;
 }
 
 .result {
   background-color: grey;
+  flex: 2
 }
 .result-list-view {
   flex: 1;
@@ -75,5 +76,11 @@
 .result-item {
   margin: 0.5em;
   cursor: pointer;
+  padding: 0.8em 0.5em 0.8em 0.5em;
+  display: flex;
+}
+.bug-summary {
+  margin-top: 2px;
+  padding-left: 0.2em;
 }
 
