@@ -14,6 +14,7 @@ export class Bug {
   id: string;
   product: string;
   summary: string;
+  severity: string;
   assain: string;
   isEmpty = false;
   constructor(bugData: BugResponceData) {
@@ -21,6 +22,7 @@ export class Bug {
     this.summary = bugData['summary']
     this.assain = bugData['assain']
     this.product = bugData['product']
+    this.severity = bugData['severity']
   }
 }
 
