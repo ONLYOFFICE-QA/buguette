@@ -6,6 +6,7 @@ export interface BugResponceData {
   status?:string;
   importance?: string;
   summary?: string;
+  priority?: string;
   assain?: string;
 }
 
@@ -15,6 +16,7 @@ export class Bug {
   product: string;
   summary: string;
   severity: string;
+  priority: string;
   assain: string;
   isEmpty = false;
   constructor(bugData: BugResponceData) {
@@ -23,6 +25,7 @@ export class Bug {
     this.assain = bugData['assain']
     this.product = bugData['product']
     this.severity = bugData['severity']
+    this.priority = bugData['priority']
   }
 }
 

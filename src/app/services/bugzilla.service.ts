@@ -134,6 +134,7 @@ export class BugzillaService {
     params = params.append('include_fields', 'severity');
     params = params.append('include_fields', 'summary');
     params = params.append('include_fields', 'product');
+    params = params.append('include_fields', 'priority');
     params = params.append('include_fields', 'id');
 
      this.httpService.getRequest('/bug', params).subscribe((response: {bugs: BugResponceData[]}) => {
