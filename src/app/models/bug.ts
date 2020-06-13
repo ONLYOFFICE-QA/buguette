@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs';
 
 export interface BugResponceData {
   id?: number;
@@ -19,6 +20,12 @@ export interface UserDetail {
   name: string;
 }
 
+export interface Comment {
+  text: string;
+  creation_time: string;
+  creator: string;
+}
+
 // this object describe bug
 export class Bug {
   id: number;
@@ -36,6 +43,7 @@ export class Bug {
   assigned_to: string;
   assigned_to_detail: UserDetail;
   creator: string;
+  comments = [];
   isEmpty = false;
   constructor(bugData: BugResponceData) {
     this.id = bugData['id']
@@ -51,7 +59,6 @@ export class Bug {
     this.qa_contact = bugData['qa_contact']
     this.assigned_to = bugData['assigned_to']
     this.assigned_to_detail = bugData['assigned_to_detail']
-    console.log(bugData['status'])
     this.creator = bugData['creator']
     this.buguetteStatus = this.get_buguette_status()
   }

@@ -35,16 +35,11 @@ export class BugDetailsComponent implements OnInit {
     // });
 
     this.activatedRoute.params.switchMap(params => {
-      return this.bugzilla.get_bug_by_id(params.id).map(bug => {
+      return this.bugzilla.get_bug_and_comments(params.id).map(bug => {
         if (bug.id.toString() === params.id) {
           this.bug$.next(bug);
         }
       });
     }).subscribe();
-  }
-
-  get_bug(id: number) {
-    console.log('get_bug')
-    return this.bugzilla.get_bug_by_id(id);
   }
 }

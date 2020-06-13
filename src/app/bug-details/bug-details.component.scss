@@ -1,28 +1,42 @@
 :host {
   display: flex;
   flex: 2;
+  max-width: 70em;
   overflow: auto;
-  margin: 0 1em 0 1em;
 }
 
 .result {
+  display: inline-table;
   width: 100%;
+  margin: 0.5em;
 }
 
 .addition-params {
-  padding-top: 0;
+  display: flex;
+  margin: 1em;
 }
 
 .addition-data {
   display: inline-block;
 }
 
-.addition-params-right, .addition-params-left {
-  display: inline-block;
-  flex: 2;
-  align-items: center;
+.comment-text {
+  white-space: pre-wrap;
+  word-break: break-all;
 }
-
-.addition-params-right {
-  flex: 3;
+.comment {
+  padding-top: 1em;
+}
+.addition-params-icon {
+  margin: auto;
+  padding-right: 1em;
+}
+.addition-params-data {
+  flex: 1;
+  margin: auto;
+}
+.addition-params-space {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
 }

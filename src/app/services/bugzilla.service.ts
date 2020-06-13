@@ -3,6 +3,7 @@ import { HttpService } from './http-request.service';
 import { HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Observable, BehaviorSubject, of, ReplaySubject } from 'rxjs';
 import { Bug, BugResponceData } from '../models/bug';
+import { CommentResponce, Comment } from '../models/comment';
 import { User, UserResponceData } from '../models/user';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StaticData }  from '../static-data';
@@ -122,6 +123,17 @@ export class BugzillaService {
      });
   }
 
+  get_comments(bugId: number): Observable<any> {
+    const url = '/bug/' + bugId + '/comment';
+    return this.httpService.getRequest(url, new HttpParams()).map((response: {bugs: CommentResponce}) => {
+      const comments = [];
+      response.bugs[bugId].comments.forEach(commentData => {
+        comments.push(new Comment(commentData));
+      });
+      return comments
+    });
+  }
+
   append_status(params: HttpParams, statusName: string) {
     switch(statusName) {
       case 'FIXED': {
@@ -142,14 +154,24 @@ export class BugzillaService {
     return params;
   }
 
-  get_bug_by_id(id: number) {
+  get_bug_by_id(id: number): Observable<Bug> {
     let params = new HttpParams();
     params = params.append('id', id.toString());
     return this.httpService.getRequest('/bug', params).map((response: {bugs: BugResponceData[]}) => {
-      const _bugs = [];
-      console.log(response.bugs[0])
-      return new Bug(response.bugs[0])
+      const newBug = new Bug(response.bugs[0]);
+      return new Bug(response.bugs[0]);
     });
+  }
+
+  get_bug_and_comments(id: number) {
+    const bug = this.get_bug_by_id(id);
+    const comments = this.get_comments(id);
+    return Observable.forkJoin([bug, comments]).map(result => {
+      const bug = result[0];
+      bug.comments = result[1];
+      result[0].comments = result[1];
+      return bug;
+    })
   }
 
   get_user_by_api(username: string, apiKey: string): Observable<any> {
