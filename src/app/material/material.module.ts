@@ -20,6 +20,9 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatBadgeModule} from '@angular/material/badge';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MatListModule} from '@angular/material/list';
 
 
 @NgModule({
@@ -44,6 +47,9 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     MatSelectModule,
     MatProgressSpinnerModule,
     MatProgressBarModule,
+    MatBadgeModule,
+    MatExpansionModule,
+    MatListModule,
     MatTooltipModule
   ],
   exports: [
@@ -67,6 +73,9 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     MatProgressSpinnerModule,
     MatProgressBarModule,
     ScrollingModule,
+    MatBadgeModule,
+    MatExpansionModule,
+    MatListModule,
     MatTooltipModule
   ]
 })
