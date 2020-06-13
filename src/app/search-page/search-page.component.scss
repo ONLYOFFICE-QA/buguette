@@ -4,6 +4,7 @@
   flex-direction: column;
   padding-top: 1em;
   overflow: hidden;
+  padding: 0 7em 0 7em;
 }
 .product-select-block {
   display: inline-block;
@@ -35,9 +36,6 @@
 
 .search-space {
   margin: 0.5em;
-  margin-left: 10.5em;
-  margin: 0.5em;
-  margin-left: 10.5em;
   display: flex;
   flex-direction: row;
 }
@@ -62,7 +60,6 @@
   flex-direction: column;
   overflow: auto;
   flex: 3;
-  padding-left: 10em;
 }
 
 .result {
@@ -90,3 +87,6 @@
   margin-top: 2px;
 }
 
+.space-holder {
+  flex: 1;
+}

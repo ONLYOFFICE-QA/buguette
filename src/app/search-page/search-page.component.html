@@ -2,7 +2,7 @@
   <div class="actions-for-filter">
     <div class="filter-block">
       <div class="product-select-block">
-        <mat-card class="filter-item" (click)="product.active = !product.active" *ngFor="let product of products"
+        <mat-card class="filter-item" (click)="product.active = !product.active" *ngFor="let product of productsArray"
           [ngClass]="{'mat-elevation-z21': product.active, 'mat-elevation-z0': !product.active}"
           [ngStyle]="{'background-color': product.active?product.color:'#e2e2e2'}">
           {{product.name}}
@@ -21,7 +21,7 @@
     <mat-divider class="filter-block-divider" [vertical]="true"></mat-divider>
     <div class="filter-block">
       <div class="statuses-block">
-        <mat-card class="filter-item" (click)="status.active = !status.active" *ngFor="let status of statuses"
+        <mat-card class="filter-item" (click)="status.active = !status.active" *ngFor="let status of statusesArray"
           [ngClass]="{'mat-elevation-z10 active': status.active, 'mat-elevation-z0': !status.active}"
           [ngStyle]="{'background-color': status.active?'white':'#e2e2e2'}">
           {{status.name}}
@@ -37,7 +37,7 @@
                   (+{{severityControl.value.length - 1}} {{severityControl.value?.length === 2 ? 'other' : 'others'}})
                 </span>
               </mat-select-trigger>
-              <mat-option *ngFor="let severity of severities" [value]="severity">{{severity.name}}</mat-option>
+              <mat-option *ngFor="let severity of severitiesArray" [value]="severity">{{severity.name}}</mat-option>
             </mat-select>
           </mat-form-field>
 
@@ -50,7 +50,7 @@
                   (+{{priorityControl.value.length - 1}} {{priorityControl.value?.length === 2 ? 'other' : 'others'}})
                 </span>
               </mat-select-trigger>
-              <mat-option *ngFor="let priority of priorities" [value]="priority">{{priority.name}}</mat-option>
+              <mat-option *ngFor="let priority of prioritiesArray" [value]="priority">{{priority.name}}</mat-option>
             </mat-select>
           </mat-form-field>
       </div>
@@ -67,19 +67,18 @@
 
   <div class="result-list" *ngIf="(bugs$ | async) as bugs">
     <mat-spinner *ngIf="loading" style="margin: auto;"></mat-spinner>
-    <mat-card *ngIf="bugs == []">Use search for load more bugs from Bugzilla</mat-card>
 
     <cdk-virtual-scroll-viewport
       [itemSize]="50"
       class="result-list-view">
       <mat-card (click)="get_details(bug)" [ngClass]="{'mat-elevation-z10': (bugDetail$ | async)?.id == bug.id}"
-        [ngStyle]="{'border-left': '0.3em solid ' + productsColoreRestructured[bug.product]}"
+        [ngStyle]="{'border-left': '0.3em solid ' + products[bug.product].color}"
         routerLinkActive="active" class="result-item" *cdkVirtualFor="let bug of bugs">
 
         <mat-icon matTooltip={{bug.severity}}
                   aria-hidden="false"
-                  [ngStyle]="{'color': this.severitiesRestructured[bug.severity].color}"
-                  >{{this.severitiesRestructured[bug.severity].isFeature?"insights":"bug_report"}}</mat-icon>
+                  [ngStyle]="{'color': severities[bug.severity].color}"
+                  >{{severities[bug.severity].isFeature?"insights":"bug_report"}}</mat-icon>
         <div class="bug-summary">
           <span style="font-weight: 500;">{{bug.id}}</span>&nbsp;{{bug.summary}}
           <span *ngIf="bug.priority !== 'P1'">&nbsp;{{bug.priority}}</span>
@@ -87,5 +86,8 @@
       </mat-card>
     </cdk-virtual-scroll-viewport>
   </div>
+  <div class="space-holder" *ngIf="!(bugs$ | async)"></div>
   <router-outlet></router-outlet>
+  <div class="space-holder" *ngIf="!(bugs$ | async)"></div>
+
 </div>

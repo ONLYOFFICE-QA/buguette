@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { BugzillaService, SearchParams, Severity, Status, Product, Priority } from '../services/bugzilla.service';
 import { BugDetailService } from '../bug-details/bug-detail.service';
-import { BehaviorSubject } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 import { Bug } from '../models/bug';
 import {ActivatedRoute, Router} from '@angular/router';
 import { FormControl, FormGroup } from '@angular/forms';
+import  { StaticData }  from '../static-data';
 
 @Component({
   selector: 'app-search-page',
@@ -13,12 +14,18 @@ import { FormControl, FormGroup } from '@angular/forms';
 })
 export class SearchPageComponent implements OnInit {
   value: string;
-  statuses: Status[];
-  products: Product[];
-  severities: Severity[];
-  priorities: Priority[];
-  bugs$: BehaviorSubject<Bug[]>;
-  bugDetail$: BehaviorSubject<Bug>;
+  statuses = StaticData.STATUSES;
+  products = StaticData.PRODUCTS;
+  severities = StaticData.SEVERITIES;
+  priorities = StaticData.PRIORITIES;
+
+  productsArray: Product[];
+  severitiesArray: Severity[];
+  prioritiesArray: Priority[];
+  statusesArray: Status[];
+
+  bugs$: ReplaySubject<Bug[]>;
+  bugDetail$: ReplaySubject<Bug>;
   productsColoreRestructured = {};
   severitiesRestructured = {};
   loading = false;
@@ -32,19 +39,10 @@ export class SearchPageComponent implements OnInit {
     this.bugDetail$ = this.bugDetail.bug$;
     this.bugs$ = this.bugzilla.bugs$;
 
-    this.products = this.bugzilla.products;
-    this.severities = this.bugzilla.severities;
-
-    // need for quick select in result list
-    this.products.forEach(product => {
-      this.productsColoreRestructured[product.realName] = product.color;
-    });
-
-    this.severities.forEach(severity => {
-      this.severitiesRestructured[severity.realName] = severity;
-    });
-    this.statuses = this.bugzilla.statuses;
-    this.priorities = this.bugzilla.priorities;
+    this.productsArray = Object.values(this.products);
+    this.severitiesArray = Object.values(this.severities);
+    this.prioritiesArray = Object.values(this.priorities);
+    this.statusesArray = Object.values(this.statuses);
     this.bugs$.subscribe(_ => {
       this.loading = false;
     });
@@ -63,7 +61,7 @@ export class SearchPageComponent implements OnInit {
   get_details(bug: Bug): void {
     console.log(bug.id)
     this.bugDetail$.next(bug);
-    this.router.navigate(['bug', bug.id], { relativeTo: this.route })
+    this.router.navigate(['bug', bug.id], { relativeTo: this.route });
   }
 
   show() {
@@ -71,18 +69,18 @@ export class SearchPageComponent implements OnInit {
   }
 
   get_active_products(): string[] {
-    const activeProducts = this.products.filter(product => product.active);
+    const activeProducts = this.productsArray.filter(product => product.active);
     let result = [];
     if (activeProducts.length == 0) {
-      result = this.products.map(product => product.realName);
+      result = Object.keys(this.products);
     } else {
-      result =  activeProducts.map(product => product.realName);
+      result = activeProducts.map(product => product.realName);
     }
     return result;
   }
 
   get_active_statuses(): string[] {
-    return this.statuses.
+    return this.statusesArray.
     filter(status => status.active).
     map(status => [status.realName].concat(status.addition || [])).flat();
   }

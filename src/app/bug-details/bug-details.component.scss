@@ -1,6 +1,28 @@
 :host {
   display: flex;
   flex: 2;
+  overflow: auto;
+  margin: 0 1em 0 1em;
 }
 
+.result {
+  width: 100%;
+}
 
+.addition-params {
+  padding-top: 0;
+}
+
+.addition-data {
+  display: inline-block;
+}
+
+.addition-params-right, .addition-params-left {
+  display: inline-block;
+  flex: 2;
+  align-items: center;
+}
+
+.addition-params-right {
+  flex: 3;
+}
