@@ -1,8 +1,3 @@
-<!-- <div class="result" *ngIf="(bug$ | async) as bug">
-  <p>bug-details works!</p>
-  {{bug.id}}
-  {{bug.product}}
-</div> -->
 <mat-card class="result" *ngIf="(bug$ | async) as bug; else loading">
   <mat-card-header>
     <mat-card-title>
