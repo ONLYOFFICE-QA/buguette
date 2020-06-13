@@ -8,7 +8,7 @@ export class HttpService {
 
   constructor(private http: HttpClient) {}
 
-  getRequest(path: string, params?: HttpParams): Observable<any> {
+  getRequest(path: string, params: HttpParams): Observable<any> {
     if (localStorage.getItem('user_data')) {
       params = this.user_data(params);
     }
