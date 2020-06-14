@@ -43,9 +43,6 @@ export class SearchPageComponent implements OnInit {
     this.severitiesArray = Object.values(this.severities);
     this.prioritiesArray = Object.values(this.priorities);
     this.statusesArray = Object.values(this.statuses);
-    this.bugs$.subscribe(_ => {
-      this.loading = false;
-    });
   }
 
   search(): void {
@@ -55,11 +52,12 @@ export class SearchPageComponent implements OnInit {
     params.severities = this.get_active_severities();
     params.priorities = this.get_active_priorities();
     this.loading = true
-    this.bugzilla.get_bugs(params);
+    this.bugzilla.get_bugs(params).subscribe(_ => {
+      this.loading = false;
+    });
   }
 
   get_details(bug: Bug): void {
-    console.log(bug.id)
     this.bugDetail$.next(bug);
     this.router.navigate(['bug', bug.id], { relativeTo: this.route });
   }

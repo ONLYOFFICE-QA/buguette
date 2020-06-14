@@ -57,17 +57,15 @@
     </div>
   </div>
   <div class="actions-for-search">
-    <button (click)="search()" mat-fab color="primary" aria-label="Example icon button with a delete icon">
+    <button (click)="search()" mat-fab color="primary" [disabled] = loading>
       <mat-icon>search</mat-icon>
     </button>
   </div>
 </div>
 
 <div class="result-space">
-
-  <div class="result-list" *ngIf="(bugs$ | async) as bugs">
-    <mat-spinner *ngIf="loading" style="margin: auto;"></mat-spinner>
-
+<ng-container *ngIf="!loading">
+    <div class="result-list" *ngIf="(bugs$ | async) as bugs">
     <cdk-virtual-scroll-viewport
       [itemSize]="50"
       class="result-list-view">
@@ -85,6 +83,10 @@
         </div>
       </mat-card>
     </cdk-virtual-scroll-viewport>
+  </div>
+</ng-container>
+  <div *ngIf="loading" style="flex: 3; margin: auto">
+    <mat-spinner style="margin: auto"></mat-spinner>
   </div>
   <router-outlet></router-outlet>
 </div>

@@ -86,7 +86,7 @@ export class BugzillaService {
     this.router.navigate(['/login']);
   }
 
-  get_bugs(searchParams: SearchParams) {
+  get_bugs(searchParams: SearchParams): Observable<Bug[]> {
     let params = new HttpParams();
 
     searchParams.products?.forEach((product: string) => {
@@ -113,13 +113,13 @@ export class BugzillaService {
     params = params.append('include_fields', 'priority');
     params = params.append('include_fields', 'id');
 
-     this.httpService.getRequest('/bug', params).subscribe((response: {bugs: BugResponceData[]}) => {
+     return this.httpService.getRequest('/bug', params).map((response: {bugs: BugResponceData[]}) => {
        const _bugs = [];
        response.bugs.forEach(bug => {
          _bugs.push(new Bug(bug))
        });
          this.bugs$.next(_bugs.reverse());
-       console.log(response)
+         return _bugs;
      });
   }
 
