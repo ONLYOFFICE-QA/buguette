@@ -73,19 +73,40 @@
 .result-item {
   margin: 0.5em;
   cursor: pointer;
-  padding: 0.8em 0.5em 0.8em 0.5em;
+  padding: 0.3em 0.5em 0.3em 0.5em;
   display: flex;
 }
 .bug-summary {
-  margin-top: 2px;
+  margin: auto;
   padding-left: 0.2em;
   flex: 1;
-  max-height: 1.5em;
   overflow: hidden;
+  padding-top: 2px;
 }
 .bug-status, .bug-priority {
-  margin-top: 2px;
+  margin: auto;
+  padding-top: 2px;
+  padding-right: 0.2em;
+  padding-left: 0.2em;
+}
+
+.bug-status {
+  width: 5em;
+  text-align: center;
+}
+
+.bug-severity {
+  margin: auto;
 }
 .bug-information {
-  margin-top: 2px;
+  margin: auto;
+  padding-top: 2px;
+}
+.avatar-image {
+  background-size: cover;
+}
+
+.arrow-forward {
+  margin: auto;
+  padding-top: 5px;
 }

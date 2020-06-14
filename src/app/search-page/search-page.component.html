@@ -28,68 +28,74 @@
         </mat-card>
       </div>
       <div class="importence-block">
-          <mat-form-field>
-            <mat-label>Severity</mat-label>
-            <mat-select [formControl]="severityControl" multiple>
-              <mat-select-trigger>
-                {{severityControl.value ? severityControl.value[0]?.name : ''}}
-                <span *ngIf="severityControl.value?.length > 1">
-                  (+{{severityControl.value.length - 1}} {{severityControl.value?.length === 2 ? 'other' : 'others'}})
-                </span>
-              </mat-select-trigger>
-              <mat-option *ngFor="let severity of severitiesArray" [value]="severity">{{severity.name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
+        <mat-form-field>
+          <mat-label>Severity</mat-label>
+          <mat-select [formControl]="severityControl" multiple>
+            <mat-select-trigger>
+              {{severityControl.value ? severityControl.value[0]?.name : ''}}
+              <span *ngIf="severityControl.value?.length > 1">
+                (+{{severityControl.value.length - 1}} {{severityControl.value?.length === 2 ? 'other' : 'others'}})
+              </span>
+            </mat-select-trigger>
+            <mat-option *ngFor="let severity of severitiesArray" [value]="severity">{{severity.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
 
-          <mat-form-field>
-            <mat-label>Priority</mat-label>
-            <mat-select [formControl]="priorityControl" multiple>
-              <mat-select-trigger>
-                {{priorityControl.value ? priorityControl.value[0]?.name : ''}}
-                <span *ngIf="priorityControl.value?.length > 1">
-                  (+{{priorityControl.value.length - 1}} {{priorityControl.value?.length === 2 ? 'other' : 'others'}})
-                </span>
-              </mat-select-trigger>
-              <mat-option *ngFor="let priority of prioritiesArray" [value]="priority">{{priority.name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
+        <mat-form-field>
+          <mat-label>Priority</mat-label>
+          <mat-select [formControl]="priorityControl" multiple>
+            <mat-select-trigger>
+              {{priorityControl.value ? priorityControl.value[0]?.name : ''}}
+              <span *ngIf="priorityControl.value?.length > 1">
+                (+{{priorityControl.value.length - 1}} {{priorityControl.value?.length === 2 ? 'other' : 'others'}})
+              </span>
+            </mat-select-trigger>
+            <mat-option *ngFor="let priority of prioritiesArray" [value]="priority">{{priority.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
     </div>
   </div>
   <div class="actions-for-search">
-    <button (click)="search()" mat-fab color="primary" [disabled] = loading>
+    <button (click)="search()" mat-fab color="primary" [disabled]=loading>
       <mat-icon>search</mat-icon>
     </button>
   </div>
 </div>
 
 <div class="result-space">
-<ng-container *ngIf="!loading">
+  <ng-container *ngIf="!loading">
     <div class="result-list" *ngIf="(bugs$ | async) as bugs">
-    <cdk-virtual-scroll-viewport
-      [itemSize]="50"
-      class="result-list-view">
-      <mat-card (click)="get_details(bug)" [ngClass]="{'mat-elevation-z10': (bugDetail$ | async)?.id == bug.id}"
-        [ngStyle]="{'border-left': '0.3em solid ' + products[bug.product].color}"
-        routerLinkActive="active" class="result-item" *cdkVirtualFor="let bug of bugs">
+      <cdk-virtual-scroll-viewport [itemSize]="50" class="result-list-view">
+        <mat-card (click)="get_details(bug)" [ngClass]="{'mat-elevation-z10': (bugDetail$ | async)?.id == bug.id}"
+          [ngStyle]="{'border-left': '0.3em solid ' + products[bug.product].color}" routerLinkActive="active"
+          class="result-item" *cdkVirtualFor="let bug of bugs">
 
-        <mat-icon matTooltip={{bug.severity}}
-                  aria-hidden="false"
-                  [ngStyle]="{'color': severities[bug.severity].color}"
-                  >{{severities[bug.severity].isFeature?"insights":"bug_report"}}</mat-icon>
-        <div class="bug-summary">
-          <span style="font-weight: 500;">{{bug.id}}</span>&nbsp;{{bug.summary}}
-        </div>
-        <div class="bug-priority">
-          <span *ngIf="bug.priority !== 'P1'">&nbsp;{{bug.priority}}</span>
-        </div>
-        <div class="bug-status">
-          <span>&nbsp;{{bug.buguetteStatus}}</span>
-        </div>
-      </mat-card>
-    </cdk-virtual-scroll-viewport>
-  </div>
-</ng-container>
+          <mat-icon class="bug-severity" matTooltip={{bug.severity}} aria-hidden="false"
+            [ngStyle]="{'color': severities[bug.severity].color, 'margin': 'auto'}">
+            {{severities[bug.severity].isFeature?"insights":"bug_report"}}</mat-icon>
+          <div class="bug-summary">
+            <span style="font-weight: 500;">{{bug.id}}</span>&nbsp;{{bug.summary}}
+          </div>
+          <div class="bug-priority">
+            <span *ngIf="bug.priority !== 'P1'">&nbsp;{{bug.priority}}</span>
+          </div>
+          <div mat-card-avatar class="avatar-image" matTooltip={{bug.qa_contact_detail.real_name}}
+           [style.backgroundImage]="get_image_name(bug.qa_contact_detail)">
+          </div>
+           <div class="arrow-forward">
+            <mat-icon>arrow_forward</mat-icon>
+          </div>
+          <div mat-card-avatar class="avatar-image" matTooltip={{bug.assigned_to_detail.real_name}}
+           [style.backgroundImage]="get_image_name(bug.assigned_to_detail)"></div>
+
+          <div class="bug-status" style="margin: auto;">
+            <span>&nbsp;{{bug.buguetteStatus}}</span>
+          </div>
+        </mat-card>
+      </cdk-virtual-scroll-viewport>
+    </div>
+  </ng-container>
   <div *ngIf="loading" style="flex: 3; margin: auto">
     <mat-spinner style="margin: auto"></mat-spinner>
   </div>

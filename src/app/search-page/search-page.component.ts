@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { BugzillaService, SearchParams, Severity, Status, Product, Priority } from '../services/bugzilla.service';
 import { BugDetailService } from '../bug-details/bug-detail.service';
 import { ReplaySubject } from 'rxjs';
-import { Bug } from '../models/bug';
+import { Bug, UserDetail } from '../models/bug';
 import {ActivatedRoute, Router} from '@angular/router';
 import { FormControl, FormGroup } from '@angular/forms';
 import  { StaticData }  from '../static-data';
@@ -14,10 +14,12 @@ import  { StaticData }  from '../static-data';
 })
 export class SearchPageComponent implements OnInit {
   value: string;
+  usersWithAvatars: Array<string>;
   statuses = StaticData.STATUSES;
   products = StaticData.PRODUCTS;
   severities = StaticData.SEVERITIES;
   priorities = StaticData.PRIORITIES;
+  users = StaticData.USERS;
 
   productsArray: Product[];
   severitiesArray: Severity[];
@@ -43,6 +45,7 @@ export class SearchPageComponent implements OnInit {
     this.severitiesArray = Object.values(this.severities);
     this.prioritiesArray = Object.values(this.priorities);
     this.statusesArray = Object.values(this.statuses);
+    this.usersWithAvatars = this.users.filter(user => user.avatar).map(user => user.username);
   }
 
   search(): void {
@@ -89,5 +92,12 @@ export class SearchPageComponent implements OnInit {
 
   get_active_priorities(): string[] {
     return this.priorityControl.value?.map((priority: Priority) => priority.realName);
+  }
+
+  get_image_name(details: UserDetail) {
+    if (this.usersWithAvatars.includes(details.username)) {
+      return 'url(/assets/avatars/' + details.username + '.jpg' + ')';
+    }
+    return 'url(/assets/avatars/default.jpg)';
   }
 }
