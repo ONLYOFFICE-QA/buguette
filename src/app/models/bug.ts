@@ -18,6 +18,7 @@ export interface UserDetail {
   id: number;
   email: string;
   name: string;
+  username: string;
 }
 
 export interface Comment {
@@ -40,6 +41,7 @@ export class Bug {
   priority: string;
   assain: string;
   qa_contact: string;
+  qa_contact_detail: UserDetail;
   assigned_to: string;
   assigned_to_detail: UserDetail;
   creator: string;
@@ -57,8 +59,9 @@ export class Bug {
     this.severity = bugData['severity']
     this.priority = bugData['priority']
     this.qa_contact = bugData['qa_contact']
+    this.qa_contact_detail = this.get_user_detail(bugData['qa_contact_detail'])
     this.assigned_to = bugData['assigned_to']
-    this.assigned_to_detail = bugData['assigned_to_detail']
+    this.assigned_to_detail = this.get_user_detail(bugData['assigned_to_detail'])
     this.creator = bugData['creator']
     this.buguetteStatus = this.get_buguette_status()
   }
@@ -75,6 +78,12 @@ export class Bug {
          return this.status;
       }
    }
+  }
+
+  get_user_detail(data: UserDetail) {
+    const detail = data;
+    detail.username = data.email.split('@')[0];
+    return detail;
   }
 }
 
