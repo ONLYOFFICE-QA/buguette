@@ -109,6 +109,8 @@ export class BugzillaService {
     params = params.append('include_fields', 'status');
     params = params.append('include_fields', 'severity');
     params = params.append('include_fields', 'summary');
+    params = params.append('include_fields', 'assigned_to');
+    params = params.append('include_fields', 'qa_contact');
     params = params.append('include_fields', 'product');
     params = params.append('include_fields', 'priority');
     params = params.append('include_fields', 'id');
