@@ -79,7 +79,12 @@
                   >{{severities[bug.severity].isFeature?"insights":"bug_report"}}</mat-icon>
         <div class="bug-summary">
           <span style="font-weight: 500;">{{bug.id}}</span>&nbsp;{{bug.summary}}
+        </div>
+        <div class="bug-priority">
           <span *ngIf="bug.priority !== 'P1'">&nbsp;{{bug.priority}}</span>
+        </div>
+        <div class="bug-status">
+          <span>&nbsp;{{bug.buguetteStatus}}</span>
         </div>
       </mat-card>
     </cdk-virtual-scroll-viewport>
