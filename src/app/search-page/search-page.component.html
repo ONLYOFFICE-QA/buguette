@@ -80,8 +80,8 @@
           <div class="bug-priority">
             <span *ngIf="bug.priority !== 'P1'">&nbsp;{{bug.priority}}</span>
           </div>
-          <div mat-card-avatar class="avatar-image" matTooltip={{bug.qa_contact_detail.real_name}}
-           [style.backgroundImage]="get_image_name(bug.qa_contact_detail)">
+          <div mat-card-avatar class="avatar-image" matTooltip={{bug.creator_detail.real_name}}
+           [style.backgroundImage]="get_image_name(bug.creator_detail)">
           </div>
            <div class="arrow-forward">
             <mat-icon>arrow_forward</mat-icon>
