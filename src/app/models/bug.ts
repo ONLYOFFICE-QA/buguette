@@ -43,7 +43,7 @@ export class Bug {
   qa_contact: string;
   qa_contact_detail: UserDetail;
   assigned_to: string;
-  assigned_to_detail: UserDetail;
+  assigned_to_detail: UserDetail = {  real_name: "", id: 0, email: "", name: "", username: ""};
   creator: string;
   comments = [];
   isEmpty = false;
@@ -59,7 +59,9 @@ export class Bug {
     this.severity = bugData['severity']
     this.priority = bugData['priority']
     this.qa_contact = bugData['qa_contact']
-    this.qa_contact_detail = this.get_user_detail(bugData['qa_contact_detail'])
+    if (this.qa_contact) {
+      this.qa_contact_detail = this.get_user_detail(bugData['qa_contact_detail'])
+    }
     this.assigned_to = bugData['assigned_to']
     this.assigned_to_detail = this.get_user_detail(bugData['assigned_to_detail'])
     this.creator = bugData['creator']
