@@ -43,8 +43,10 @@ export class Bug {
   qa_contact: string;
   qa_contact_detail: UserDetail;
   assigned_to: string;
+  // set default assigned_to_detail because it can be empty
   assigned_to_detail: UserDetail = {  real_name: "", id: 0, email: "", name: "", username: ""};
   creator: string;
+  creator_detail: UserDetail;
   comments = [];
   isEmpty = false;
   constructor(bugData: BugResponceData) {
@@ -65,6 +67,7 @@ export class Bug {
     this.assigned_to = bugData['assigned_to']
     this.assigned_to_detail = this.get_user_detail(bugData['assigned_to_detail'])
     this.creator = bugData['creator']
+    this.creator_detail = this.get_user_detail(bugData['creator_detail'])
     this.buguetteStatus = this.get_buguette_status()
   }
 
