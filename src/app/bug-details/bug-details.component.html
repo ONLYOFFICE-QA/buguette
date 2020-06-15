@@ -27,14 +27,15 @@
       </div>
       <div class="addition-params">
         <div class="addition-params-icon">
-          <mat-icon aria-hidden="false" aria-label="Example home icon">people_alt</mat-icon>
+          <mat-icon matTooltip="QA contact {{bug.qa_contact}}" aria-hidden="false" aria-label="Example home icon">people_alt</mat-icon>
         </div>
         <div class="addition-params-data">
           <div class="params-data">
-            {{(bug$ | async).qa_contact || "loading..."}}
-             ==> {{(bug$ | async).assigned_to_detail?(bug$ | async).assigned_to_detail?.real_name:(bug$ | async).assigned_to}}
+            Creator: {{(bug$ | async).creator_detail.real_name || "loading..."}}
             </div>
-          <div class="params-data" *ngIf="bug.creator !== bug.qa_contact">Creator: {{bug.creator}}</div>
+          <div class="params-data">
+            Assigned: {{(bug$ | async).assigned_to_detail?(bug$ | async).assigned_to_detail?.real_name:(bug$ | async).assigned_to}}
+          </div>
         </div>
       </div>
     </div>
