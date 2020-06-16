@@ -149,6 +149,12 @@ export class BugzillaService {
         params = params.append('resolution', 'FIXED');
         break;
       }
+      case 'NEW': {
+        params = params.append('bug_status', 'NEW');
+        params = params.append('bug_status', 'NEW');
+        params = params.append('resolution', '---');
+        break;
+      }
       default: {
          params = params.append('bug_status', statusName);
          break;
