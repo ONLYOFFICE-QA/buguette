@@ -23,6 +23,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatListModule} from '@angular/material/list';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 
 @NgModule({
@@ -50,6 +51,7 @@ import {MatListModule} from '@angular/material/list';
     MatBadgeModule,
     MatExpansionModule,
     MatListModule,
+    MatAutocompleteModule,
     MatTooltipModule
   ],
   exports: [
@@ -76,6 +78,7 @@ import {MatListModule} from '@angular/material/list';
     MatBadgeModule,
     MatExpansionModule,
     MatListModule,
+    MatAutocompleteModule,
     MatTooltipModule
   ]
 })

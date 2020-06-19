@@ -1,8 +1,7 @@
 import { Component, OnInit, getDebugNode } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import {BehaviorSubject, Observable, Subject, of, ReplaySubject} from 'rxjs';
+import {ReplaySubject} from 'rxjs';
 import 'rxjs/add/operator/map';
-import { switchMap, map } from 'rxjs/operators';
 import { Bug } from '../models/bug';
 import { BugzillaService } from '../services/bugzilla.service';
 import { BugDetailService } from './bug-detail.service';
@@ -29,10 +28,6 @@ export class BugDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.bug$ = this.bugDetailService.bug$
-
-    // this.severities.forEach(severity => {
-    //   this.severitiesRestructured[severity.realName] = severity;
-    // });
 
     this.activatedRoute.params.switchMap(params => {
       return this.bugzilla.get_bug_and_comments(params.id).map(bug => {
