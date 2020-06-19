@@ -1,6 +1,19 @@
 {
   "$schema": "./node_modules/@angular/service-worker/config/schema.json",
   "index": "/index.html",
+  "dataGroups": [{
+    "name": "api-performance",
+    "urls": [
+      "bugzilla.onlyoffice.com/rest/bug/45649/attachment",
+      "bugzilla.onlyoffice.com/rest/bug/comment/172072"
+    ],
+    "cacheConfig": {
+      "strategy": "performance",
+      "maxSize": 20,
+      "maxAge": "3d"
+    }
+  }
+],
   "assetGroups": [
     {
       "name": "app",
@@ -22,6 +35,14 @@
         "files": [
           "/assets/**",
           "/*.(eot|svg|cur|jpg|png|webp|gif|otf|ttf|woff|woff2|ani)"
+        ]
+      }
+    },
+    {
+      "name": "userdata",
+      "resources": {
+        "urls": [
+          "https://bugzilla.onlyoffice.com/rest/bug/45649/attachment"
         ]
       }
     }
