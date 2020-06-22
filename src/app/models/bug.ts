@@ -1,5 +1,3 @@
-import { Observable } from 'rxjs';
-
 export interface BugResponceData {
   id?: number;
   product?: string;
