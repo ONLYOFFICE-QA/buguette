@@ -55,6 +55,30 @@
         </mat-form-field>
       </div>
     </div>
+    <mat-divider class="filter-block-divider" [vertical]="true"></mat-divider>
+    <div class="filter-block">
+      <div class="creator-block">
+        <div class="creator-image-selected" *ngIf="createrControl.value">
+          <img class="avatar-image"
+            [src]="createrControl.value.avatar || '/assets/avatars/default.jpg'">
+        </div>
+        <div class="creator-image-empty" *ngIf="!createrControl.value">
+          <mat-icon class="creator-icon-empty" aria-hidden="false">create</mat-icon>
+        </div>
+        <form class="creator-form" *ngIf="(filteredCreator | async) as creators">
+          <mat-form-field class="creator-field">
+            <input matInput placeholder="Creator" aria-label="Creator" [matAutocomplete]="auto"
+              [formControl]="createrControl">
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayUser">
+              <mat-option *ngFor="let user of creators" [value]="user">
+                <img class="creator-image" aria-hidden [src]="user.avatar || '/assets/avatars/default.jpg'" height="25">
+                <span>{{user.real_name}}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </form>
+      </div>
+    </div>
   </div>
   <div class="actions-for-search">
     <button (click)="search()" mat-fab color="primary" [disabled]=loading>
@@ -66,13 +90,13 @@
 <div class="result-space">
   <ng-container *ngIf="!loading">
     <div class="result-list" *ngIf="(bugs$ | async) as bugs">
+
       <cdk-virtual-scroll-viewport [itemSize]="50" class="result-list-view">
         <mat-card (click)="get_details(bug)" [ngClass]="{'mat-elevation-z10': (bugDetail$ | async)?.id == bug.id}"
           [ngStyle]="{'border-left': '0.3em solid ' + products[bug.product].color}" routerLinkActive="active"
           class="result-item" *cdkVirtualFor="let bug of bugs">
-
           <mat-icon class="bug-severity" matTooltip={{bug.severity}} aria-hidden="false"
-            [ngStyle]="{'color': severities[bug.severity].color, 'margin': 'auto'}">
+            [ngStyle]="{'color': severities[bug.severity]?.color, 'margin': 'auto'}">
             {{severities[bug.severity].isFeature?"insights":"bug_report"}}</mat-icon>
           <div class="bug-summary">
             <span style="font-weight: 500;">{{bug.id}}</span>&nbsp;{{bug.summary}}
@@ -80,14 +104,15 @@
           <div class="bug-priority">
             <span *ngIf="bug.priority !== 'P1'">&nbsp;{{bug.priority}}</span>
           </div>
-          <div mat-card-avatar class="avatar-image" matTooltip={{bug.creator_detail.real_name}}
-           [style.backgroundImage]="get_image_name(bug.creator_detail)">
+          <div mat-card-avatar class="avatar-image" matTooltip={{bug.creator_detail.real_name}}>
+            <img class="avatar-image" [src]="(users$ | async)[bug.creator_detail.username.trim()]?.avatar || '/assets/avatars/default.jpg'">
           </div>
-           <div class="arrow-forward">
+          <div class="arrow-forward">
             <mat-icon>arrow_forward</mat-icon>
           </div>
-          <div mat-card-avatar class="avatar-image" matTooltip={{bug.assigned_to_detail.real_name}}
-           [style.backgroundImage]="get_image_name(bug.assigned_to_detail)"></div>
+          <div mat-card-avatar class="avatar-image" matTooltip={{bug.assigned_to_detail.real_name}}>
+            <img class="avatar-image" [src]="(users$ | async)[bug.assigned_to_detail.username]?.avatar || '/assets/avatars/default.jpg'">
+          </div>
 
           <div class="bug-status" style="margin: auto;">
             <span>&nbsp;{{bug.buguetteStatus}}</span>

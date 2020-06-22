@@ -40,11 +40,11 @@ export class LoginPageComponent implements OnInit {
     this.formSubmitAttempt = false;
     if (this.form.valid) {
       this.loading = true;
-      const username = this.form.get('username').value;
+      const username: string = this.form.get('username').value;
       const password = this.form.get('password').value;
       this.bugzilla.login(username, password).subscribe((res: UserData) => {
         this.login(res);
-        this.bugzilla.currentUser$.next(new User({'name': username, 'email': username}));
+        this.bugzilla.currentUser$.next(new User({'email': username}));
         this.bugzilla.get_user({'names': username}).subscribe();
       }, err => this.login_invalid(err));
     } else {

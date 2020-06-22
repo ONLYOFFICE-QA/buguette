@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { BugzillaService, SearchParams, Severity, Status, Product, Priority } from '../services/bugzilla.service';
+import { BugzillaService, SearchParams, Severity, Status, Product, Priority, StructuredUsers } from '../services/bugzilla.service';
 import { BugDetailService } from '../bug-details/bug-detail.service';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Observable } from 'rxjs';
 import { Bug, UserDetail } from '../models/bug';
-import {ActivatedRoute, Router} from '@angular/router';
-import { FormControl, FormGroup } from '@angular/forms';
-import  { StaticData }  from '../static-data';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormControl } from '@angular/forms';
+import { StaticData } from '../static-data';
+import { User } from '../models/user';
 
 @Component({
   selector: 'app-search-page',
@@ -19,7 +20,8 @@ export class SearchPageComponent implements OnInit {
   products = StaticData.PRODUCTS;
   severities = StaticData.SEVERITIES;
   priorities = StaticData.PRIORITIES;
-  users = StaticData.USERS;
+  users: User[];
+  users$: Observable<StructuredUsers>;
 
   productsArray: Product[];
   severitiesArray: Severity[];
@@ -34,18 +36,51 @@ export class SearchPageComponent implements OnInit {
 
   severityControl = new FormControl();
   priorityControl = new FormControl();
+  createrControl = new FormControl();
+
+  filteredCreator: Observable<User[]>;
 
   constructor(public bugzilla: BugzillaService, private router: Router,
-              private route: ActivatedRoute, private bugDetail: BugDetailService, ) { }
+    private route: ActivatedRoute, private bugDetail: BugDetailService,) {
+    this.filteredCreator = this.createrControl.valueChanges.startWith('').switchMap(input => {
+      return this.users$.map((structuredUsers: StructuredUsers) => {
+        let users = Object.values(structuredUsers);
+        return this.user_filtering(input, users)
+      });
+    });
+  }
+
+  user_filtering(userInput: (string | undefined), users: User[]): User[] {
+    return (typeof userInput == 'string') ? this._filterUsers(userInput, users) : users.slice()
+  }
+
+  private _filterUsers(value: string, users: User[]): User[] {
+    const filterValue = value.toLowerCase();
+    return users.filter(user => {
+      const splittedName = user.real_name.toLowerCase().split(' ');
+      let result = false;
+      splittedName.forEach(word => {
+        if (word.indexOf(filterValue) === 0) {
+          result = true;
+        }
+      })
+      return result;
+    });
+  }
+
   ngOnInit(): void {
     this.bugDetail$ = this.bugDetail.bug$;
     this.bugs$ = this.bugzilla.bugs$;
+    this.users$ = this.bugzilla.users$
 
     this.productsArray = Object.values(this.products);
     this.severitiesArray = Object.values(this.severities);
     this.prioritiesArray = Object.values(this.priorities);
     this.statusesArray = Object.values(this.statuses);
-    this.usersWithAvatars = this.users.filter(user => user.avatar).map(user => user.username);
+  }
+
+  displayUser(user: UserDetail): string {
+    return user && user.real_name ? user.real_name : '';
   }
 
   search(): void {
@@ -54,6 +89,7 @@ export class SearchPageComponent implements OnInit {
     params.statuses = this.get_active_statuses();
     params.severities = this.get_active_severities();
     params.priorities = this.get_active_priorities();
+    params.creator = this.get_active_creater();
     this.loading = true
     this.bugzilla.get_bugs(params).subscribe(_ => {
       this.loading = false;
@@ -63,10 +99,6 @@ export class SearchPageComponent implements OnInit {
   get_details(bug: Bug): void {
     this.bugDetail$.next(bug);
     this.router.navigate(['bug', bug.id], { relativeTo: this.route });
-  }
-
-  show() {
-    return this.severityControl.value?.map((severity: Severity) => severity.realName)
   }
 
   get_active_products(): string[] {
@@ -82,8 +114,8 @@ export class SearchPageComponent implements OnInit {
 
   get_active_statuses(): string[] {
     return this.statusesArray.
-    filter(status => status.active).
-    map(status => [status.realName].concat(status.addition || [])).flat();
+      filter(status => status.active).
+      map(status => [status.realName].concat(status.addition || [])).flat();
   }
 
   get_active_severities(): string[] {
@@ -94,10 +126,7 @@ export class SearchPageComponent implements OnInit {
     return this.priorityControl.value?.map((priority: Priority) => priority.realName);
   }
 
-  get_image_name(details: UserDetail) {
-    if (this.usersWithAvatars.includes(details.username)) {
-      return 'url(/assets/avatars/' + details.username + '.jpg' + ')';
-    }
-    return 'url(/assets/avatars/default.jpg)';
+  get_active_creater(): string {
+    return this.createrControl.value?.username;
   }
 }

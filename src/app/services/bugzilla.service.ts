@@ -1,17 +1,22 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from './http-request.service';
-import { HttpErrorResponse, HttpParams } from '@angular/common/http';
-import { Observable, BehaviorSubject, of, ReplaySubject } from 'rxjs';
+import { HttpParams } from '@angular/common/http';
+import { Observable, ReplaySubject } from 'rxjs';
 import { Bug, BugResponceData } from '../models/bug';
-import { CommentResponce, Comment } from '../models/comment';
-import { User, UserResponceData } from '../models/user';
-import { ActivatedRoute, Router } from '@angular/router';
+import { CommentResponce, Comment, CommentResponceData } from '../models/comment';
+import { User } from '../models/user';
+import { Router } from '@angular/router';
 import { StaticData }  from '../static-data';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 export interface UserData {
   id: number,
   token: string
   api_key?: string
+}
+
+export interface StructuredUsers {
+  [key: string]: User
 }
 
 export interface SearchParams {
@@ -20,6 +25,7 @@ export interface SearchParams {
   statuses?: Array<string>,
   severities?: Array<string>,
   priorities?: Array<string>,
+  creator?: string,
 }
 
 export interface userParams {
@@ -57,6 +63,26 @@ export interface Product {
   realName: string;
 }
 
+export interface AttachmentResponceObject {
+  id: string;
+  big_id: number;
+  content_type: string;
+  creation_time: string;
+  creator: string;
+  data: string;
+  file_name: string;
+  last_change_time: string;
+  size: number;
+  summary: string;
+  is_obsolete: (0|1);
+}
+
+export interface AttachmentResponce {
+  bugs: {
+    [key: number]: AttachmentResponceObject[]
+  }
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -64,9 +90,10 @@ export class BugzillaService {
   restructuredConstants = {products: {}};
 
   bugs$: ReplaySubject<Bug[]> = new ReplaySubject(1);
+  users$: ReplaySubject<StructuredUsers> = new ReplaySubject(1);
   currentUser$: ReplaySubject<User> = new ReplaySubject(1);
 
-  constructor(private httpService: HttpService, private router: Router) {  }
+  constructor(private httpService: HttpService, private router: Router, private _sanitizer: DomSanitizer,) {  }
 
   login(login: string, password: string): Observable<UserData> {
     let params = new HttpParams();
@@ -106,6 +133,10 @@ export class BugzillaService {
       params = params.append('priority', priority);
     });
 
+    if (searchParams.creator) {
+      params = params.append('creator', searchParams.creator);
+    }
+
     params = params.append('include_fields', 'status');
     params = params.append('include_fields', 'severity');
     params = params.append('include_fields', 'summary');
@@ -127,7 +158,7 @@ export class BugzillaService {
   }
 
   get_comments(bugId: number): Observable<any> {
-    const url = '/bug/' + bugId + '/comment';
+    let url = '/bug/' + bugId + '/comment';
     return this.httpService.getRequest(url, new HttpParams()).map((response: {bugs: CommentResponce}) => {
       const comments = [];
       response.bugs[bugId].comments.forEach(commentData => {
@@ -137,7 +168,19 @@ export class BugzillaService {
     });
   }
 
-  append_status(params: HttpParams, statusName: string) {
+  get_comment_by_id(commentId: number): Observable<Comment> {
+    let url = '/bug/comment/' + commentId;
+    return this.httpService.getRequest(url, new HttpParams()).map((response: {comments: CommentResponceData}) => {
+      return new Comment(response.comments[commentId])
+    });
+  }
+
+  get_attachments(bugId: number): Observable<AttachmentResponce> {
+    const url = '/bug/' + bugId + '/attachment';
+    return this.httpService.getRequest(url, new HttpParams());
+  }
+
+  append_status(params: HttpParams, statusName: string): HttpParams {
     switch(statusName) {
       case 'FIXED': {
         params = params.append('bug_status', 'RESOLVED');
@@ -172,7 +215,7 @@ export class BugzillaService {
     });
   }
 
-  get_bug_and_comments(id: number) {
+  get_bug_and_comments(id: number): Observable<Bug> {
     const bug = this.get_bug_by_id(id);
     const comments = this.get_comments(id);
     return Observable.forkJoin([bug, comments]).map(result => {
@@ -192,7 +235,7 @@ export class BugzillaService {
     })
   }
 
-  get_user(userParams: userParams) {
+  get_user(userParams: userParams): Observable<any> {
     let params = new HttpParams();
     if (userParams.id) {
       params = params.append('ids', userParams.id);
@@ -207,9 +250,37 @@ export class BugzillaService {
     }
 
     return this.httpService.getRequest('/user', params).map(res => {
-      console.log(res.users[0]);
       this.currentUser$.next(new User(res.users[0]));
     })
+  }
+
+  get_user_data(): Observable<true> {
+    const comment = this.get_comment_by_id(StaticData.COMMENT_WITH_USER_DATA);
+    const attachments = this.get_attachments(StaticData.BUG_WITH_ATTACHMENTS);
+    return Observable.forkJoin([comment, attachments]).map(result => {
+      let avatars = this.restructure_attachments(result[1])
+      // test needed
+      let users = {};
+      JSON.parse(result[0].text).forEach((userData: {email: string, real_name: string}) => {
+        let newUser = new User(userData);
+        newUser.avatar = avatars[newUser.username]
+        users[newUser.username] = newUser
+      });
+      this.users$.next(users);
+      return true;
+    });
+  }
+
+  restructure_attachments(attachments: AttachmentResponce): {[key: string]: SafeUrl} {
+    let restructuredAttachments = {};
+    attachments.bugs[StaticData.BUG_WITH_ATTACHMENTS].filter(attachment => attachment.is_obsolete == 0).forEach(attachment => {
+      restructuredAttachments[attachment.summary] = this.sanitizer_for_avatar_data(attachment);
+    });
+    return restructuredAttachments
+  }
+
+  sanitizer_for_avatar_data(attachment: AttachmentResponceObject): SafeUrl {
+    return this._sanitizer.bypassSecurityTrustUrl("data:" + attachment.content_type + ";base64," + attachment.data);
   }
 
   handleError(error: any): string {

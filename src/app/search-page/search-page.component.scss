@@ -110,3 +110,43 @@
   margin: auto;
   padding-top: 5px;
 }
+
+.creator-form {
+  min-width: 18em;
+  width: 100%;
+}
+
+.creator-field {
+  width: 100%;
+  margin: 0 0.5em 0 0.5em;
+}
+.creator-image {
+  vertical-align: middle;
+  margin-right: 8px;
+}
+.creator-image-selected {
+  background-size: cover;
+  width: 3em;
+  height: 3em;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+.creator-block {
+  display: flex;
+}
+.creator-image-empty {
+  width: 3em;
+  margin: auto;
+  display: flex;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+.creator-icon-empty {
+  margin: auto;
+  display: flex;
+}
+
+img.avatar-image {
+  height: inherit;
+  width: inherit;
+}
