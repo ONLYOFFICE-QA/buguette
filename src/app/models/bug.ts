@@ -10,7 +10,7 @@ export interface BugResponceData {
   summary?: string;
   priority?: string;
   qa_contact?: string;
-  assain?: string;
+  assigned_to?: string;
 }
 
 export interface UserDetail {
@@ -39,7 +39,6 @@ export class Bug {
   resolution: string;
   buguetteStatus: string;
   priority: string;
-  assain: string;
   qa_contact: string;
   qa_contact_detail: UserDetail;
   assigned_to: string;
@@ -52,7 +51,6 @@ export class Bug {
   constructor(bugData: BugResponceData) {
     this.id = bugData['id']
     this.summary = bugData['summary']
-    this.assain = bugData['assain']
     this.product = bugData['product']
     this.component = bugData['component']
     this.version = bugData['version']
