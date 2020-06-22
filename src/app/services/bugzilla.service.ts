@@ -26,6 +26,7 @@ export interface SearchParams {
   severities?: Array<string>,
   priorities?: Array<string>,
   creator?: string,
+  assigned_to?: string,
 }
 
 export interface userParams {
@@ -135,6 +136,10 @@ export class BugzillaService {
 
     if (searchParams.creator) {
       params = params.append('creator', searchParams.creator);
+    }
+
+    if (searchParams.assigned_to) {
+      params = params.append('assigned_to', searchParams.assigned_to);
     }
 
     params = params.append('include_fields', 'status');

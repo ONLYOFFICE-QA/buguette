@@ -63,14 +63,42 @@
             [src]="createrControl.value.avatar || '/assets/avatars/default.jpg'">
         </div>
         <div class="creator-image-empty" *ngIf="!createrControl.value">
-          <mat-icon class="creator-icon-empty" aria-hidden="false">create</mat-icon>
+          <mat-icon class="icon-empty" aria-hidden="false">create</mat-icon>
         </div>
         <form class="creator-form" *ngIf="(filteredCreator | async) as creators">
           <mat-form-field class="creator-field">
             <input matInput placeholder="Creator" aria-label="Creator" [matAutocomplete]="auto"
               [formControl]="createrControl">
+              <button mat-button *ngIf="createrControl.value" matSuffix mat-icon-button aria-label="Clear" (click)="createrControl.reset()">
+                <mat-icon>close</mat-icon>
+              </button>
             <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayUser">
               <mat-option *ngFor="let user of creators" [value]="user">
+                <img class="creator-image" aria-hidden [src]="user.avatar || '/assets/avatars/default.jpg'" height="25">
+                <span>{{user.real_name}}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </form>
+      </div>
+
+      <div class="assigned-block">
+        <div class="assigned-image-selected" *ngIf="assignedToControl.value">
+          <img class="avatar-image"
+            [src]="assignedToControl.value.avatar || '/assets/avatars/default.jpg'">
+        </div>
+        <div class="assigned-image-empty" *ngIf="!assignedToControl.value">
+          <mat-icon class="icon-empty" aria-hidden="false">assignment_ind</mat-icon>
+        </div>
+        <form class="assigned-form" *ngIf="(filteredAssignedTo | async) as assigneters">
+          <mat-form-field class="assigned-field">
+            <input matInput placeholder="Assigned To" aria-label="Assigned To" [matAutocomplete]="auto"
+              [formControl]="assignedToControl">
+              <button mat-button *ngIf="assignedToControl.value" matSuffix mat-icon-button aria-label="Clear" (click)="assignedToControl.reset()">
+                <mat-icon>close</mat-icon>
+              </button>
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayUser">
+              <mat-option *ngFor="let user of assigneters" [value]="user">
                 <img class="creator-image" aria-hidden [src]="user.avatar || '/assets/avatars/default.jpg'" height="25">
                 <span>{{user.real_name}}</span>
               </mat-option>

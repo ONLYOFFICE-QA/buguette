@@ -111,12 +111,12 @@
   padding-top: 5px;
 }
 
-.creator-form {
+.creator-form, .assigned-form {
   min-width: 18em;
   width: 100%;
 }
 
-.creator-field {
+.creator-field, .assigned-field {
   width: 100%;
   margin: 0 0.5em 0 0.5em;
 }
@@ -124,24 +124,24 @@
   vertical-align: middle;
   margin-right: 8px;
 }
-.creator-image-selected {
+.creator-image-selected, .assigned-image-selected {
   background-size: cover;
   width: 3em;
   height: 3em;
   flex-shrink: 0;
   object-fit: cover;
 }
-.creator-block {
+.creator-block, .assigned-block {
   display: flex;
 }
-.creator-image-empty {
+.creator-image-empty, .assigned-image-empty {
   width: 3em;
   margin: auto;
   display: flex;
   flex-shrink: 0;
   object-fit: cover;
 }
-.creator-icon-empty {
+.icon-empty {
   margin: auto;
   display: flex;
 }

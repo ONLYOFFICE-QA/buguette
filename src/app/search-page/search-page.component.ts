@@ -37,12 +37,21 @@ export class SearchPageComponent implements OnInit {
   severityControl = new FormControl();
   priorityControl = new FormControl();
   createrControl = new FormControl();
+  assignedToControl = new FormControl();
 
   filteredCreator: Observable<User[]>;
+  filteredAssignedTo: Observable<User[]>;
 
   constructor(public bugzilla: BugzillaService, private router: Router,
     private route: ActivatedRoute, private bugDetail: BugDetailService,) {
     this.filteredCreator = this.createrControl.valueChanges.startWith('').switchMap(input => {
+      return this.users$.map((structuredUsers: StructuredUsers) => {
+        let users = Object.values(structuredUsers);
+        return this.user_filtering(input, users)
+      });
+    });
+
+    this.filteredAssignedTo = this.assignedToControl.valueChanges.startWith('').switchMap(input => {
       return this.users$.map((structuredUsers: StructuredUsers) => {
         let users = Object.values(structuredUsers);
         return this.user_filtering(input, users)
@@ -90,6 +99,7 @@ export class SearchPageComponent implements OnInit {
     params.severities = this.get_active_severities();
     params.priorities = this.get_active_priorities();
     params.creator = this.get_active_creater();
+    params.assigned_to = this.get_active_assigned_to();
     this.loading = true
     this.bugzilla.get_bugs(params).subscribe(_ => {
       this.loading = false;
@@ -128,5 +138,9 @@ export class SearchPageComponent implements OnInit {
 
   get_active_creater(): string {
     return this.createrControl.value?.username;
+  }
+
+  get_active_assigned_to(): string {
+    return this.assignedToControl.value?.username;
   }
 }
