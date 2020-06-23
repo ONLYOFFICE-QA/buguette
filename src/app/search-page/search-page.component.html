@@ -125,7 +125,7 @@
           class="result-item" *cdkVirtualFor="let bug of bugs">
           <mat-icon class="bug-severity" matTooltip={{bug.severity}} aria-hidden="false"
             [ngStyle]="{'color': severities[bug.severity]?.color, 'margin': 'auto'}">
-            {{severities[bug.severity].isFeature?"insights":"bug_report"}}</mat-icon>
+            {{severities[bug.severity]?.isFeature?"insights":"bug_report"}}</mat-icon>
           <div class="bug-summary">
             <span style="font-weight: 500;">{{bug.id}}</span>&nbsp;{{bug.summary}}
           </div>

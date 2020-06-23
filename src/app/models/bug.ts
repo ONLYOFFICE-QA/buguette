@@ -23,6 +23,7 @@ export interface Comment {
   text: string;
   creation_time: string;
   creator: string;
+  creator_username: string;
 }
 
 // this object describe bug
@@ -44,7 +45,7 @@ export class Bug {
   assigned_to_detail: UserDetail = {  real_name: "", id: 0, email: "", name: "", username: ""};
   creator: string;
   creator_detail: UserDetail;
-  comments = [];
+  comments: Comment[] = [];
   isEmpty = false;
   constructor(bugData: BugResponceData) {
     this.id = bugData['id']

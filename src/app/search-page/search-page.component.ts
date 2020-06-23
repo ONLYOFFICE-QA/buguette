@@ -15,7 +15,6 @@ import { User } from '../models/user';
 })
 export class SearchPageComponent implements OnInit {
   value: string;
-  usersWithAvatars: Array<string>;
   statuses = StaticData.STATUSES;
   products = StaticData.PRODUCTS;
   severities = StaticData.SEVERITIES;

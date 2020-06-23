@@ -17,24 +17,24 @@
           <mat-icon aria-hidden="false" aria-label="Example home icon">location_on</mat-icon>
         </div>
         <div class="addition-params-data">
-          <div class="params-data"
-
-          matTooltip={{bug.product}}
-          matTooltipPosition="above"><span [ngStyle]="{'background-color': products[bug.product].color}">{{products[bug.product].name}}</span></div>
+          <div class="params-data" matTooltip={{bug.product}} matTooltipPosition="above"><span
+              [ngStyle]="{'background-color': products[bug.product].color}">{{products[bug.product].name}}</span></div>
           <div class="params-data">{{bug.component}}</div>
           <div class="params-data">{{bug.version}}</div>
         </div>
       </div>
       <div class="addition-params">
         <div class="addition-params-icon">
-          <mat-icon matTooltip="QA contact {{bug.qa_contact}}" aria-hidden="false" aria-label="Example home icon">people_alt</mat-icon>
+          <mat-icon matTooltip="QA contact {{bug.qa_contact}}" aria-hidden="false" aria-label="Example home icon">
+            people_alt</mat-icon>
         </div>
         <div class="addition-params-data">
           <div class="params-data">
             Creator: {{(bug$ | async).creator_detail.real_name || "loading..."}}
-            </div>
+          </div>
           <div class="params-data">
-            Assigned: {{(bug$ | async).assigned_to_detail?(bug$ | async).assigned_to_detail?.real_name:(bug$ | async).assigned_to}}
+            Assigned:
+            {{(bug$ | async).assigned_to_detail?(bug$ | async).assigned_to_detail?.real_name:(bug$ | async).assigned_to}}
           </div>
         </div>
       </div>
@@ -45,16 +45,28 @@
         {{bug.comments[0]?.text}}
       </span>
     </div>
-
-
-
-
-
-
   </mat-card-content>
+</mat-card>
+
+<mat-card *ngFor="let comment of (bug$ | async)?.comments | slice:1" class="result comment mat-elevation-z2">
+  <div class="left-block-comment">
+    <div class="creator-image" *ngIf="(users$ | async)[comment.creator_username] as user">
+      <img class="avatar-image" matTooltip={{user.real_name}}
+        [src]="user.avatar || '/assets/avatars/default.jpg'">
+    </div>
+  </div>
+  <div class="right-block-comment">
+    <div class="comment-date">
+      {{comment.creation_time | date : 'd MMMM y, HH:mm'}}
+    </div>
+    <div class="comment-text">
+      {{comment.text}}
+    </div>
+  </div>
 
 
 </mat-card>
+
 
 <ng-template #loading>
   <mat-spinner style="margin: auto;"></mat-spinner>

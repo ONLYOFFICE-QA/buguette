@@ -13,12 +13,21 @@ export interface CommentResponceData {
   count: string;
 }
 
+export interface UserDetail {
+  real_name: string;
+  id: number;
+  email: string;
+  name: string;
+  username: string;
+}
+
 // this object describe comment
 export class Comment {
   id: number;
   bugId: number;
   attachment_id: string;
-  creationTime: string;
+  creation_time: string;
+  creator_username: string;
   creator: string;
   text: string;
   count: string;
@@ -26,9 +35,14 @@ export class Comment {
     this.id = commentData['id']
     this.bugId = commentData['bug_id']
     this.attachment_id = commentData['attachment_id']
-    this.creationTime = commentData['creation_time']
+    this.creation_time = commentData['creation_time']
     this.creator = commentData['creator']
+    this.creator_username = this.get_creator_username(commentData['creator'])
     this.text = commentData['text']
     this.count = commentData['count']
+  }
+
+  get_creator_username(email: string) {
+    return email.split('@')[0];
   }
 }

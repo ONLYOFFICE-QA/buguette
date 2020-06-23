@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import {ReplaySubject} from 'rxjs';
 import 'rxjs/add/operator/map';
 import { Bug } from '../models/bug';
-import { BugzillaService } from '../services/bugzilla.service';
+import { BugzillaService, StructuredUsers } from '../services/bugzilla.service';
 import { BugDetailService } from './bug-detail.service';
 import { StaticData }  from '../static-data';
 
@@ -15,6 +15,7 @@ import { StaticData }  from '../static-data';
 })
 export class BugDetailsComponent implements OnInit {
   bug$: ReplaySubject<Bug>;
+  users$: ReplaySubject<StructuredUsers>;
   severitiesRestructured = {};
   productRestructured = {};
   folders = [];
@@ -28,6 +29,7 @@ export class BugDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.bug$ = this.bugDetailService.bug$
+    this.users$ = this.bugzilla.users$
 
     this.activatedRoute.params.switchMap(params => {
       return this.bugzilla.get_bug_and_comments(params.id).map(bug => {
