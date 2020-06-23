@@ -7,3 +7,9 @@ mat-card {
 mat-form-field {
   display: block;
 }
+.mat-toolbar-multiple-rows {
+  min-height: 0;
+}
+.toolbar {
+  height: 2em;
+}

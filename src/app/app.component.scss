@@ -4,22 +4,3 @@
   flex: 1;
   overflow: hidden;
 }
-.toolbar-fill-space {
-  flex: 1 1 auto;
-}
-
-.loading-resources-block {
-  font-size: 2em;
-  padding: 3em;
-  display: flex;
-  margin: auto;
-  text-align: center;
-  flex-direction: column;
-  line-height: initial;
-}
-.mat-toolbar-multiple-rows {
-  min-height: 0;
-}
-.toolbar {
-  height: 2em;
-}

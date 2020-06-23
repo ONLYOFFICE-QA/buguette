@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {BugzillaService} from '../services/bugzilla.service';
+import { AuthGuardService } from '../guards/auth-guard.service';
 
 @Component({
   selector: 'app-main-page',
@@ -9,7 +10,7 @@ import {BugzillaService} from '../services/bugzilla.service';
 })
 export class MainPageComponent implements OnInit {
 
-  constructor(private activatedRoute: ActivatedRoute, public bugzilla: BugzillaService) { }
+  constructor(private activatedRoute: ActivatedRoute, public bugzilla: BugzillaService,  public auth: AuthGuardService) { }
 
   ngOnInit(): void {
 
@@ -23,4 +24,7 @@ export class MainPageComponent implements OnInit {
     }).subscribe();
   }
 
+  logout() {
+    this.bugzilla.logout();
+  }
 }
