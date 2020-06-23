@@ -17,3 +17,9 @@
   flex-direction: column;
   line-height: initial;
 }
+.mat-toolbar-multiple-rows {
+  min-height: 0;
+}
+.toolbar {
+  height: 2em;
+}
