@@ -6,25 +6,21 @@
     <mat-menu #appMenu="matMenu">
       <button (click)="logout()" mat-menu-item>Logout</button>
     </mat-menu>
-      <span *ngIf="(bugzilla.currentUser$ |async) as user; else loading">
-        {{user?.email}}
-      </span>
-      <ng-template #loading>
-        loading...
-      </ng-template>
-      <button mat-icon-button [matMenuTriggerFor]="appMenu">
-        <mat-icon>menu</mat-icon>
-      </button>
+    <span *ngIf="(bugzilla.currentUser$ |async) as user; else loading">
+      {{user?.email}}
+    </span>
+    <ng-template #loading>
+      loading...
+    </ng-template>
+    <button mat-icon-button [matMenuTriggerFor]="appMenu">
+      <mat-icon>menu</mat-icon>
+    </button>
   </mat-toolbar-row>
 </mat-toolbar>
 
-<div class="loading-resources-block" *ngIf="(auth.loader$ | async)">
-  <span> Wait for loading more resources.</span>
-  <span>This needs to be done only 1 time.</span>
-  <mat-progress-bar mode="buffer" style="margin-top: 1em;"></mat-progress-bar>
-</div>
+
 <div class="main-page">
-<router-outlet></router-outlet>
+  <router-outlet></router-outlet>
 
 </div>
 <button mat-button routerLink='/search'>Search</button>
