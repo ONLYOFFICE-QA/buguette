@@ -1,1 +1,11 @@
 <router-outlet></router-outlet>
+<div class="loading-resources-block" *ngIf="auth.loader$ | async">
+  <div class="account-message">
+    <div class="text">
+      Loading  resources:
+    </div>
+    <div>
+      <mat-spinner style="margin: auto;" [diameter]="25"></mat-spinner>
+    </div>
+  </div>
+</div>
