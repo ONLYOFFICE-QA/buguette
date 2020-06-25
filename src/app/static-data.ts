@@ -11,11 +11,10 @@ export class StaticData {
   "DocumentBuilder": { name: "Builder", color: "#feffba", active: false, realName: "DocumentBuilder" }};
 
   public static readonly SEVERITIES =
-  {"critical": { name: "Critical", realName: "critical", addition: ["blocker"], color: "#ff0000" },
+  {"critical": { name: "Critical/Blocker", realName: "critical", addition: ["blocker"], color: "#ff0000" },
   "major": { name: "Major", realName: "major", color: "#ff8922" },
   "normal": { name: "Normal", realName: "normal", color: "#000000" },
-  "minor": { name: "Minor", realName: "minor", color: "#000000" },
-  "trivial": { name: "Trivial", realName: "trivial", color: "#000000" },
+  "minor": { name: "Minor/Trivial", realName: "minor", addition: ["trivial"], color: "#8d8d8d" },
   "enhancement": { name: "Enhancement", realName: "enhancement", isFeature: true, color: "#30ac09" }};
 
   public static readonly STATUSES =
