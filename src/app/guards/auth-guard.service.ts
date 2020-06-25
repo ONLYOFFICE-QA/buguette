@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate } from '@angular/router';
-import { Observable, of, Subject, BehaviorSubject } from 'rxjs';
+import { Observable, of, BehaviorSubject } from 'rxjs';
 import { BugzillaService } from '../services/bugzilla.service';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class AuthGuardService implements CanActivate {
@@ -14,9 +15,9 @@ export class AuthGuardService implements CanActivate {
       return of(false);
     }
     this.loader$.next(true);
-    return this.bugzilla.get_user_data().map(x => {
+    return this.bugzilla.get_user_data().pipe(map(x => {
       this.loader$.next(false);
       return x
-    });
+    }));
   }
 }

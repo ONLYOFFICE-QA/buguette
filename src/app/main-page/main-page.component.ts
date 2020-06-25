@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {BugzillaService} from '../services/bugzilla.service';
 import { AuthGuardService } from '../guards/auth-guard.service';
+import { switchMap, pluck } from 'rxjs/operators';
 
 @Component({
   selector: 'app-main-page',
@@ -14,14 +15,16 @@ export class MainPageComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.activatedRoute.params.pluck('id').switchMap( _ => {
-      const userdata = JSON.parse(localStorage.getItem('user_data'));
-      if (userdata.id) {
-        return this.bugzilla.get_user({id: userdata.id});
-      } else {
-        return this.bugzilla.get_user({names: userdata.username});
-      }
-    }).subscribe();
+    this.activatedRoute.params.pipe(
+      pluck('id'),
+      switchMap( _ => {
+        const userdata = JSON.parse(localStorage.getItem('user_data'));
+        if (userdata.id) {
+          return this.bugzilla.get_user({id: userdata.id});
+        } else {
+          return this.bugzilla.get_user({names: userdata.username});
+        }
+      })).subscribe();
   }
 
   logout() {

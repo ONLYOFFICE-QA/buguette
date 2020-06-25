@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from './http-request.service';
 import { HttpParams } from '@angular/common/http';
-import { Observable, ReplaySubject } from 'rxjs';
 import { Bug, BugResponceData } from '../models/bug';
 import { CommentResponce, Comment, CommentResponceData } from '../models/comment';
 import { User } from '../models/user';
 import { Router } from '@angular/router';
 import { StaticData }  from '../static-data';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { map } from 'rxjs/operators';
+import { forkJoin, Observable, ReplaySubject } from 'rxjs';
 
 export interface UserData {
   id: number,
@@ -152,32 +153,32 @@ export class BugzillaService {
     params = params.append('include_fields', 'priority');
     params = params.append('include_fields', 'id');
 
-     return this.httpService.getRequest('/bug', params).map((response: {bugs: BugResponceData[]}) => {
-       const _bugs = [];
-       response.bugs.forEach(bug => {
-         _bugs.push(new Bug(bug))
-       });
-         this.bugs$.next(_bugs.reverse());
-         return _bugs;
-     });
+     return this.httpService.getRequest('/bug', params).pipe(map((response: {bugs: BugResponceData[]}) => {
+      const _bugs = [];
+      response.bugs.forEach(bug => {
+        _bugs.push(new Bug(bug))
+      });
+        this.bugs$.next(_bugs.reverse());
+        return _bugs;
+    }));
   }
 
   get_comments(bugId: number): Observable<any> {
     let url = '/bug/' + bugId + '/comment';
-    return this.httpService.getRequest(url, new HttpParams()).map((response: {bugs: CommentResponce}) => {
+    return this.httpService.getRequest(url, new HttpParams()).pipe(map((response: {bugs: CommentResponce}) => {
       const comments = [];
       response.bugs[bugId].comments.forEach(commentData => {
         comments.push(new Comment(commentData));
       });
       return comments
-    });
+    }));
   }
 
   get_comment_by_id(commentId: number): Observable<Comment> {
     let url = '/bug/comment/' + commentId;
-    return this.httpService.getRequest(url, new HttpParams()).map((response: {comments: CommentResponceData}) => {
+    return this.httpService.getRequest(url, new HttpParams()).pipe(map((response: {comments: CommentResponceData}) => {
       return new Comment(response.comments[commentId])
-    });
+    }));
   }
 
   get_attachments(bugId: number): Observable<AttachmentResponce> {
@@ -213,30 +214,30 @@ export class BugzillaService {
   get_bug_by_id(id: number): Observable<Bug> {
     let params = new HttpParams();
     params = params.append('id', id.toString());
-    return this.httpService.getRequest('/bug', params).map((response: {bugs: BugResponceData[]}) => {
+    return this.httpService.getRequest('/bug', params).pipe(map((response: {bugs: BugResponceData[]}) => {
       const newBug = new Bug(response.bugs[0]);
       return new Bug(response.bugs[0]);
-    });
+    }));
   }
 
   get_bug_and_comments(id: number): Observable<Bug> {
     const bug = this.get_bug_by_id(id);
     const comments = this.get_comments(id);
-    return Observable.forkJoin([bug, comments]).map(result => {
+    return forkJoin([bug, comments]).pipe(map(result => {
       const bug = result[0];
       bug.comments = result[1];
       result[0].comments = result[1];
       return bug;
-    })
+    }));
   }
 
   get_user_by_api(username: string, apiKey: string): Observable<any> {
     let params = new HttpParams();
     params = params.append('api_key', apiKey);
     params = params.append('names', username);
-    return this.httpService.getRequest('/user', params).map(res => {
+    return this.httpService.getRequest('/user', params).pipe(map(res => {
       this.currentUser$.next(new User(res.users[0]));
-    })
+    }));
   }
 
   get_user(userParams: userParams): Observable<any> {
@@ -253,15 +254,15 @@ export class BugzillaService {
       params = params.append('api_key', userParams.apiKey);
     }
 
-    return this.httpService.getRequest('/user', params).map(res => {
+    return this.httpService.getRequest('/user', params).pipe(map(res => {
       this.currentUser$.next(new User(res.users[0]));
-    })
+    }))
   }
 
   get_user_data(): Observable<true> {
     const comment = this.get_comment_by_id(StaticData.COMMENT_WITH_USER_DATA);
     const attachments = this.get_attachments(StaticData.BUG_WITH_ATTACHMENTS);
-    return Observable.forkJoin([comment, attachments]).map(result => {
+    return forkJoin([comment, attachments]).pipe(map(result => {
       let avatars = this.restructure_attachments(result[1])
       // test needed
       let users = {};
@@ -272,7 +273,7 @@ export class BugzillaService {
       });
       this.users$.next(users);
       return true;
-    });
+    }));
   }
 
   restructure_attachments(attachments: AttachmentResponce): {[key: string]: SafeUrl} {

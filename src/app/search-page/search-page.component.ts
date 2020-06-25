@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { StaticData } from '../static-data';
 import { User } from '../models/user';
+import { startWith, map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-search-page',
@@ -43,19 +44,19 @@ export class SearchPageComponent implements OnInit {
 
   constructor(public bugzilla: BugzillaService, private router: Router,
     private route: ActivatedRoute, private bugDetail: BugDetailService,) {
-    this.filteredCreator = this.createrControl.valueChanges.startWith('').switchMap(input => {
-      return this.users$.map((structuredUsers: StructuredUsers) => {
+    this.filteredCreator = this.createrControl.valueChanges.pipe(startWith(''), switchMap(input => {
+      return this.users$.pipe(map((structuredUsers: StructuredUsers) => {
         let users = Object.values(structuredUsers);
         return this.user_filtering(input, users)
-      });
-    });
+      }));
+    }));
 
-    this.filteredAssignedTo = this.assignedToControl.valueChanges.startWith('').switchMap(input => {
-      return this.users$.map((structuredUsers: StructuredUsers) => {
+    this.filteredAssignedTo = this.assignedToControl.valueChanges.pipe(startWith(''), switchMap(input => {
+      return this.users$.pipe(map((structuredUsers: StructuredUsers) => {
         let users = Object.values(structuredUsers);
         return this.user_filtering(input, users)
-      });
-    });
+      }));
+    }));
   }
 
   user_filtering(userInput: (string | undefined), users: User[]): User[] {

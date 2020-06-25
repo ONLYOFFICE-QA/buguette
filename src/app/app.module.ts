@@ -17,7 +17,6 @@ import { SearchPageComponent } from './search-page/search-page.component';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import { BugDetailsComponent } from './bug-details/bug-details.component';
 import { BugDetailService } from './bug-details/bug-detail.service';
-import 'rxjs/Rx';
 
 
 @NgModule({
