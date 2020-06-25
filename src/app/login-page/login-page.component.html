@@ -26,7 +26,7 @@
               Please provide a valid password
             </mat-error>
           </mat-form-field>
-          <button mat-raised-button color="primary">Sing in</button>
+          <button mat-raised-button color="primary" [disabled] = buttonsDisableFlag>Sing in</button>
         </form>
       </mat-card-content>
     </mat-card>
@@ -48,12 +48,23 @@
               Please provide a valid key
             </mat-error>
           </mat-form-field>
-          <button mat-raised-button color="primary">Sing in</button>
+          <button mat-raised-button color="primary" [disabled] = buttonsDisableFlag>Sing in</button>
         </form>
       </mat-card-content>
     </mat-card>
-
   </mat-tab>
 </mat-tab-group>
+<div class="loading-resources-block" *ngIf="formStatus.loading !== 'waiting'">
+  <div class="account-message">
+    <div class="text">
+      Check account data:
+    </div>
+    <div *ngIf="formStatus?.loading == 'start'">
+      <mat-spinner style="margin: auto;" [diameter]="25"></mat-spinner>
+    </div>
+    <div *ngIf="formStatus?.loading == 'complite'">
+      Ok
+    </div>
+  </div>
+</div>
 
-<mat-spinner *ngIf="loading" style="margin: auto;"></mat-spinner>

@@ -13,3 +13,16 @@ mat-form-field {
 .toolbar {
   height: 2em;
 }
+.account-message {
+  display: flex;
+  margin: auto;
+}
+
+.loading-resources-block {
+  display: flex;
+  flex-direction: column;
+}
+.text {
+  display: grid;
+  padding-right: 0.5em;
+}

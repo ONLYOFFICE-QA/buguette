@@ -5,7 +5,7 @@ import { BugzillaService } from '../services/bugzilla.service';
 
 @Injectable()
 export class AuthGuardService implements CanActivate {
-  public loader$ = new BehaviorSubject<boolean>(true);
+  public loader$ = new BehaviorSubject<boolean>(false);
 
   constructor(public router: Router, private bugzilla: BugzillaService) {}
   canActivate(): Observable<boolean> {
@@ -13,6 +13,7 @@ export class AuthGuardService implements CanActivate {
       this.router.navigate(['login']);
       return of(false);
     }
+    this.loader$.next(true);
     return this.bugzilla.get_user_data().map(x => {
       this.loader$.next(false);
       return x
