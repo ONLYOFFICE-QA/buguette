@@ -77,6 +77,9 @@ export class SearchPageComponent implements OnInit {
           result = true;
         }
       })
+      if (!result) {
+        result = user.real_name.toLowerCase().indexOf(filterValue) === 0
+      }
       return result;
     });
   }
