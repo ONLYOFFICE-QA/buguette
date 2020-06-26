@@ -140,7 +140,7 @@ export class BugzillaService {
       params = params.append('assigned_to', searchParams.assigned_to);
     }
 
-    if (searchParams.quicksearch !== '') {
+    if (searchParams.quicksearch) {
       params = params.append('quicksearch', searchParams.quicksearch);
     }
     params = params.append('include_fields', 'status');
@@ -154,7 +154,7 @@ export class BugzillaService {
     params = params.append('include_fields', 'id');
 
     return this.users$.pipe(switchMap(users => {
-      if (searchParams.creator_and_commentator) {
+      if (searchParams.creator_and_commentator && searchParams.creator) {
         params = params.append('email1', users[searchParams.creator].email);
         params = params.append('emaillongdesc1', '1');
       } else if (searchParams.creator) {
