@@ -15,7 +15,7 @@
 
 .actions-for-search {
   display: flex;
-  margin: auto;
+  padding-left: 3em;
 }
 
 .actions-for-filter {
@@ -149,4 +149,8 @@
 img.avatar-image {
   height: inherit;
   width: inherit;
+}
+
+.search-button {
+  margin: auto;
 }
