@@ -121,6 +121,7 @@
 <div class="result-space">
   <ng-container *ngIf="!loading">
     <div class="result-list" *ngIf="(bugs$ | async) as bugs">
+      <div *ngIf="bugs.length == 0"><h1>Bugs not found. Try to change search paramerters</h1></div>
 
       <cdk-virtual-scroll-viewport [itemSize]="50" class="result-list-view">
         <mat-card (click)="get_details(bug)" [ngClass]="{'mat-elevation-z10': (bugDetail$ | async)?.id == bug.id}"
