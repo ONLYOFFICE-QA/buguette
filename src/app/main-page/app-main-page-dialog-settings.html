@@ -1,0 +1,8 @@
+<h1 mat-dialog-title>Settings</h1>
+<div mat-dialog-content class="dialog-content" *ngIf="(settings.settingsData$ | async) as settingsData">
+  <mat-slide-toggle [checked]="settingsData.comment_and_creator"
+   (change)="comment_and_creator_change($event)"
+   matTooltip="Enables searching by bug and comment creators">
+    Creator and Commentator
+  </mat-slide-toggle>
+</div>

@@ -67,7 +67,10 @@
         </div>
         <form class="creator-form" *ngIf="(filteredCreator | async) as creators">
           <mat-form-field class="creator-field">
-            <input matInput placeholder="Creator" aria-label="Creator" [matAutocomplete]="auto"
+            <input matInput
+              [placeholder]="(settings.settingsData$ | async)?.comment_and_creator?'Creator or Commentator': 'Creator'"
+              aria-label="Creator"
+              [matAutocomplete]="auto"
               [formControl]="createrControl">
               <button mat-button *ngIf="createrControl.value" matSuffix mat-icon-button aria-label="Clear" (click)="createrControl.reset()">
                 <mat-icon>close</mat-icon>

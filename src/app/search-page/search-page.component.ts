@@ -8,6 +8,7 @@ import { FormControl } from '@angular/forms';
 import { StaticData } from '../static-data';
 import { User } from '../models/user';
 import { startWith, map, switchMap } from 'rxjs/operators';
+import { SettingsService } from '../services/settings.service';
 
 @Component({
   selector: 'app-search-page',
@@ -42,8 +43,11 @@ export class SearchPageComponent implements OnInit {
   filteredCreator: Observable<User[]>;
   filteredAssignedTo: Observable<User[]>;
 
-  constructor(public bugzilla: BugzillaService, private router: Router,
-    private route: ActivatedRoute, private bugDetail: BugDetailService,) {
+  constructor(public bugzilla: BugzillaService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private bugDetail: BugDetailService,
+    public settings: SettingsService) {
     this.filteredCreator = this.createrControl.valueChanges.pipe(startWith(''), switchMap(input => {
       return this.users$.pipe(map((structuredUsers: StructuredUsers) => {
         let users = Object.values(structuredUsers);
@@ -100,6 +104,7 @@ export class SearchPageComponent implements OnInit {
     params.priorities = this.get_active_priorities();
     params.creator = this.get_active_creater();
     params.assigned_to = this.get_active_assigned_to();
+    params.creator_and_commentator = this.settings.settingsData$.getValue().comment_and_creator;
     this.loading = true
     this.bugzilla.get_bugs(params).subscribe(_ => {
       this.loading = false;

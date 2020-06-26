@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {BugzillaService} from '../services/bugzilla.service';
+import {SettingsService} from '../services/settings.service';
 import { AuthGuardService } from '../guards/auth-guard.service';
 import { switchMap, pluck } from 'rxjs/operators';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-main-page',
@@ -11,7 +13,10 @@ import { switchMap, pluck } from 'rxjs/operators';
 })
 export class MainPageComponent implements OnInit {
 
-  constructor(private activatedRoute: ActivatedRoute, public bugzilla: BugzillaService,  public auth: AuthGuardService) { }
+  constructor(private activatedRoute: ActivatedRoute,
+     public bugzilla: BugzillaService,
+     public auth: AuthGuardService,
+     public dialog: MatDialog) { }
 
   ngOnInit(): void {
 
@@ -29,5 +34,31 @@ export class MainPageComponent implements OnInit {
 
   logout() {
     this.bugzilla.logout();
+  }
+
+  settingsOpen() {
+    const dialogRef = this.dialog.open(MainPageDialogSettings);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+}
+
+@Component({
+  selector: 'app-main-page-dialog-settings',
+  templateUrl: 'app-main-page-dialog-settings.html',
+  styleUrls: ['app-main-page-dialog-settings.scss']
+})
+export class MainPageDialogSettings {
+
+  constructor(public dialogRef: MatDialogRef<MainPageDialogSettings>, public settings: SettingsService,) {}
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+  comment_and_creator_change($event) {
+    this.settings.comment_and_creator_change($event.checked);
   }
 }

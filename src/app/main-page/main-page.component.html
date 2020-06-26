@@ -2,10 +2,6 @@
   <mat-toolbar-row class="toolbar">
     <span>Buguette</span>
     <span class="toolbar-fill-space"></span>
-
-    <mat-menu #appMenu="matMenu">
-      <button (click)="logout()" mat-menu-item>Logout</button>
-    </mat-menu>
     <span *ngIf="(bugzilla.currentUser$ |async) as user; else loading">
       {{user?.email}}
     </span>
@@ -21,6 +17,10 @@
 
 <div class="main-page">
   <router-outlet></router-outlet>
-
 </div>
 <button mat-button routerLink='/search'>Search</button>
+
+<mat-menu #appMenu="matMenu">
+  <button (click)="logout()" mat-menu-item>Logout</button>
+  <button (click)="settingsOpen()" mat-menu-item>Settings</button>
+</mat-menu>

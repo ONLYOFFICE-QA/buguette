@@ -7,7 +7,7 @@ import { User } from '../models/user';
 import { Router } from '@angular/router';
 import { StaticData }  from '../static-data';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { forkJoin, Observable, ReplaySubject } from 'rxjs';
 
 export interface UserData {
@@ -28,6 +28,7 @@ export interface SearchParams {
   priorities?: Array<string>,
   creator?: string,
   assigned_to?: string,
+  creator_and_commentator?: boolean,
 }
 
 export interface userParams {
@@ -135,14 +136,9 @@ export class BugzillaService {
       params = params.append('priority', priority);
     });
 
-    if (searchParams.creator) {
-      params = params.append('creator', searchParams.creator);
-    }
-
     if (searchParams.assigned_to) {
       params = params.append('assigned_to', searchParams.assigned_to);
     }
-
     params = params.append('include_fields', 'status');
     params = params.append('include_fields', 'severity');
     params = params.append('include_fields', 'summary');
@@ -153,14 +149,22 @@ export class BugzillaService {
     params = params.append('include_fields', 'priority');
     params = params.append('include_fields', 'id');
 
-     return this.httpService.getRequest('/bug', params).pipe(map((response: {bugs: BugResponceData[]}) => {
-      const _bugs = [];
-      response.bugs.forEach(bug => {
-        _bugs.push(new Bug(bug))
-      });
-        this.bugs$.next(_bugs.reverse());
-        return _bugs;
-    }));
+    return this.users$.pipe(switchMap(users => {
+      if (searchParams.creator_and_commentator) {
+        params = params.append('email1', users[searchParams.creator].email);
+        params = params.append('emaillongdesc1', '1');
+      } else if (searchParams.creator) {
+        params = params.append('creator', searchParams.creator);
+      }
+      return this.httpService.getRequest('/bug', params).pipe(map((response: {bugs: BugResponceData[]}) => {
+        const _bugs = [];
+        response.bugs.forEach(bug => {
+          _bugs.push(new Bug(bug))
+        });
+          this.bugs$.next(_bugs.reverse());
+          return _bugs;
+      }));
+    }))
   }
 
   get_comments(bugId: number): Observable<any> {
