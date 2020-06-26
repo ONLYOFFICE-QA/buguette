@@ -28,6 +28,7 @@ export interface SearchParams {
   priorities?: Array<string>,
   creator?: string,
   assigned_to?: string,
+  quicksearch?: string,
   creator_and_commentator?: boolean,
 }
 
@@ -127,7 +128,6 @@ export class BugzillaService {
       params = this.append_status(params, statusName);
     });
 
-
     searchParams.severities?.forEach((severity: string) => {
       params = params.append('severity', severity);
     });
@@ -138,6 +138,10 @@ export class BugzillaService {
 
     if (searchParams.assigned_to) {
       params = params.append('assigned_to', searchParams.assigned_to);
+    }
+
+    if (searchParams.quicksearch !== '') {
+      params = params.append('quicksearch', searchParams.quicksearch);
     }
     params = params.append('include_fields', 'status');
     params = params.append('include_fields', 'severity');
