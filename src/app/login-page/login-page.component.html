@@ -12,6 +12,9 @@
           <mat-error *ngIf="tokenInvalid">
             Api token is not found
           </mat-error>
+          <mat-error *ngIf="emailInvalid">
+            The email is not connected with the api key?
+          </mat-error>
           <mat-form-field class="full-width-input">
             <input matInput placeholder="Email" formControlName="username" required>
           </mat-form-field>

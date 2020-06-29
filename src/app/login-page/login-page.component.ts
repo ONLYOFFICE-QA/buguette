@@ -20,6 +20,7 @@ export class LoginPageComponent implements OnInit {
   formKey: FormGroup;
   public loginInvalid: boolean;
   public tokenInvalid: boolean;
+  public emailInvalid: boolean;
   public loading = false;
   public buttonsDisableFlag = false;
   public formStatus: FormStatusInterface = { loading: 'waiting'};
@@ -65,7 +66,11 @@ export class LoginPageComponent implements OnInit {
       params['names'] = this.formKey.get('username').value
       params['apiKey'] = this.formKey.get('key').value
       this.bugzilla.get_user(params).subscribe(res => {
-        this.api_token_authorize(params.names, params.apiKey);
+        if (res?.users[0].saved_searches) {
+          this.api_token_authorize(params.names, params.apiKey);
+        } else {
+          this.email_invalid();
+        }
       }, err => {
         this.token_invalid(err);
       });
@@ -74,6 +79,7 @@ export class LoginPageComponent implements OnInit {
 
   login_invalid(err) {
     this.loading = false;
+    this.formStatus.loading = "waiting";
     this.buttonsDisableFlag = false;
     this.loginInvalid = true;
     console.error(err);
@@ -81,9 +87,17 @@ export class LoginPageComponent implements OnInit {
 
   token_invalid(err) {
     this.loading = false;
+    this.formStatus.loading = "waiting";
     this.buttonsDisableFlag = false;
     this.tokenInvalid = true;
     console.error(err);
+  }
+
+  email_invalid() {
+    this.loading = false;
+    this.formStatus.loading = "waiting";
+    this.buttonsDisableFlag = false;
+    this.emailInvalid = true;
   }
 
   login(res: UserData) {

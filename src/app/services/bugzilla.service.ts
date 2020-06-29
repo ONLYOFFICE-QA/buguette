@@ -264,6 +264,7 @@ export class BugzillaService {
 
     return this.httpService.getRequest('/user', params).pipe(map(res => {
       this.currentUser$.next(new User(res.users[0]));
+      return res;
     }))
   }
 
