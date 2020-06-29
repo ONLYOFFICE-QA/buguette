@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { BugzillaService, UserData, userParams } from '../services/bugzilla.service';
 import { User } from '../models/user';
 import { AuthGuardService } from '../guards/auth-guard.service';
+import { StaticData }  from '../static-data';
 
 export interface FormStatusInterface {
   loading?: "waiting" | "start" | "complite" | "error"
@@ -95,5 +96,9 @@ export class LoginPageComponent implements OnInit {
     this.formStatus.loading = 'complite';
     localStorage.setItem('user_data', JSON.stringify({ api_key: apiKey, username: username }));
     this.router.navigate(['/']);
+  }
+
+  get_link_to_bugzilla_api() {
+    return StaticData.BUGZILLA_LINK + '/userprefs.cgi?tab=apikey';
   }
 }

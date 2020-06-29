@@ -21,7 +21,10 @@
               Please provide a valid key
             </mat-error>
           </mat-form-field>
-          <button mat-raised-button color="primary" [disabled] = buttonsDisableFlag>Sing in</button>
+          <div>
+            <button mat-raised-button color="primary" [disabled] = buttonsDisableFlag>Sing in</button>
+          </div>
+          <div style="text-align: end;"><a [href]=get_link_to_bugzilla_api() target="_blank">Generate API key</a></div>
         </form>
       </mat-card-content>
     </mat-card>
