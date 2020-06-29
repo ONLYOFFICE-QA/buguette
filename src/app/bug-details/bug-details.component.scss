@@ -17,7 +17,7 @@
 }
 
 .addition-data {
-  display: inline-block;
+  display: block;
 }
 
 .comment-text {
@@ -74,3 +74,16 @@
 .comment-text {
   margin: 0.5em;
 }
+.bugzilla-image {
+  width: 4em;
+  height: 4em;
+  background-image: url(/assets/images/bugzilla.jpeg);
+  background-size: cover;
+}
+.space {
+ flex: 1;
+}
+.addition-params-bugzilla-link {
+  cursor: pointer;
+}
+
