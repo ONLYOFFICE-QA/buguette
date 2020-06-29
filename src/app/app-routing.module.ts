@@ -10,9 +10,7 @@ import { BugDetailsComponent } from './bug-details/bug-details.component';
 const routes: Routes = [
   { path: 'login', component: LoginPageComponent},
   { path: '', component: MainPageComponent, canActivate: [AuthGuardService], children: [
-    { path: 'search', component: SearchPageComponent, children: [
-      { path: 'bug/:id', component: BugDetailsComponent}
-  ]},
+    { path: 'bug/:id', component: BugDetailsComponent },
   ]},
   { path: '**', redirectTo: '' }
 ];

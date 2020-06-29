@@ -16,9 +16,9 @@
 
 
 <div class="main-page">
-  <router-outlet></router-outlet>
+  <!-- <router-outlet></router-outlet> -->
+  <app-search-page></app-search-page>
 </div>
-<button mat-button routerLink='/search'>Search</button>
 
 <mat-menu #appMenu="matMenu">
   <button (click)="logout()" mat-menu-item>Logout</button>
