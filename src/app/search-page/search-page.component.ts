@@ -9,7 +9,6 @@ import { StaticData } from '../static-data';
 import { User } from '../models/user';
 import { startWith, map, switchMap, tap } from 'rxjs/operators';
 import { SettingsService } from '../services/settings.service';
-import { NodeCompatibleEventEmitter } from 'rxjs/internal/observable/fromEvent';
 
 @Component({
   selector: 'app-search-page',

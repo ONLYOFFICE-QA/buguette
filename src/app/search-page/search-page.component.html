@@ -125,7 +125,7 @@
       <cdk-virtual-scroll-viewport [itemSize]="50" class="result-list-view">
         <mat-card (click)="get_details(bug)" [ngClass]="{'mat-elevation-z10': (bugDetail$ | async)?.id == bug.id}"
           [ngStyle]="{'border-left': '0.3em solid ' + products[bug.product].color}" routerLinkActive="active"
-          class="result-item" *cdkVirtualFor="let bug of bugs| quicksearch: quicksearch: currentCount$;  let l = count">
+          class="result-item" *cdkVirtualFor="let bug of bugs| quicksearch: quicksearch;  let l = count">
           <mat-icon class="bug-severity" matTooltip={{bug.severity}} aria-hidden="false"
             [ngStyle]="{'color': severities[bug.severity]?.color, 'margin': 'auto'}">
             {{severities[bug.severity]?.isFeature?"insights":"bug_report"}}</mat-icon>
