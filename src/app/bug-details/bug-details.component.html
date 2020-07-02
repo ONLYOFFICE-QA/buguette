@@ -48,7 +48,7 @@
     </div>
     <mat-divider></mat-divider>
     <div class="comment main-comment">
-      <div class="attachment" *ngIf="bug.comments[0].attachment_id as id">
+      <div class="attachment" *ngIf="bug.comments[0]?.attachment_id as id">
         <mat-progress-bar mode="query" *ngIf="attachmentLoading[id]"></mat-progress-bar>
         <div [ngClass]="{'attachment_space_for_loading': !attachmentLoading[id]}">
           <button mat-icon-button matTooltip="Download {{bug.comments[0].attachment_name}}"
