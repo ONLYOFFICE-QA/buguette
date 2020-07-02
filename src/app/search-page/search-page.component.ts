@@ -16,7 +16,6 @@ import { SettingsService } from '../services/settings.service';
   styleUrls: ['./search-page.component.scss']
 })
 export class SearchPageComponent implements OnInit {
-  quicksearch: string;
   statuses = StaticData.STATUSES;
   products = StaticData.PRODUCTS;
   severities = StaticData.SEVERITIES;
@@ -94,8 +93,11 @@ export class SearchPageComponent implements OnInit {
   }
 
   private bugs_filtering(userInput: string, bugs: Bug[]) {
-    userInput = userInput.toLowerCase();
-    let result = bugs.filter(bug => bug.summary.toLowerCase().indexOf(userInput) !== -1);
+    let result = bugs
+    if (userInput) {
+      userInput = userInput?.toLowerCase();
+      result = bugs.filter(bug => bug.summary.toLowerCase().indexOf(userInput) !== -1);
+    }
     return result;
   }
 
@@ -126,7 +128,7 @@ export class SearchPageComponent implements OnInit {
     params.priorities = this.get_active_priorities();
     params.creator = this.get_active_creater();
     params.assigned_to = this.get_active_assigned_to();
-    params.quicksearch = this.quicksearch;
+    params.quicksearch = this.quickFilterControl.value;
     params.creator_and_commentator = this.settings.settingsData$.getValue().comment_and_creator;
     this.loading = true
     this.bugzilla.get_bugs(params).subscribe(_ => {
