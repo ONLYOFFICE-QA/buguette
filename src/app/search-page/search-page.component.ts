@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { BugzillaService, SearchParams, Severity, Status, Product, Priority, StructuredUsers } from '../services/bugzilla.service';
 import { BugDetailService } from '../bug-details/bug-detail.service';
 import { ReplaySubject, Observable, Subject, BehaviorSubject } from 'rxjs';
@@ -7,7 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { StaticData } from '../static-data';
 import { User } from '../models/user';
-import { startWith, map, switchMap, tap } from 'rxjs/operators';
+import { startWith, map, switchMap } from 'rxjs/operators';
 import { SettingsService } from '../services/settings.service';
 
 @Component({
@@ -21,7 +21,6 @@ export class SearchPageComponent implements OnInit {
   products = StaticData.PRODUCTS;
   severities = StaticData.SEVERITIES;
   priorities = StaticData.PRIORITIES;
-  users: User[];
   users$: Observable<StructuredUsers>;
   currentCount$: Observable<number> = new BehaviorSubject(0);
   currentCount: number;
@@ -41,14 +40,15 @@ export class SearchPageComponent implements OnInit {
   priorityControl = new FormControl();
   createrControl = new FormControl();
   assignedToControl = new FormControl();
+  quickFilterControl = new FormControl();
 
+  filteredBugs: Observable<Bug[]>;
   filteredCreator: Observable<User[]>;
   filteredAssignedTo: Observable<User[]>;
 
   constructor(public bugzilla: BugzillaService,
     private router: Router,
     private route: ActivatedRoute,
-    private cd: ChangeDetectorRef,
     private bugDetail: BugDetailService,
     public settings: SettingsService) {
     this.filteredCreator = this.createrControl.valueChanges.pipe(startWith(''), switchMap(input => {
@@ -64,9 +64,15 @@ export class SearchPageComponent implements OnInit {
         return this.user_filtering(input, users)
       }));
     }));
+
+    this.filteredBugs = this.quickFilterControl.valueChanges.pipe(startWith(''), switchMap(string => {
+      return this.bugs$.pipe(map((bugs: Bug[]) => {
+        return this.bugs_filtering(string, bugs)
+      }));
+    }));
   }
 
-  user_filtering(userInput: (string | undefined), users: User[]): User[] {
+  private user_filtering(userInput: (string | undefined), users: User[]): User[] {
     return (typeof userInput == 'string') ? this._filterUsers(userInput, users) : users.slice()
   }
 
@@ -85,6 +91,12 @@ export class SearchPageComponent implements OnInit {
       }
       return result;
     });
+  }
+
+  private bugs_filtering(userInput: string, bugs: Bug[]) {
+    userInput = userInput.toLowerCase();
+    let result = bugs.filter(bug => bug.summary.toLowerCase().indexOf(userInput) !== -1);
+    return result;
   }
 
   ngOnInit(): void {

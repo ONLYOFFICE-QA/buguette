@@ -11,7 +11,7 @@
       <div class="search-field-block">
         <mat-form-field appearance="fill" class="search-field">
           <mat-label>Quick search</mat-label>
-          <input matInput type="search" [(ngModel)]="quicksearch" autocomplete="off" (keydown.enter)="search()">
+          <input matInput type="search" [formControl]="quickFilterControl" autocomplete="off" (keydown.enter)="search()">
           <button mat-button *ngIf="quicksearch" matSuffix mat-icon-button aria-label="Clear" (click)="quicksearch=''">
             <mat-icon>close</mat-icon>
           </button>
@@ -121,12 +121,12 @@
 
 <div class="result-space">
   <ng-container *ngIf="!loading">
-    <div class="result-list" *ngIf="(bugs$ | async) as bugs">
+    <div class="result-list" *ngIf="(filteredBugs | async) as bugs">
       <div *ngIf="bugs.length == 0"><h1>No bugs found. Try adjusting search parameters</h1></div>
       <cdk-virtual-scroll-viewport [itemSize]="50" class="result-list-view">
         <mat-card (click)="get_details(bug)" [ngClass]="{'mat-elevation-z10': (bugDetail$ | async)?.id == bug.id}"
           [ngStyle]="{'border-left': '0.3em solid ' + products[bug.product].color}" routerLinkActive="active"
-          class="result-item" *cdkVirtualFor="let bug of bugs| quicksearch: quicksearch;  let l = count">
+          class="result-item" *cdkVirtualFor="let bug of bugs">
           <mat-icon class="bug-severity" matTooltip={{bug.severity}} aria-hidden="false"
             [ngStyle]="{'color': severities[bug.severity]?.color, 'margin': 'auto'}">
             {{severities[bug.severity]?.isFeature?"insights":"bug_report"}}</mat-icon>
