@@ -22,7 +22,7 @@ export class StaticData {
   {"NEW": { name: "New/Assigned", realName: "NEW", addition: ["ASSIGNED"], active: false },
   "FIXED": { name: "Fixed", realName: "FIXED", active: false },
   "VERIFIED": { name: "Verified", realName: "VERIFIED", active: false },
-  "REOPENED": { name: "Reopen", realName: "REOPENED", active: false }};
+  "REOPENED": { name: "Reopened", realName: "REOPENED", active: false }};
 
   public static readonly PRIORITIES =
   {"P1": { name: "P1", realName: "P1" },

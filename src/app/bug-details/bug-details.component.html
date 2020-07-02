@@ -33,7 +33,7 @@
             Creator: {{(bug$ | async).creator_detail.real_name || "loading..."}}
           </div>
           <div class="params-data">
-            Assigned:
+            Assigned to:
             {{(bug$ | async).assigned_to_detail?(bug$ | async).assigned_to_detail?.real_name:(bug$ | async).assigned_to}}
           </div>
         </div>
