@@ -1,10 +1,13 @@
 <mat-card class="result" *ngIf="(bug$ | async) as bug; else loading">
-  <mat-card-header>
+  <mat-card-header class="bug-detail-header">
     <mat-card-title style="word-break: break-word;">
       {{bug.id}}&nbsp;{{bug.summary}}
     </mat-card-title>
-    <mat-card-subtitle><span
-        [ngStyle]="{'color': severities[bug.severity]?.color}">{{bug.severity}}</span>&nbsp;{{bug.priority}}
+    <mat-card-subtitle>
+      <span [ngStyle]="{'color': severities[bug.severity]?.color}">
+        {{bug.severity}}
+      </span>
+      &nbsp;{{bug.priority}}
     </mat-card-subtitle>
     <mat-card-subtitle>{{bug.buguetteStatus}}</mat-card-subtitle>
     <!-- <mat-card-subtitle>{{bug.product}},&nbsp;</mat-card-subtitle> -->
@@ -30,11 +33,27 @@
         </div>
         <div class="addition-params-data">
           <div class="params-data">
-            Creator: {{(bug$ | async).creator_detail.real_name || "loading..."}}
+            Creator: {{bug.creator_detail.real_name || "loading..."}}
           </div>
           <div class="params-data">
             Assigned to:
-            {{(bug$ | async).assigned_to_detail?(bug$ | async).assigned_to_detail?.real_name:(bug$ | async).assigned_to}}
+            {{bug.assigned_to_detail?bug.assigned_to_detail?.real_name:bug.assigned_to}}
+          </div>
+        </div>
+      </div>
+      <div class="addition-params">
+        <div class="addition-params-icon">
+          <mat-icon aria-hidden="false" aria-label="Example home icon">
+            date_range
+          </mat-icon>
+        </div>
+        <div class="addition-params-data" matTooltip="Created: {{bug.creation_time | date : 'd MMMM y, HH:mm'}}">
+          <div class="params-data">
+            {{bug.creation_time | date : 'd MMMM y'}}
+          </div>
+          <div class="params-data" *ngIf="bug.last_change_time !== bug.creation_time"
+          matTooltip="Updated: {{bug.last_change_time | date : 'd MMMM y, HH:mm'}}">
+            {{bug.last_change_time | date : 'd MMMM y'}}
           </div>
         </div>
       </div>

@@ -42,6 +42,8 @@ export class Bug {
   creator_detail: UserDetail;
   comments: Comment[] = [];
   isEmpty = false;
+  creation_time: string;
+  last_change_time: string;
   constructor(bugData: BugResponceData) {
     this.id = bugData['id']
     this.summary = bugData['summary']
@@ -61,6 +63,8 @@ export class Bug {
     this.creator = bugData['creator']
     this.creator_detail = this.get_user_detail(bugData['creator_detail'])
     this.buguetteStatus = this.get_buguette_status()
+    this.creation_time = bugData['creation_time']
+    this.last_change_time = bugData['last_change_time']
   }
 
   get_buguette_status() {
