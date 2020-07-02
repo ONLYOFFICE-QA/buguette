@@ -84,6 +84,9 @@ export interface AttachmentResponceObject {
 export interface AttachmentResponce {
   bugs: {
     [key: number]: AttachmentResponceObject[]
+  },
+  attachments: {
+    [key: number]: AttachmentResponceObject
   }
 }
 
@@ -194,6 +197,11 @@ export class BugzillaService {
     return this.httpService.getRequest(url, new HttpParams());
   }
 
+  get_attachment(id: number): Observable<AttachmentResponce> {
+    const url = '/bug/attachment/' + id;
+    return this.httpService.getRequest(url, new HttpParams());
+  }
+
   append_status(params: HttpParams, statusName: string): HttpParams {
     switch(statusName) {
       case 'FIXED': {
@@ -288,12 +296,12 @@ export class BugzillaService {
   restructure_attachments(attachments: AttachmentResponce): {[key: string]: SafeUrl} {
     let restructuredAttachments = {};
     attachments.bugs[StaticData.BUG_WITH_ATTACHMENTS].filter(attachment => attachment.is_obsolete == 0).forEach(attachment => {
-      restructuredAttachments[attachment.summary] = this.sanitizer_for_avatar_data(attachment);
+      restructuredAttachments[attachment.summary] = this.sanitizer_data(attachment);
     });
     return restructuredAttachments
   }
 
-  sanitizer_for_avatar_data(attachment: AttachmentResponceObject): SafeUrl {
+  sanitizer_data(attachment: AttachmentResponceObject): SafeUrl {
     return this._sanitizer.bypassSecurityTrustUrl("data:" + attachment.content_type + ";base64," + attachment.data);
   }
 

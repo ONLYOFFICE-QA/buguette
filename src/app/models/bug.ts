@@ -1,3 +1,5 @@
+import { Comment } from './comment';
+
 export interface BugResponceData {
   id?: number;
   product?: string;
@@ -17,13 +19,6 @@ export interface UserDetail {
   email: string;
   name: string;
   username: string;
-}
-
-export interface Comment {
-  text: string;
-  creation_time: string;
-  creator: string;
-  creator_username: string;
 }
 
 // this object describe bug
