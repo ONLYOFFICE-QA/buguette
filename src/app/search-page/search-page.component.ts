@@ -96,7 +96,7 @@ export class SearchPageComponent implements OnInit {
     let result = bugs
     if (userInput) {
       userInput = userInput?.toLowerCase();
-      result = bugs.filter(bug => bug.summary.toLowerCase().indexOf(userInput) !== -1);
+      result = bugs.filter(bug => (bug.id + ' ' + bug.summary.toLowerCase()).indexOf(userInput) !== -1);
     }
     return result;
   }
