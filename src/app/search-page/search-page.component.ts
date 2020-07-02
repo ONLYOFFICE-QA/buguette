@@ -10,6 +10,11 @@ import { User } from '../models/user';
 import { startWith, map, switchMap } from 'rxjs/operators';
 import { SettingsService } from '../services/settings.service';
 
+export interface Counters {
+  all?: number;
+  hidden?: number;
+}
+
 @Component({
   selector: 'app-search-page',
   templateUrl: './search-page.component.html',
@@ -21,8 +26,7 @@ export class SearchPageComponent implements OnInit {
   severities = StaticData.SEVERITIES;
   priorities = StaticData.PRIORITIES;
   users$: Observable<StructuredUsers>;
-  currentCount$: Observable<number> = new BehaviorSubject(0);
-  currentCount: number;
+  currentCounts: Counters = {};
 
   productsArray: Product[];
   severitiesArray: Severity[];
@@ -66,7 +70,10 @@ export class SearchPageComponent implements OnInit {
 
     this.filteredBugs = this.quickFilterControl.valueChanges.pipe(startWith(''), switchMap(string => {
       return this.bugs$.pipe(map((bugs: Bug[]) => {
-        return this.bugs_filtering(string, bugs)
+        this.currentCounts.all = bugs.length;
+        let _filteredBugs = this.bugs_filtering(string, bugs)
+        this.currentCounts.hidden = this.currentCounts.all - _filteredBugs.length;
+        return _filteredBugs;
       }));
     }));
   }

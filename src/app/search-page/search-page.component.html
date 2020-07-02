@@ -15,8 +15,11 @@
           <button mat-button *ngIf="quickFilterControl.value" matSuffix mat-icon-button (click)="quickFilterControl.reset()">
             <mat-icon>close</mat-icon>
           </button>
-          <mat-hint align="end" *ngIf="(bugs$ | async) && !loading" style="font-size: 1.2em;">
-            All results count: <span><b>{{(bugs$ | async)?.length}}</b></span>
+          <mat-hint *ngIf="(filteredBugs | async) && !loading && currentCounts?.hidden" style="font-size: 1.2em;">
+            Hidden results: <b>{{currentCounts.hidden}}</b>
+          </mat-hint>
+          <mat-hint align="end" *ngIf="(filteredBugs | async) && !loading" style="font-size: 1.2em;">
+            All results count: <span><b>{{currentCounts?.all}}</b></span>
           </mat-hint>
         </mat-form-field>
       </div>
@@ -124,7 +127,8 @@
 <div class="result-space">
   <ng-container *ngIf="!loading">
     <div class="result-list" *ngIf="(filteredBugs | async) as bugs">
-      <div *ngIf="bugs.length == 0"><h1>No bugs found. Try adjusting search parameters</h1></div>
+      <div *ngIf="currentCounts.all == 0"><h1>No bugs found. Try adjusting search parameters</h1></div>
+      <div *ngIf="currentCounts.all == currentCounts.hidden"><h1>All bugs hidden. Try to clear quick search</h1></div>
       <cdk-virtual-scroll-viewport [itemSize]="50" class="result-list-view">
         <mat-card (click)="get_details(bug)" [ngClass]="{'mat-elevation-z10': (bugDetail$ | async)?.id == bug.id}"
           [ngStyle]="{'border-left': '0.3em solid ' + products[bug.product].color}" routerLinkActive="active"
