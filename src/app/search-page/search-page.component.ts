@@ -1,14 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { BugzillaService, SearchParams, Severity, Status, Product, Priority, StructuredUsers } from '../services/bugzilla.service';
 import { BugDetailService } from '../bug-details/bug-detail.service';
-import { ReplaySubject, Observable } from 'rxjs';
+import { ReplaySubject, Observable, Subject, BehaviorSubject } from 'rxjs';
 import { Bug, UserDetail } from '../models/bug';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { StaticData } from '../static-data';
 import { User } from '../models/user';
-import { startWith, map, switchMap } from 'rxjs/operators';
+import { startWith, map, switchMap, tap } from 'rxjs/operators';
 import { SettingsService } from '../services/settings.service';
+import { NodeCompatibleEventEmitter } from 'rxjs/internal/observable/fromEvent';
 
 @Component({
   selector: 'app-search-page',
@@ -23,6 +24,8 @@ export class SearchPageComponent implements OnInit {
   priorities = StaticData.PRIORITIES;
   users: User[];
   users$: Observable<StructuredUsers>;
+  currentCount$: Observable<number> = new BehaviorSubject(0);
+  currentCount: number;
 
   productsArray: Product[];
   severitiesArray: Severity[];
@@ -46,6 +49,7 @@ export class SearchPageComponent implements OnInit {
   constructor(public bugzilla: BugzillaService,
     private router: Router,
     private route: ActivatedRoute,
+    private cd: ChangeDetectorRef,
     private bugDetail: BugDetailService,
     public settings: SettingsService) {
     this.filteredCreator = this.createrControl.valueChanges.pipe(startWith(''), switchMap(input => {
@@ -88,6 +92,10 @@ export class SearchPageComponent implements OnInit {
     this.bugDetail$ = this.bugDetail.bug$;
     this.bugs$ = this.bugzilla.bugs$;
     this.users$ = this.bugzilla.users$
+    // this.currentCount$.subscribe(x => {
+    //   this.currentCount = x;
+    //   return x
+    // });
 
     this.productsArray = Object.values(this.products);
     this.severitiesArray = Object.values(this.severities);

@@ -17,6 +17,7 @@ import { SearchPageComponent } from './search-page/search-page.component';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import { BugDetailsComponent } from './bug-details/bug-details.component';
 import { BugDetailService } from './bug-details/bug-detail.service';
+import { QuicksearchPipe } from './search-page/quicksearch.pipe';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { BugDetailService } from './bug-details/bug-detail.service';
     LoginPageComponent,
     MainPageComponent, MainPageDialogSettings,
     SearchPageComponent,
-    BugDetailsComponent
+    BugDetailsComponent,
+    QuicksearchPipe
   ],
   imports: [
     HttpClientModule,
