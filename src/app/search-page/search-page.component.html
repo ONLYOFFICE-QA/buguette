@@ -15,6 +15,7 @@
           <button mat-button *ngIf="quicksearch" matSuffix mat-icon-button aria-label="Clear" (click)="quicksearch=''">
             <mat-icon>close</mat-icon>
           </button>
+          <mat-hint align="end" *ngIf="(bugs$ | async) && !loading" style="font-size: 1.2em;">All results count: <span><b>{{(bugs$ | async)?.length}}</b></span></mat-hint>
         </mat-form-field>
       </div>
     </div>

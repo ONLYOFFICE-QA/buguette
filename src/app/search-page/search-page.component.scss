@@ -56,6 +56,7 @@
 }
 
 .result-list {
+  margin-top: 0.5em;
   flex-direction: column;
   overflow: auto;
   flex: 3;
@@ -153,4 +154,14 @@ img.avatar-image {
 
 .search-button {
   margin: auto;
+}
+.count_chart {
+  height: 0.5em;
+  border: solid 1px #8b8b8b;
+  background-color: #00ff95;
+}
+
+.count-message {
+  display: flex;
+  width: 100%;
 }
