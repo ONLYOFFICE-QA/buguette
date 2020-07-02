@@ -105,10 +105,6 @@ export class SearchPageComponent implements OnInit {
     this.bugDetail$ = this.bugDetail.bug$;
     this.bugs$ = this.bugzilla.bugs$;
     this.users$ = this.bugzilla.users$
-    // this.currentCount$.subscribe(x => {
-    //   this.currentCount = x;
-    //   return x
-    // });
 
     this.productsArray = Object.values(this.products);
     this.severitiesArray = Object.values(this.severities);
