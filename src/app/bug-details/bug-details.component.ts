@@ -47,15 +47,4 @@ export class BugDetailsComponent implements OnInit {
       }));
     })).subscribe();
   }
-
-  download_attachment(id: number) {
-    this.attachmentLoading[id] = true;
-    this.bugzilla.get_attachment(id).subscribe((attachmentsResponce: AttachmentResponce) => {
-      let data = attachmentsResponce.attachments[id]["data"]
-      let type = attachmentsResponce.attachments[id]["content_type"]
-      let name = attachmentsResponce.attachments[id]["file_name"]
-      this.filehelper.download_file_by_base64(data, type, name);
-      this.attachmentLoading[id] = false;
-    })
-  }
 }

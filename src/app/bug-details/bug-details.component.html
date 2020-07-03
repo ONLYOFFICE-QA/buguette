@@ -67,16 +67,9 @@
     </div>
     <mat-divider></mat-divider>
     <div class="comment main-comment">
-      <div class="attachment" *ngIf="bug.comments[0]?.attachment_id as id">
-        <mat-progress-bar mode="query" *ngIf="attachmentLoading[id]"></mat-progress-bar>
-        <div [ngClass]="{'attachment_space_for_loading': !attachmentLoading[id]}">
-          <button mat-icon-button matTooltip="Download {{bug.comments[0].attachment_name}}"
-            (click)="download_attachment(id)">
-            <mat-icon>attachment</mat-icon>
-          </button>
-          {{bug.comments[0].attachment_name}}
-        </div>
-      </div>
+      <app-detail-attachment
+      [id]="bug.comments[0]?.attachment_id"
+      [bugData]="bug.comments[0]"></app-detail-attachment>
       <span class="comment-text">
         {{bug.comments[0]?.text}}
       </span>
@@ -94,17 +87,9 @@
     <div class="comment-date">
       {{comment.creation_time | date : 'd MMMM y, HH:mm'}}
     </div>
-    <div class="attachment" *ngIf="comment.attachment_id">
-      <mat-progress-bar mode="query" *ngIf="attachmentLoading[comment.attachment_id]"></mat-progress-bar>
-      <div [ngClass]="{'attachment_space_for_loading': !attachmentLoading[comment.attachment_id]}">
-        <button mat-icon-button matTooltip="Download {{comment.attachment_name}}"
-          [disabled]="this.attachmentLoading[comment.attachment_id]"
-          (click)="download_attachment(comment.attachment_id)">
-          <mat-icon>attachment</mat-icon>
-        </button>
-        <div class="attachment-name">{{comment.attachment_name}}</div>
-      </div>
-    </div>
+    <app-detail-attachment
+    [id]="comment.attachment_id"
+    [bugData]="comment"></app-detail-attachment>
     <div class="comment-text" *ngIf="comment.text">
       {{comment.text}}
     </div>

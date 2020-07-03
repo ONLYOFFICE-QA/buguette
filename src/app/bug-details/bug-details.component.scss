@@ -96,21 +96,8 @@
 .addition-params-bugzilla-link {
   cursor: pointer;
 }
-.loading-attachment {
-  display: inline-block;
-  margin-left: 0.5em;
-  margin-right: 0.5em;
-  margin-top: 0.5em;
-}
 .attachment-name {
   display: inline-block;
-}
-.attachment {
-  display: flex;
-  flex-direction: column;
-}
-.attachment_space_for_loading {
-  padding-top: 4px;
 }
 .bug-detail-header {
   flex: 1;

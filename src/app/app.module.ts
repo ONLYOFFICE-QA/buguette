@@ -17,6 +17,7 @@ import { SearchPageComponent } from './search-page/search-page.component';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import { BugDetailsComponent } from './bug-details/bug-details.component';
 import { BugDetailService } from './bug-details/bug-detail.service';
+import { DetailAttachmentComponent } from './bug-details/detail-attachment/detail-attachment.component';
 
 
 @NgModule({
@@ -26,6 +27,7 @@ import { BugDetailService } from './bug-details/bug-detail.service';
     MainPageComponent, MainPageDialogSettings,
     SearchPageComponent,
     BugDetailsComponent,
+    DetailAttachmentComponent,
   ],
   imports: [
     HttpClientModule,
