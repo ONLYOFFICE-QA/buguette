@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { BugzillaService, SearchParams, Severity, Status, Product, Priority, StructuredUsers } from '../services/bugzilla.service';
 import { BugDetailService } from '../bug-details/bug-detail.service';
 import { ReplaySubject, Observable, Subject, BehaviorSubject } from 'rxjs';
@@ -52,6 +52,7 @@ export class SearchPageComponent implements OnInit {
   constructor(public bugzilla: BugzillaService,
     private router: Router,
     private route: ActivatedRoute,
+    private cd: ChangeDetectorRef,
     private bugDetail: BugDetailService,
     public settings: SettingsService) {
     this.filteredCreator = this.createrControl.valueChanges.pipe(startWith(''), switchMap(input => {
@@ -68,11 +69,12 @@ export class SearchPageComponent implements OnInit {
       }));
     }));
 
-    this.filteredBugs = this.quickFilterControl.valueChanges.pipe(startWith(''), switchMap(string => {
+    this.filteredBugs = this.quickFilterControl.valueChanges.pipe(startWith(''), switchMap(_ => {
       return this.bugs$.pipe(map((bugs: Bug[]) => {
         this.currentCounts.all = bugs.length;
-        let _filteredBugs = this.bugs_filtering(string, bugs)
+        let _filteredBugs = this.bugs_filtering(this.quickFilterControl.value, bugs)
         this.currentCounts.hidden = this.currentCounts.all - _filteredBugs.length;
+        this.cd.detectChanges();
         return _filteredBugs;
       }));
     }));

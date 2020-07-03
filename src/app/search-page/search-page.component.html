@@ -15,10 +15,10 @@
           <button mat-button *ngIf="quickFilterControl.value" matSuffix mat-icon-button (click)="quickFilterControl.reset()">
             <mat-icon>close</mat-icon>
           </button>
-          <mat-hint *ngIf="(filteredBugs | async) && !loading && currentCounts?.hidden" style="font-size: 1.2em;">
+          <mat-hint *ngIf="!loading && currentCounts?.hidden" style="font-size: 1.2em;">
             Hidden results: <b>{{currentCounts.hidden}}</b>
           </mat-hint>
-          <mat-hint align="end" *ngIf="(filteredBugs | async) && !loading" style="font-size: 1.2em;">
+          <mat-hint align="end" *ngIf="!loading && currentCounts?.all" style="font-size: 1.2em;">
             All results count: <span><b>{{currentCounts?.all}}</b></span>
           </mat-hint>
         </mat-form-field>
