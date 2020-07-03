@@ -61,4 +61,8 @@ export class MainPageDialogSettings {
   comment_and_creator_change($event) {
     this.settings.comment_and_creator_change($event.checked);
   }
+
+  autoload_images_change($event) {
+    this.settings.autoload_images_change($event.checked);
+  }
 }
