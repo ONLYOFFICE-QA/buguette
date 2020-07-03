@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 
 export interface SettingsInterface {
   comment_and_creator?: boolean
+  autoload_images?: boolean
 }
 
 @Injectable({
@@ -17,6 +18,12 @@ export class SettingsService {
   public comment_and_creator_change(status: boolean): void {
     let _settings: SettingsInterface = this.get_settings_from_storage();
     _settings.comment_and_creator = status
+    this.save_settings_from_storage(_settings);
+  }
+
+  public autoload_images_change(status: boolean): void {
+    let _settings: SettingsInterface = this.get_settings_from_storage();
+    _settings.autoload_images = status
     this.save_settings_from_storage(_settings);
   }
 
