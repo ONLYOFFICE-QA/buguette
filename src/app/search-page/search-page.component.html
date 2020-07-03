@@ -128,7 +128,7 @@
   <ng-container *ngIf="!loading">
     <div class="result-list" *ngIf="(filteredBugs | async) as bugs">
       <div *ngIf="currentCounts.all == 0"><h1>No bugs found. Try adjusting search parameters</h1></div>
-      <div *ngIf="currentCounts.all == currentCounts.hidden"><h1>All bugs hidden. Try to clear quick search</h1></div>
+      <div *ngIf="(currentCounts.all == currentCounts.hidden) && currentCounts.all !== 0"><h1>All bugs hidden. Try to clear quick search</h1></div>
       <cdk-virtual-scroll-viewport [itemSize]="50" class="result-list-view">
         <mat-card (click)="get_details(bug)" [ngClass]="{'mat-elevation-z10': (bugDetail$ | async)?.id == bug.id}"
           [ngStyle]="{'border-left': '0.3em solid ' + products[bug.product].color}" routerLinkActive="active"
