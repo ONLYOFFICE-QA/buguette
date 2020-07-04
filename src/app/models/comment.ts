@@ -6,7 +6,7 @@ export interface CommentResponce {
 export interface CommentResponceData {
   id: number;
   bugId: number;
-  attachment_id: string;
+  attachment_id: number;
   creationTime: string;
   creator: string;
   text: string;
@@ -25,13 +25,14 @@ export interface UserDetail {
 export class Comment {
   id: number;
   bugId: number;
-  attachment_id: string;
+  attachment_id: number;
   attachment_name: string;
   creation_time: string;
   creator_username: string;
   creator: string;
   text: string;
   count: string;
+  attachment_is_image: boolean;
   constructor(commentData: CommentResponceData) {
     this.id = commentData['id']
     this.bugId = commentData['bug_id']
@@ -42,6 +43,7 @@ export class Comment {
     this.attachment_id = commentData['attachment_id']
     if (this.attachment_id) {
       this.attachment_name = this.get_attachment_name(commentData['text'])
+      this.attachment_is_image = this.attachment_is_image_check()
     }
     this.count = commentData['count']
   }
@@ -52,6 +54,15 @@ export class Comment {
 
   get_attachment_name(text: string): string {
     return text.split('\n')[1]
+  }
+
+  attachment_is_image_check(): boolean {
+    let result = (/\.(gif|jpe?g|tiff|png|webp|bmp)$/i).test(this.attachment_name)
+    if (!result) {
+      let name = this.attachment_name.toLowerCase();
+      result = ["скриншот", "screen"].some(x => name.indexOf(x) >= 0)
+    }
+    return result
   }
 
   get_text(text: string): string {

@@ -10,7 +10,6 @@
       &nbsp;{{bug.priority}}
     </mat-card-subtitle>
     <mat-card-subtitle>{{bug.buguetteStatus}}</mat-card-subtitle>
-    <!-- <mat-card-subtitle>{{bug.product}},&nbsp;</mat-card-subtitle> -->
   </mat-card-header>
   <mat-card-content class="addition-data">
     <mat-divider></mat-divider>
@@ -67,12 +66,17 @@
     </div>
     <mat-divider></mat-divider>
     <div class="comment main-comment">
-      <app-detail-attachment
+      <app-detail-attachment *ngIf="!image_autoload || !bug.comments[0]?.attachment_is_image"
       [id]="bug.comments[0]?.attachment_id"
+      [imageAutoload]="image_autoload"
       [bugData]="bug.comments[0]"></app-detail-attachment>
       <span class="comment-text">
         {{bug.comments[0]?.text}}
       </span>
+      <app-detail-attachment *ngIf="image_autoload && bug.comments[0]?.attachment_is_image"
+      [id]="bug.comments[0]?.attachment_id"
+      [imageAutoload]="image_autoload"
+      [bugData]="bug.comments[0]"></app-detail-attachment>
     </div>
   </mat-card-content>
 </mat-card>
@@ -89,6 +93,7 @@
     </div>
     <app-detail-attachment
     [id]="comment.attachment_id"
+    [imageAutoload]="image_autoload"
     [bugData]="comment"></app-detail-attachment>
     <div class="comment-text" *ngIf="comment.text">
       {{comment.text}}

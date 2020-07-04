@@ -1,10 +1,16 @@
-<div class="attachment" *ngIf="id">
-  <mat-progress-bar mode="query" *ngIf="loading"></mat-progress-bar>
-  <div [ngClass]="{'attachment_space_for_loading': !loading}">
-    <button mat-icon-button matTooltip="Download {{bugData.attachment_name}}"
-      (click)="download_attachment(id)">
-      <mat-icon>attachment</mat-icon>
-    </button>
-    {{bugData.attachment_name}}
+<ng-container *ngIf="!images[id] || !imageAutoload">
+  <div class="attachment" *ngIf="id">
+    <mat-progress-bar mode="query" *ngIf="loading"></mat-progress-bar>
+    <div [ngClass]="{'attachment_space_for_loading': !loading}">
+      <button mat-icon-button matTooltip="Download {{bugData.attachment_name}}" (click)="download_attachment(id)">
+        <mat-icon>attachment</mat-icon>
+      </button>
+      {{bugData.attachment_name}}
+    </div>
   </div>
-</div>
+</ng-container>
+<ng-container *ngIf="images[id] && imageAutoload">
+  <div class="attachment">
+    <img class="attachment-image" [src]="images[id]">
+  </div>
+</ng-container>

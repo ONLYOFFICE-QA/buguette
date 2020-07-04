@@ -10,4 +10,9 @@
 .attachment {
   display: flex;
   flex-direction: column;
+  margin: 0 -16px 0 -16px;
+}
+.attachment-image {
+  margin: auto;
+  width: 100%;
 }

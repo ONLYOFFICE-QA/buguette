@@ -2,11 +2,11 @@ import { Component, OnInit, getDebugNode } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 import { Bug } from '../models/bug';
-import { BugzillaService, StructuredUsers, AttachmentResponce } from '../services/bugzilla.service';
+import { BugzillaService, StructuredUsers } from '../services/bugzilla.service';
 import { BugDetailService } from './bug-detail.service';
-import { FileHelperService } from '../services/file-helper.service';
 import { StaticData }  from '../static-data';
 import { switchMap, map } from 'rxjs/operators';
+import { SettingsService } from '../services/settings.service';
 
 
 @Component({
@@ -24,12 +24,11 @@ export class BugDetailsComponent implements OnInit {
   severities = StaticData.SEVERITIES;
   products = StaticData.PRODUCTS;
   bugzillaLink: string = '';
-  attachmentLoading = {};
 
   constructor(private activatedRoute: ActivatedRoute,
               private bugzilla: BugzillaService,
-              private filehelper: FileHelperService,
-              private bugDetailService: BugDetailService) { }
+              private bugDetailService: BugDetailService,
+              private settings: SettingsService) { }
 
   ngOnInit(): void {
     this.bug$ = this.bugDetailService.bug$
@@ -46,5 +45,9 @@ export class BugDetailsComponent implements OnInit {
         }
       }));
     })).subscribe();
+  }
+
+  get image_autoload() {
+    return this.settings.settingsData$.getValue()?.autoload_images
   }
 }

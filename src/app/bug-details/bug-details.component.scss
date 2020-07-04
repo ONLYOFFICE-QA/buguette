@@ -9,6 +9,7 @@
 .result {
   display: inline-table;
   margin: 0.5em;
+  padding-bottom: 0;
 }
 
 .addition-params {
@@ -96,9 +97,11 @@
 .addition-params-bugzilla-link {
   cursor: pointer;
 }
+
 .attachment-name {
   display: inline-block;
 }
+
 .bug-detail-header {
   flex: 1;
 }
