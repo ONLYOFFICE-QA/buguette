@@ -66,17 +66,16 @@
     </div>
     <mat-divider></mat-divider>
     <div class="comment main-comment">
-      <app-detail-attachment *ngIf="!image_autoload || !bug.comments[0]?.attachment_is_image"
-      [id]="bug.comments[0]?.attachment_id"
-      [imageAutoload]="image_autoload"
-      [bugData]="bug.comments[0]"></app-detail-attachment>
-      <span class="comment-text">
+      <span class="comment-text" *ngIf="image_autoload && bug.comments[0]?.attachment_is_image">
         {{bug.comments[0]?.text}}
       </span>
-      <app-detail-attachment *ngIf="image_autoload && bug.comments[0]?.attachment_is_image"
+      <app-detail-attachment
       [id]="bug.comments[0]?.attachment_id"
       [imageAutoload]="image_autoload"
       [bugData]="bug.comments[0]"></app-detail-attachment>
+      <span class="comment-text" *ngIf="!image_autoload || !bug.comments[0]?.attachment_is_image">
+        {{bug.comments[0]?.text}}
+      </span>
     </div>
   </mat-card-content>
 </mat-card>
