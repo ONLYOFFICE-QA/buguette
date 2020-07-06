@@ -11,7 +11,9 @@ export class StaticData {
   "documenteditors plugins": { name: "Plugins", color: "#ff8ee2", active: false, realName: "documenteditors plugins" },
   "DocumentBuilder": { name: "Builder", color: "#feffba", active: false, realName: "DocumentBuilder" },
   "ONLYOFFICE Projects App iOS": { name: "iOS Projects", color: "#00dedd", active: false, realName: "ONLYOFFICE Projects App iOS" },
-  "Documents Android App": { name: "Android", color: "#00c93e", active: false, realName: "Documents Android App" }};
+  "Documents Android App": { name: "Android", color: "#00c93e", active: false, realName: "Documents Android App" },
+  "OnlyOffice": { name: "OnlyOffice", color: "#ffc800", active: false, realName: "OnlyOffice" },
+  "OnlyOffice Install": { name: "O. Install", color: "#ff6e6e", active: false, realName: "OnlyOffice Install" }};
 
   public static readonly SEVERITIES =
   {"critical": { name: "Critical/Blocker", realName: "critical", addition: ["blocker"], color: "#ff0000" },
