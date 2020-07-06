@@ -8,6 +8,7 @@ export class StaticData {
   {"Office Canvas Document Editor": { name: "Documents", color: "#cbcbff", active: false, realName: "Office Canvas Document Editor" },
   "Office Canvas Spreadsheet Editor": { name: "Spreadsheets", color: "#c5ffc5", active: false, realName: "Office Canvas Spreadsheet Editor" },
   "Office Canvas Presentation Editor": { name: "Presentations", color: "#ffa7a7", active: false, realName: "Office Canvas Presentation Editor" },
+  "Chromium Desktop Editors": { name: "Desktop", color: "#c49000", active: false, realName: "Chromium Desktop Editors" },
   "documenteditors plugins": { name: "Plugins", color: "#ff8ee2", active: false, realName: "documenteditors plugins" },
   "DocumentBuilder": { name: "Builder", color: "#feffba", active: false, realName: "DocumentBuilder" },
   "ONLYOFFICE Projects App iOS": { name: "iOS Projects", color: "#00dedd", active: false, realName: "ONLYOFFICE Projects App iOS" },
