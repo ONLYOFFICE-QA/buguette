@@ -9,7 +9,9 @@ export class StaticData {
   "Office Canvas Spreadsheet Editor": { name: "Spreadsheets", color: "#c5ffc5", active: false, realName: "Office Canvas Spreadsheet Editor" },
   "Office Canvas Presentation Editor": { name: "Presentations", color: "#ffa7a7", active: false, realName: "Office Canvas Presentation Editor" },
   "documenteditors plugins": { name: "Plugins", color: "#ff8ee2", active: false, realName: "documenteditors plugins" },
-  "DocumentBuilder": { name: "Builder", color: "#feffba", active: false, realName: "DocumentBuilder" }};
+  "DocumentBuilder": { name: "Builder", color: "#feffba", active: false, realName: "DocumentBuilder" },
+  "ONLYOFFICE Projects App iOS": { name: "iOS Projects", color: "#00dedd", active: false, realName: "ONLYOFFICE Projects App iOS" },
+  "Documents Android App": { name: "Android", color: "#00c93e", active: false, realName: "Documents Android App" }};
 
   public static readonly SEVERITIES =
   {"critical": { name: "Critical/Blocker", realName: "critical", addition: ["blocker"], color: "#ff0000" },
