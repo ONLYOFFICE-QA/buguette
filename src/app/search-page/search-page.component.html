@@ -2,7 +2,7 @@
   <div class="actions-for-filter">
     <div class="filter-block">
       <div class="product-select-block">
-        <mat-card class="filter-item"  (click)="product.active = !product.active" *ngFor="let product of productsArray"
+        <mat-card class="filter-item" (click)="change_product_active(product)" *ngFor="let product of productsArray"
           [ngClass]="{'mat-elevation-z21': product.active, 'mat-elevation-z0': !product.active}"
           [ngStyle]="{'background-color': product.active?product.color:'#e2e2e2'}">
           {{product.name}}
@@ -11,8 +11,10 @@
       <div class="search-field-block">
         <mat-form-field appearance="fill" class="search-field">
           <mat-label>Quick search</mat-label>
-          <input matInput type="search" [formControl]="quickFilterControl" autocomplete="off" (keydown.enter)="search()">
-          <button mat-button *ngIf="quickFilterControl.value" matSuffix mat-icon-button (click)="quickFilterControl.reset()">
+          <input matInput type="search" [formControl]="quickFilterControl" autocomplete="off"
+            (keydown.enter)="search()">
+          <button mat-button *ngIf="quickFilterControl.value" matSuffix mat-icon-button
+            (click)="quickFilterControl.reset()">
             <mat-icon>close</mat-icon>
           </button>
           <mat-hint *ngIf="!loading && currentCounts?.hidden" style="font-size: 1.2em;">
@@ -47,7 +49,7 @@
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field>
+        <mat-form-field class="priority-field">
           <mat-label>Priority</mat-label>
           <mat-select [formControl]="priorityControl" multiple>
             <mat-select-trigger>
@@ -59,14 +61,26 @@
             <mat-option *ngFor="let priority of prioritiesArray" [value]="priority">{{priority.name}}</mat-option>
           </mat-select>
         </mat-form-field>
+
+        <mat-form-field class="priority-field">
+          <mat-label>Versions</mat-label>
+          <mat-select [formControl]="versionControl" multiple>
+            <mat-select-trigger>
+              {{versionControl.value ? versionControl.value[0] : ''}}
+              <span *ngIf="versionControl.value?.length > 1">
+                (+{{versionControl.value.length - 1}} {{versionControl.value?.length === 2 ? 'other' : 'others'}})
+              </span>
+            </mat-select-trigger>
+            <mat-option *ngFor="let version of filteredVersions" [value]="version">{{version}}</mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
     </div>
     <mat-divider class="filter-block-divider" [vertical]="true"></mat-divider>
     <div class="filter-block">
       <div class="creator-block">
         <div class="creator-image-selected" *ngIf="createrControl.value">
-          <img class="avatar-image"
-            [src]="createrControl.value.avatar || '/assets/avatars/default.jpg'">
+          <img class="avatar-image" [src]="createrControl.value.avatar || '/assets/avatars/default.jpg'">
         </div>
         <div class="creator-image-empty" *ngIf="!createrControl.value">
           <mat-icon class="icon-empty" aria-hidden="false">create</mat-icon>
@@ -75,12 +89,11 @@
           <mat-form-field class="creator-field">
             <input matInput
               [placeholder]="(settings.settingsData$ | async)?.comment_and_creator?'Creator or Commentator': 'Creator'"
-              aria-label="Creator"
-              [matAutocomplete]="auto"
-              [formControl]="createrControl">
-              <button mat-button *ngIf="createrControl.value" matSuffix mat-icon-button aria-label="Clear" (click)="createrControl.reset()">
-                <mat-icon>close</mat-icon>
-              </button>
+              aria-label="Creator" [matAutocomplete]="auto" [formControl]="createrControl">
+            <button mat-button *ngIf="createrControl.value" matSuffix mat-icon-button aria-label="Clear"
+              (click)="createrControl.reset()">
+              <mat-icon>close</mat-icon>
+            </button>
             <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayUser">
               <mat-option *ngFor="let user of creators" [value]="user">
                 <img class="creator-image" aria-hidden [src]="user.avatar || '/assets/avatars/default.jpg'" height="25">
@@ -93,8 +106,7 @@
 
       <div class="assigned-block">
         <div class="assigned-image-selected" *ngIf="assignedToControl.value">
-          <img class="avatar-image"
-            [src]="assignedToControl.value.avatar || '/assets/avatars/default.jpg'">
+          <img class="avatar-image" [src]="assignedToControl.value.avatar || '/assets/avatars/default.jpg'">
         </div>
         <div class="assigned-image-empty" *ngIf="!assignedToControl.value">
           <mat-icon class="icon-empty" aria-hidden="false">assignment_ind</mat-icon>
@@ -103,9 +115,10 @@
           <mat-form-field class="assigned-field">
             <input matInput placeholder="Assigned To" aria-label="Assigned To" [matAutocomplete]="auto"
               [formControl]="assignedToControl">
-              <button mat-button *ngIf="assignedToControl.value" matSuffix mat-icon-button aria-label="Clear" (click)="assignedToControl.reset()">
-                <mat-icon>close</mat-icon>
-              </button>
+            <button mat-button *ngIf="assignedToControl.value" matSuffix mat-icon-button aria-label="Clear"
+              (click)="assignedToControl.reset()">
+              <mat-icon>close</mat-icon>
+            </button>
             <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayUser">
               <mat-option *ngFor="let user of assigneters" [value]="user">
                 <img class="creator-image" aria-hidden [src]="user.avatar || '/assets/avatars/default.jpg'" height="25">
@@ -127,8 +140,12 @@
 <div class="result-space">
   <ng-container *ngIf="!loading">
     <div class="result-list" *ngIf="(filteredBugs | async) as bugs">
-      <div *ngIf="currentCounts.all == 0"><h1>No bugs found. Try adjusting search parameters</h1></div>
-      <div *ngIf="(currentCounts.all == currentCounts.hidden) && currentCounts.all !== 0"><h1>All bugs hidden. Try to clear quick search</h1></div>
+      <div *ngIf="currentCounts.all == 0">
+        <h1>No bugs found. Try adjusting search parameters</h1>
+      </div>
+      <div *ngIf="(currentCounts.all == currentCounts.hidden) && currentCounts.all !== 0">
+        <h1>All bugs hidden. Try to clear quick search</h1>
+      </div>
       <cdk-virtual-scroll-viewport [itemSize]="50" class="result-list-view">
         <mat-card (click)="get_details(bug)" [ngClass]="{'mat-elevation-z10': (bugDetail$ | async)?.id == bug.id}"
           [ngStyle]="{'border-left': '0.3em solid ' + products[bug.product].color}" routerLinkActive="active"
@@ -143,13 +160,15 @@
             <span *ngIf="bug.priority !== 'P1'">&nbsp;{{bug.priority}}</span>
           </div>
           <div mat-card-avatar class="avatar-image" matTooltip={{bug.creator_detail.real_name}}>
-            <img class="avatar-image" [src]="(users$ | async)[bug.creator_detail.username.trim()]?.avatar || '/assets/avatars/default.jpg'">
+            <img class="avatar-image"
+              [src]="(users$ | async)[bug.creator_detail.username.trim()]?.avatar || '/assets/avatars/default.jpg'">
           </div>
           <div class="arrow-forward">
             <mat-icon>arrow_forward</mat-icon>
           </div>
           <div mat-card-avatar class="avatar-image" matTooltip={{bug.assigned_to_detail.real_name}}>
-            <img class="avatar-image" [src]="(users$ | async)[bug.assigned_to_detail.username]?.avatar || '/assets/avatars/default.jpg'">
+            <img class="avatar-image"
+              [src]="(users$ | async)[bug.assigned_to_detail.username]?.avatar || '/assets/avatars/default.jpg'">
           </div>
 
           <div class="bug-status" style="margin: auto;">

@@ -26,6 +26,7 @@ export interface SearchParams {
   statuses?: Array<string>,
   severities?: Array<string>,
   priorities?: Array<string>,
+  versions?: Array<string>,
   creator?: string,
   assigned_to?: string,
   quicksearch?: string,
@@ -153,6 +154,10 @@ export class BugzillaService {
 
     searchParams.priorities?.forEach((priority: string) => {
       params = params.append('priority', priority);
+    });
+
+    searchParams.versions?.forEach((version: string) => {
+      params = params.append('version', version);
     });
 
     if (searchParams.assigned_to) {

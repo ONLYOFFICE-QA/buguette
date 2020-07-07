@@ -5,7 +5,8 @@
     "name": "api-performance",
     "urls": [
       "bugzilla.onlyoffice.com/rest/bug/45649/attachment",
-      "bugzilla.onlyoffice.com/rest/bug/comment/172072"
+      "bugzilla.onlyoffice.com/rest/bug/comment/172072",
+      "bugzilla.onlyoffice.com/rest/product"
     ],
     "cacheConfig": {
       "strategy": "performance",

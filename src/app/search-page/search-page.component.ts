@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { BugzillaService, SearchParams, Severity, Status, Product, Priority, StructuredUsers } from '../services/bugzilla.service';
+import { BugzillaService, SearchParams, Severity, Status, Product, Priority, StructuredUsers, VersionInterface, StructuredProductVersions } from '../services/bugzilla.service';
 import { BugDetailService } from '../bug-details/bug-detail.service';
-import { ReplaySubject, Observable, Subject, BehaviorSubject } from 'rxjs';
+import { ReplaySubject, Observable } from 'rxjs';
 import { Bug, UserDetail } from '../models/bug';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
@@ -32,6 +32,7 @@ export class SearchPageComponent implements OnInit {
   severitiesArray: Severity[];
   prioritiesArray: Priority[];
   statusesArray: Status[];
+  versionsArray: Status[];
 
   bugs$: ReplaySubject<Bug[]>;
   bugDetail$: ReplaySubject<Bug>;
@@ -44,10 +45,12 @@ export class SearchPageComponent implements OnInit {
   createrControl = new FormControl();
   assignedToControl = new FormControl();
   quickFilterControl = new FormControl();
+  versionControl = new FormControl();
 
   filteredBugs: Observable<Bug[]>;
   filteredCreator: Observable<User[]>;
   filteredAssignedTo: Observable<User[]>;
+  filteredVersions: String[] = [];
 
   constructor(public bugzilla: BugzillaService,
     private router: Router,
@@ -119,6 +122,7 @@ export class SearchPageComponent implements OnInit {
     this.severitiesArray = Object.values(this.severities);
     this.prioritiesArray = Object.values(this.priorities);
     this.statusesArray = Object.values(this.statuses);
+    this.filteredVersions = this.get_versions_list();
   }
 
   displayUser(user: UserDetail): string {
@@ -133,6 +137,7 @@ export class SearchPageComponent implements OnInit {
     params.priorities = this.get_active_priorities();
     params.creator = this.get_active_creater();
     params.assigned_to = this.get_active_assigned_to();
+    params.versions = this.get_active_versions();
     params.quicksearch = this.quickFilterControl.value;
     params.creator_and_commentator = this.settings.settingsData$.getValue().comment_and_creator;
     this.loading = true
@@ -167,6 +172,10 @@ export class SearchPageComponent implements OnInit {
     return this.severityControl.value?.map((severity: Severity) => severity.realName);
   }
 
+  get_active_versions(): string[] {
+    return this.versionControl.value;
+  }
+
   get_active_priorities(): string[] {
     return this.priorityControl.value?.map((priority: Priority) => priority.realName);
   }
@@ -177,5 +186,25 @@ export class SearchPageComponent implements OnInit {
 
   get_active_assigned_to(): string {
     return this.assignedToControl.value?.username;
+  }
+
+  change_product_active(product: Product) {
+    product.active = !product.active;
+    this.filteredVersions = this.get_versions_list();
+  }
+
+  get_versions_list() {
+    let results: string[] = [];
+    let active_products = this.get_active_products();
+    const versions = this.bugzilla.versions$.getValue();
+    const versionsInArrays: string[][] = active_products.map(productName => {
+      return versions[productName].map(version => version.name);
+    })
+     results = [].concat(...versionsInArrays)
+     const newVersionList = results.filter((version, index) => results.indexOf(version) == index).reverse();
+     if (this.versionControl.value) {
+      this.versionControl.setValue(newVersionList.filter(selected => this.versionControl.value.indexOf(selected) >= 0))
+     }
+     return results.filter((version, index) => results.indexOf(version) == index).reverse();
   }
 }
