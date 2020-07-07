@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 import { StaticData }  from '../static-data';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { map, switchMap } from 'rxjs/operators';
-import { forkJoin, Observable, ReplaySubject } from 'rxjs';
+import { forkJoin, Observable, ReplaySubject, BehaviorSubject } from 'rxjs';
 
 export interface UserData {
   id: number,
@@ -90,6 +90,21 @@ export interface AttachmentResponce {
   }
 }
 
+export interface StructuredProductVersions {
+  [key: string]: VersionInterface[]
+}
+
+export interface ProductResponce {
+  products: {name: string, versions: VersionInterface[]}[]
+}
+
+export interface VersionInterface {
+  id: number;
+  is_active: boolean;
+  name: string;
+  sort_key: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -99,6 +114,7 @@ export class BugzillaService {
   bugs$: ReplaySubject<Bug[]> = new ReplaySubject(1);
   users$: ReplaySubject<StructuredUsers> = new ReplaySubject(1);
   currentUser$: ReplaySubject<User> = new ReplaySubject(1);
+  versions$: BehaviorSubject<StructuredProductVersions> = new BehaviorSubject({});
 
   constructor(private httpService: HttpService, private router: Router, private _sanitizer: DomSanitizer,) {  }
 
@@ -144,7 +160,8 @@ export class BugzillaService {
     }
 
     if (searchParams.quicksearch) {
-      params = params.append('quicksearch', searchParams.quicksearch);
+      // ALL is need because by default, bugzilla will search only by opened bugs
+      params = params.append('quicksearch',  "ALL " + searchParams.quicksearch);
     }
     params = params.append('include_fields', 'status');
     params = params.append('include_fields', 'severity');
@@ -276,10 +293,31 @@ export class BugzillaService {
     }))
   }
 
+  get_product_versions() {
+    let params = new HttpParams();
+    let names = Object.keys(StaticData.PRODUCTS)
+    names.forEach(name => {
+      params = params.append('names', name);
+    })
+    return this.httpService.getRequest('/product', params).pipe(map((res: ProductResponce) => {
+      return this.get_structured_versions(res);
+    }));
+  }
+
+  get_structured_versions(responce: ProductResponce): StructuredProductVersions {
+    let result: StructuredProductVersions = {};
+    responce.products.forEach(product => {
+      result[product.name] = product.versions
+    });
+    return result
+  }
+
   get_user_data(): Observable<true> {
     const comment = this.get_comment_by_id(StaticData.COMMENT_WITH_USER_DATA);
     const attachments = this.get_attachments(StaticData.BUG_WITH_ATTACHMENTS);
-    return forkJoin([comment, attachments]).pipe(map(result => {
+    const versions = this.get_product_versions();
+    return forkJoin([comment, attachments, versions]).pipe(map(result => {
+      this.versions$.next(result[2]);
       let avatars = this.restructure_attachments(result[1])
       // test needed
       let users = {};
