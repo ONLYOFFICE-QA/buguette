@@ -17,7 +17,6 @@ export class DetailCommentTextComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log(this.text);
     if (this.text.indexOf('Commit pushed to') === 0) {
       this.commentTextObjects.commentType = "push";
       this.commentTextObjects.objects = this.parce_pushed_commit(this.text);
