@@ -15,19 +15,19 @@
     <mat-divider></mat-divider>
     <div class="addition-params-space">
       <div class="addition-params">
-        <div class="addition-params-icon">
+        <div class="addition-params-icon" matTooltip={{bug.product}}>
           <mat-icon aria-hidden="false" aria-label="Example home icon">location_on</mat-icon>
         </div>
         <div class="addition-params-data">
-          <div class="params-data" matTooltip={{bug.product}} matTooltipPosition="above"><span
+          <div class="params-data"><span
               [ngStyle]="{'background-color': products[bug.product].color}">{{products[bug.product].name}}</span></div>
           <div class="params-data">{{bug.component}}</div>
           <div class="params-data">{{bug.version}}</div>
         </div>
       </div>
       <div class="addition-params">
-        <div class="addition-params-icon">
-          <mat-icon matTooltip="QA contact {{bug.qa_contact}}" aria-hidden="false" aria-label="Example home icon">
+        <div class="addition-params-icon" matTooltip="QA contact {{bug.qa_contact}}">
+          <mat-icon aria-hidden="false">
             people_alt</mat-icon>
         </div>
         <div class="addition-params-data">
@@ -41,17 +41,17 @@
         </div>
       </div>
       <div class="addition-params">
-        <div class="addition-params-icon">
-          <mat-icon aria-hidden="false" aria-label="Example home icon">
+        <div class="addition-params-icon"
+         matTooltip="Created: {{bug.creation_time | date : 'd MMMM y, HH:mm'}}&#13;Updated: {{bug.last_change_time | date : 'd MMMM y, HH:mm'}}">
+          <mat-icon aria-hidden="false" aria-label="Example home icon"  matTooltipClass="multiline-tooltip">
             date_range
           </mat-icon>
         </div>
-        <div class="addition-params-data" matTooltip="Created: {{bug.creation_time | date : 'd MMMM y, HH:mm'}}">
+        <div class="addition-params-data">
           <div class="params-data">
             {{bug.creation_time | date : 'd MMMM y'}}
           </div>
-          <div class="params-data" *ngIf="bug.last_change_time !== bug.creation_time"
-          matTooltip="Updated: {{bug.last_change_time | date : 'd MMMM y, HH:mm'}}">
+          <div class="params-data" *ngIf="bug.last_change_time !== bug.creation_time">
             {{bug.last_change_time | date : 'd MMMM y'}}
           </div>
         </div>
