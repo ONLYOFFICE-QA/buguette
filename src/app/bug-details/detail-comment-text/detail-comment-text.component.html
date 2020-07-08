@@ -1,0 +1,18 @@
+<ng-container [ngSwitch]="commentTextObjects.commentType">
+  <div *ngSwitchCase="'push'">
+    <div  style="display: flex;" >
+      <div class="github-image" matTooltip="[NEW TAB] {{this.commentTextObjects.objects[0].link}}"></div>
+      <div class="github-text">
+        {{this.commentTextObjects.objects[0].author}}
+        pushed to
+        {{this.commentTextObjects.objects[0].branch}}
+      </div>
+    </div>
+    <div class="github-message">
+      <a [href]="this.commentTextObjects.objects[0].link" target="_blank">{{this.commentTextObjects.objects[0].message}}</a>
+    </div>
+  </div>
+  <span *ngSwitchDefault>
+    {{this.commentTextObjects.objects[0]}}
+  </span>
+</ng-container>

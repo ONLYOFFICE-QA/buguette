@@ -95,7 +95,7 @@
     [imageAutoload]="image_autoload"
     [bugData]="comment"></app-detail-attachment>
     <div class="comment-text" *ngIf="comment.text">
-      {{comment.text}}
+      <app-detail-comment-text [text]="comment.text"></app-detail-comment-text>
     </div>
   </div>
 </mat-card>

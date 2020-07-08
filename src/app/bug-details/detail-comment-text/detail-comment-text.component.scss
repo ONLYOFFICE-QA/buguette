@@ -1,0 +1,19 @@
+.github-image {
+  background-image: url('/assets/github.png');
+  background-size: cover;
+  width: 2em;
+  height: 2em;
+}
+
+.github-text {
+  display: flex;
+  margin-top: auto;
+  margin-bottom: auto;
+  font-size: 1.5em;
+}
+.github-message {
+  display: flex;
+  margin-top: auto;
+  margin-bottom: auto;
+  padding-inline-start: 2em;
+}

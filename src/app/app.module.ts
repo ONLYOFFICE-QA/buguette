@@ -18,6 +18,7 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
 import { BugDetailsComponent } from './bug-details/bug-details.component';
 import { BugDetailService } from './bug-details/bug-detail.service';
 import { DetailAttachmentComponent } from './bug-details/detail-attachment/detail-attachment.component';
+import { DetailCommentTextComponent } from './bug-details/detail-comment-text/detail-comment-text.component';
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { DetailAttachmentComponent } from './bug-details/detail-attachment/detai
     SearchPageComponent,
     BugDetailsComponent,
     DetailAttachmentComponent,
+    DetailCommentTextComponent,
   ],
   imports: [
     HttpClientModule,
