@@ -31,7 +31,7 @@ export class DetailCommentTextComponent implements OnInit {
     results['branch'] = this.text.match(/Commit pushed to.(\S*)/)[1].trim();
     results['link'] = this.text.match(/^https:\/\/github.com.*/gm)[0].trim();
     if (/Author:(.*)/.test(this.text)) {
-      results['link'] = this.text.match(/Author:(.*)/)[1].trim();
+      results['author'] = this.text.match(/Author:(.*)/)[1].trim();
     }
     if (/Message:(.*)/.test(this.text)) {
       results['message'] = this.text.match(/Message:(.*)/)[1].trim();
