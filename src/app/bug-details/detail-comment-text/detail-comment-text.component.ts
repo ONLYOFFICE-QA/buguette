@@ -27,11 +27,18 @@ export class DetailCommentTextComponent implements OnInit {
   }
 
   parce_pushed_commit(text: string) {
-    let branch = this.text.match(/refs\/heads\/(.*)/)[1].trim();
-    let link = this.text.match(/https:\/\/github.com.*/)[0].trim();
-    let author = this.text.match(/Author:(.*)/)[1].trim();
-    let message = this.text.match(/Message:(.*)/)[1].trim();
-    return [{author, branch, link, message}];
+    let results = {};
+    results['branch'] = this.text.match(/Commit pushed to.(\S*)/)[1].trim();
+    results['link'] = this.text.match(/^https:\/\/github.com.*/gm)[0].trim();
+    if (/Author:(.*)/.test(this.text)) {
+      results['link'] = this.text.match(/Author:(.*)/)[1].trim();
+    }
+    if (/Message:(.*)/.test(this.text)) {
+      results['message'] = this.text.match(/Message:(.*)/)[1].trim();
+    } else {
+      results['message'] = this.text.match(/\n.*(?!.*\n)/)[0].trim();
+    }
+    return [results];
   }
 
 }
