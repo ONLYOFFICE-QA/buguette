@@ -9,21 +9,26 @@
         </mat-card>
       </div>
       <div class="search-field-block">
-        <mat-form-field appearance="fill" class="search-field">
-          <mat-label>Quick search</mat-label>
-          <input matInput type="search" [formControl]="quickFilterControl" autocomplete="off"
-            (keydown.enter)="search()">
-          <button mat-button *ngIf="quickFilterControl.value" matSuffix mat-icon-button
-            (click)="quickFilterControl.reset()">
-            <mat-icon>close</mat-icon>
-          </button>
-          <mat-hint *ngIf="!loading && currentCounts?.hidden" style="font-size: 1.2em;">
-            Hidden results: <b>{{currentCounts.hidden}}</b>
-          </mat-hint>
-          <mat-hint align="end" *ngIf="!loading && currentCounts?.all" style="font-size: 1.2em;">
-            All results count: <span><b>{{currentCounts?.all}}</b></span>
-          </mat-hint>
-        </mat-form-field>
+        <form class = "search-form">
+          <mat-form-field appearance="fill" class="search-field">
+            <mat-label>Quick search</mat-label>
+            <input matInput type="search" [formControl]="quickFilterControl" autocomplete="off"
+              (keydown.enter)="search()">
+            <button mat-button *ngIf="quickFilterControl.value" matSuffix mat-icon-button
+              (click)="quickFilterControl.reset()">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-hint *ngIf="!loading && currentCounts?.hidden" style="font-size: 1.2em;">
+              Hidden results: <b>{{currentCounts.hidden}}</b>
+            </mat-hint>
+            <mat-hint align="end" *ngIf="!loading && currentCounts?.all" style="font-size: 1.2em;">
+              All results count: <span><b>{{currentCounts?.all}}</b></span>
+            </mat-hint>
+          </mat-form-field>
+        </form>
+        <button (click)="search()" mat-fab color="primary" [disabled]=loading class="search-button">
+          <mat-icon>search</mat-icon>
+        </button>
       </div>
     </div>
     <mat-divider class="filter-block-divider" [vertical]="true"></mat-divider>
@@ -36,56 +41,53 @@
         </mat-card>
       </div>
       <div class="importence-block">
-        <mat-form-field>
-          <mat-label>Severity</mat-label>
-          <mat-select [formControl]="severityControl" multiple>
-            <mat-select-trigger>
-              {{severityControl.value ? severityControl.value[0]?.name : ''}}
-              <span *ngIf="severityControl.value?.length > 1">
-                (+{{severityControl.value.length - 1}} {{severityControl.value?.length === 2 ? 'other' : 'others'}})
-              </span>
-            </mat-select-trigger>
-            <mat-option *ngFor="let severity of severitiesArray" [value]="severity">{{severity.name}}</mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <mat-form-field class="priority-field">
+        <div class="severity-block">
+          <button mat-icon-button *ngFor="let severity of severitiesArray" class="bug-severity"
+          (click)="severitySelected[severity.name] = !severitySelected[severity.name]"
+          matTooltip={{severity.name}} [ngStyle]="{'color': severity.color}"
+          [ngClass]="{'mat-elevation-z7': severitySelected[severity.name], 'mat-elevation-z0': !severitySelected[severity.name]}">
+          <mat-icon>{{severity.isFeature?"insights":"bug_report"}}</mat-icon>
+          </button>
+        </div>
+        <div class="priority_and_version_block">
+          <mat-form-field class="priority-field">
           <mat-label>Priority</mat-label>
           <mat-select [formControl]="priorityControl" multiple>
             <mat-select-trigger>
               {{priorityControl.value ? priorityControl.value[0]?.name : ''}}
               <span *ngIf="priorityControl.value?.length > 1">
-                (+{{priorityControl.value.length - 1}} {{priorityControl.value?.length === 2 ? 'other' : 'others'}})
+                (+{{priorityControl.value.length - 1}})
               </span>
             </mat-select-trigger>
             <mat-option *ngFor="let priority of prioritiesArray" [value]="priority">{{priority.name}}</mat-option>
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field class="priority-field">
+        <mat-form-field class="versions-field">
           <mat-label>Versions</mat-label>
           <mat-select [formControl]="versionControl" multiple>
             <mat-select-trigger>
               {{versionControl.value ? versionControl.value[0] : ''}}
               <span *ngIf="versionControl.value?.length > 1">
-                (+{{versionControl.value.length - 1}} {{versionControl.value?.length === 2 ? 'other' : 'others'}})
+                (+{{versionControl.value.length - 1}})
               </span>
             </mat-select-trigger>
             <mat-option *ngFor="let version of filteredVersions" [value]="version">{{version}}</mat-option>
           </mat-select>
         </mat-form-field>
+        </div>
       </div>
     </div>
     <mat-divider class="filter-block-divider" [vertical]="true"></mat-divider>
     <div class="filter-block">
       <div class="creator-block">
-        <div class="creator-image-selected" *ngIf="createrControl.value">
+        <div class="creator-image-selected" *ngIf="createrControl.value" [hidden]="smallForm">
           <img class="avatar-image" [src]="createrControl.value.avatar || '/assets/avatars/default.jpg'">
         </div>
-        <div class="creator-image-empty" *ngIf="!createrControl.value">
+        <div class="creator-image-empty" *ngIf="!createrControl.value" [hidden]="smallForm">
           <mat-icon class="icon-empty" aria-hidden="false">create</mat-icon>
         </div>
-        <form class="creator-form" *ngIf="(filteredCreator | async) as creators">
+        <form *ngIf="(filteredCreator | async) as creators" [ngClass]="{'creator-assigned-form': !smallForm}">
           <mat-form-field class="creator-field">
             <input matInput
               [placeholder]="(settings.settingsData$ | async)?.comment_and_creator?'Creator or Commentator': 'Creator'"
@@ -96,7 +98,7 @@
             </button>
             <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayUser">
               <mat-option *ngFor="let user of creators" [value]="user">
-                <img class="creator-image" aria-hidden [src]="user.avatar || '/assets/avatars/default.jpg'" height="25">
+                <img class="creator-image" aria-hidden [src]="user.avatar || '/assets/avatars/default.jpg'" height="25"  [hidden]="smallForm">
                 <span>{{user.real_name}}</span>
               </mat-option>
             </mat-autocomplete>
@@ -105,13 +107,13 @@
       </div>
 
       <div class="assigned-block">
-        <div class="assigned-image-selected" *ngIf="assignedToControl.value">
+        <div class="assigned-image-selected" *ngIf="assignedToControl.value" [hidden]="smallForm">
           <img class="avatar-image" [src]="assignedToControl.value.avatar || '/assets/avatars/default.jpg'">
         </div>
-        <div class="assigned-image-empty" *ngIf="!assignedToControl.value">
+        <div class="assigned-image-empty" *ngIf="!assignedToControl.value" [hidden]="smallForm">
           <mat-icon class="icon-empty" aria-hidden="false">assignment_ind</mat-icon>
         </div>
-        <form class="assigned-form" *ngIf="(filteredAssignedTo | async) as assigneters">
+        <form *ngIf="(filteredAssignedTo | async) as assigneters" [ngClass]="{'creator-assigned-form': !smallForm}">
           <mat-form-field class="assigned-field">
             <input matInput placeholder="Assigned To" aria-label="Assigned To" [matAutocomplete]="auto"
               [formControl]="assignedToControl">
@@ -121,7 +123,7 @@
             </button>
             <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayUser">
               <mat-option *ngFor="let user of assigneters" [value]="user">
-                <img class="creator-image" aria-hidden [src]="user.avatar || '/assets/avatars/default.jpg'" height="25">
+                <img class="creator-image" aria-hidden [src]="user.avatar || '/assets/avatars/default.jpg'" height="25" [hidden]="smallForm">
                 <span>{{user.real_name}}</span>
               </mat-option>
             </mat-autocomplete>
@@ -129,11 +131,6 @@
         </form>
       </div>
     </div>
-  </div>
-  <div class="actions-for-search">
-    <button (click)="search()" mat-fab color="primary" [disabled]=loading class="search-button">
-      <mat-icon>search</mat-icon>
-    </button>
   </div>
 </div>
 
@@ -183,3 +180,4 @@
   </div>
   <router-outlet></router-outlet>
 </div>
+{{isSmallScreen | async}}

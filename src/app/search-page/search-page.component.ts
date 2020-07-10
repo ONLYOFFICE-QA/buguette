@@ -9,6 +9,7 @@ import { StaticData } from '../static-data';
 import { User } from '../models/user';
 import { startWith, map, switchMap } from 'rxjs/operators';
 import { SettingsService } from '../services/settings.service';
+import {BreakpointObserver, Breakpoints, BreakpointState} from '@angular/cdk/layout';
 
 export interface Counters {
   all?: number;
@@ -37,10 +38,10 @@ export class SearchPageComponent implements OnInit {
   bugs$: ReplaySubject<Bug[]>;
   bugDetail$: ReplaySubject<Bug>;
   productsColoreRestructured = {};
-  severitiesRestructured = {};
   loading = false;
+  severitySelected = {};
+  smallForm = false;
 
-  severityControl = new FormControl();
   priorityControl = new FormControl();
   createrControl = new FormControl();
   assignedToControl = new FormControl();
@@ -51,11 +52,13 @@ export class SearchPageComponent implements OnInit {
   filteredCreator: Observable<User[]>;
   filteredAssignedTo: Observable<User[]>;
   filteredVersions: String[] = [];
+  isSmallScreen;
 
   constructor(public bugzilla: BugzillaService,
     private router: Router,
     private route: ActivatedRoute,
     private cd: ChangeDetectorRef,
+    private breakpointObserver: BreakpointObserver,
     private bugDetail: BugDetailService,
     public settings: SettingsService) {
     this.filteredCreator = this.createrControl.valueChanges.pipe(startWith(''), switchMap(input => {
@@ -123,6 +126,19 @@ export class SearchPageComponent implements OnInit {
     this.prioritiesArray = Object.values(this.priorities);
     this.statusesArray = Object.values(this.statuses);
     this.filteredVersions = this.get_versions_list();
+    this.breakpointObserver.observe([
+      Breakpoints.XSmall,
+      Breakpoints.Small,
+      Breakpoints.Medium,
+      Breakpoints.Large,
+      Breakpoints.XLarge
+    ]).subscribe( (state: BreakpointState) => {
+      if (state.breakpoints[Breakpoints.Medium] || state.breakpoints[Breakpoints.Small] || state.breakpoints[Breakpoints.XSmall]) {
+           this.smallForm = true;
+      } else {
+        this.smallForm = false;
+      }
+    });
   }
 
   displayUser(user: UserDetail): string {
@@ -169,7 +185,9 @@ export class SearchPageComponent implements OnInit {
   }
 
   get_active_severities(): string[] {
-    return this.severityControl.value?.map((severity: Severity) => severity.realName);
+    return this.severitiesArray.
+    filter((severity: Severity) => this.severitySelected[severity.name]).
+    map((severity: Severity) => severity.realName);
   }
 
   get_active_versions(): string[] {
