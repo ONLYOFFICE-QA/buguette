@@ -60,7 +60,7 @@ export class Comment {
     let result = (/\.(gif|jpe?g|tiff|png|webp|bmp)$/i).test(this.attachment_name)
     if (!result) {
       let name = this.attachment_name.toLowerCase();
-      result = ["скриншот", "screen"].some(x => name.indexOf(x) >= 0)
+      result = ["скринш", "screen"].some(x => name.indexOf(x) >= 0)
     }
     return result
   }
