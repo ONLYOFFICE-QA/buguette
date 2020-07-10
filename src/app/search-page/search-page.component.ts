@@ -52,7 +52,6 @@ export class SearchPageComponent implements OnInit {
   filteredCreator: Observable<User[]>;
   filteredAssignedTo: Observable<User[]>;
   filteredVersions: String[] = [];
-  isSmallScreen;
 
   constructor(public bugzilla: BugzillaService,
     private router: Router,
