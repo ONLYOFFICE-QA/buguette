@@ -11,6 +11,7 @@ export class StaticData {
   "Chromium Desktop Editors": { name: "Desktop", color: "#c49000", active: false, realName: "Chromium Desktop Editors" },
   "documenteditors plugins": { name: "Plugins", color: "#ff8ee2", active: false, realName: "documenteditors plugins" },
   "DocumentBuilder": { name: "Builder", color: "#feffba", active: false, realName: "DocumentBuilder" },
+  "Documents iOS App": { name: "iOS", color: "#849fff", active: false, realName: "Documents iOS App" },
   "ONLYOFFICE Projects App iOS": { name: "iOS Projects", color: "#00dedd", active: false, realName: "ONLYOFFICE Projects App iOS" },
   "Documents Android App": { name: "Android", color: "#00c93e", active: false, realName: "Documents Android App" },
   "OnlyOffice": { name: "OnlyOffice", color: "#ffc800", active: false, realName: "OnlyOffice" },
