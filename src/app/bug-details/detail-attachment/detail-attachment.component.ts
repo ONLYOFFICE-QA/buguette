@@ -23,7 +23,7 @@ export class DetailAttachmentComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: { id: SimpleChange, bugData: SimpleChange, imageAutoload: SimpleChange }) {
-    if (this.bugData.attachment_is_image && changes.imageAutoload?.currentValue) {
+    if (this.bugData?.attachment_is_image && changes.imageAutoload?.currentValue) {
       if (!this.images[this.bugData.attachment_id]) {
         this.images = {};
         this.download_image(this.bugData.attachment_id);
