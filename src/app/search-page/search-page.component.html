@@ -3,7 +3,7 @@
     <div class="filter-block">
       <div class="product-select-block">
         <mat-card class="filter-item" (click)="change_product_active(product)" *ngFor="let product of productsArray"
-          [ngClass]="{'mat-elevation-z21': product.active, 'mat-elevation-z0': !product.active}"
+          [ngClass]="{'mat-elevation-z7': product.active, 'mat-elevation-z0': !product.active}"
           [ngStyle]="{'background-color': product.active?product.color:'#e2e2e2'}">
           {{product.name}}
         </mat-card>
