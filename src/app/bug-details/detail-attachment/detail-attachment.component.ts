@@ -16,18 +16,20 @@ export class DetailAttachmentComponent implements OnInit, OnChanges {
   loading: boolean;
   images = {};
 
-  constructor( private bugzilla: BugzillaService,
+  constructor(private bugzilla: BugzillaService,
     private filehelper: FileHelperService) { }
 
   ngOnInit(): void {
   }
 
-  ngOnChanges(changes: {id: SimpleChange, bugData: SimpleChange, imageAutoload: SimpleChange}) {
-    if (changes.bugData?.currentValue?.attachment_is_image && changes.imageAutoload?.currentValue) {
-      this.images = {};
-      this.download_image(changes.bugData.currentValue?.attachment_id);
+  ngOnChanges(changes: { id: SimpleChange, bugData: SimpleChange, imageAutoload: SimpleChange }) {
+    if (this.bugData.attachment_is_image && changes.imageAutoload?.currentValue) {
+      if (!this.images[this.bugData.attachment_id]) {
+        this.images = {};
+        this.download_image(this.bugData.attachment_id);
+      }
     }
-}
+  }
 
   download_attachment(id: number): void {
     this.loading = true;
