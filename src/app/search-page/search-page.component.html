@@ -12,9 +12,8 @@
         <form class = "search-form">
           <mat-form-field appearance="fill" class="search-field">
             <mat-label>Quick search</mat-label>
-            <input matInput type="search" [formControl]="quickFilterControl" autocomplete="off"
-              (keydown.enter)="search()">
-            <button mat-button *ngIf="quickFilterControl.value" matSuffix mat-icon-button
+            <input matInput type="search" [formControl]="quickFilterControl" autocomplete="off">
+            <button type="button" mat-button *ngIf="quickFilterControl.value" matSuffix mat-icon-button
               (click)="quickFilterControl.reset()">
               <mat-icon>close</mat-icon>
             </button>
@@ -25,10 +24,11 @@
               All results count: <span><b>{{currentCounts?.all}}</b></span>
             </mat-hint>
           </mat-form-field>
+          <button (click)="search()" mat-fab color="primary" [disabled]=loading class="search-button">
+            <mat-icon>search</mat-icon>
+          </button>
         </form>
-        <button (click)="search()" mat-fab color="primary" [disabled]=loading class="search-button">
-          <mat-icon>search</mat-icon>
-        </button>
+        
       </div>
     </div>
     <mat-divider class="filter-block-divider" [vertical]="true"></mat-divider>

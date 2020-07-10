@@ -49,11 +49,12 @@
   display: flex;
 }
 .search-field {
-  width: 100%;
+  flex: 1;
 }
 
 .search-form {
-  width: 100%;
+  display: flex;
+  flex: 1;
 }
 .result-space {
   display: flex;
