@@ -17,8 +17,7 @@ export class DetailAttachmentComponent implements OnInit, OnChanges {
   images = {};
 
   constructor( private bugzilla: BugzillaService,
-    private filehelper: FileHelperService,
-    private settings: SettingsService) { }
+    private filehelper: FileHelperService) { }
 
   ngOnInit(): void {
   }
