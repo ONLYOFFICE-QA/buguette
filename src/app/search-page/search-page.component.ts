@@ -122,13 +122,15 @@ export class SearchPageComponent implements OnInit {
     this.productsArray = Object.values(this.products);
     this.settings.settingsData$.pipe(map((settings: SettingsInterface) => {
       let newProducts = [];
-      Object.values(this.products).forEach(product => {
-        if (settings.hidden_products?.indexOf(product.realName) === -1) {
-          product.active = this.productsArray.find(prod => prod.realName === product.realName)?.active;
-          newProducts.push(product);
-        }
-      })
+      if (settings.hidden_products) {
+        Object.values(this.products).forEach(product => {
+          if (settings.hidden_products?.indexOf(product.realName) === -1) {
+            product.active = this.productsArray.find(prod => prod.realName === product.realName)?.active;
+            newProducts.push(product);
+          }
+        })
       this.productsArray = newProducts;
+      }
     })).subscribe();
 
     this.severitiesArray = Object.values(this.severities);

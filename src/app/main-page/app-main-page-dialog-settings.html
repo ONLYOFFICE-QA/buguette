@@ -22,7 +22,7 @@
         <mat-list-item *ngFor="let product of products" role="listitem">
           <button mat-icon-button (click)="product_visibility_change(product)">
             <mat-icon>
-              {{(settingsData?.hidden_products?.indexOf(product.realName) >= 0)?"visibility_off":"visibility"}}
+              {{(settingsData.hidden_products && settingsData?.hidden_products?.indexOf(product.realName) >= 0)?"visibility_off":"visibility"}}
             </mat-icon>
           </button>
           {{product.name}}
