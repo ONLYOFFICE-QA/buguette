@@ -177,6 +177,7 @@ export class BugzillaService {
     params = params.append('include_fields', 'product');
     params = params.append('include_fields', 'priority');
     params = params.append('include_fields', 'id');
+    params = params.append('include_fields', 'last_change_time');
 
     return this.users$.pipe(switchMap(users => {
       if (searchParams.creator_and_commentator && searchParams.creator) {
