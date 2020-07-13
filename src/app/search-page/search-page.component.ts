@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { BugzillaService, SearchParams, Severity, Status, Product, Priority, StructuredUsers, VersionInterface, StructuredProductVersions } from '../services/bugzilla.service';
+import { BugzillaService, SearchParams, Severity, Status, Product, Priority, StructuredUsers } from '../services/bugzilla.service';
 import { BugDetailService } from '../bug-details/bug-detail.service';
-import { ReplaySubject, Observable } from 'rxjs';
+import { ReplaySubject, Observable, merge } from 'rxjs';
 import { Bug, UserDetail } from '../models/bug';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
@@ -37,6 +37,7 @@ export class SearchPageComponent implements OnInit {
 
   bugs$: ReplaySubject<Bug[]>;
   bugDetail$: ReplaySubject<Bug>;
+  sorting_by_updated$: ReplaySubject<boolean> = new ReplaySubject(1);
   productsColoreRestructured = {};
   loading = false;
   severitySelected = {};
@@ -47,6 +48,7 @@ export class SearchPageComponent implements OnInit {
   assignedToControl = new FormControl();
   quickFilterControl = new FormControl();
   versionControl = new FormControl();
+  sortingControl = new FormControl();
 
   filteredBugs: Observable<Bug[]>;
   filteredCreator: Observable<User[]>;
@@ -74,7 +76,9 @@ export class SearchPageComponent implements OnInit {
       }));
     }));
 
-    this.filteredBugs = this.quickFilterControl.valueChanges.pipe(startWith(''), switchMap(_ => {
+    this.filteredBugs = merge(this.quickFilterControl.valueChanges, this.sortingControl.valueChanges).pipe(
+      startWith(''),
+      switchMap(_ => {
       return this.bugs$.pipe(map((bugs: Bug[]) => {
         this.currentCounts.all = bugs.length;
         let _filteredBugs = this.bugs_filtering(this.quickFilterControl.value, bugs)
@@ -82,7 +86,7 @@ export class SearchPageComponent implements OnInit {
         this.cd.detectChanges();
         return _filteredBugs;
       }));
-    }));
+    }), map(bugs => this.bugs_sorting(bugs, this.sortingControl.value)));
   }
 
   private user_filtering(userInput: (string | undefined), users: User[]): User[] {
@@ -132,6 +136,7 @@ export class SearchPageComponent implements OnInit {
       this.productsArray = newProducts;
       }
     })).subscribe();
+    this.sorting_by_updated$.next(this.get_sorting_from_storage());
 
     this.severitiesArray = Object.values(this.severities);
     this.prioritiesArray = Object.values(this.priorities);
@@ -233,5 +238,23 @@ export class SearchPageComponent implements OnInit {
       this.versionControl.setValue(newVersionList.filter(selected => this.versionControl.value.indexOf(selected) >= 0))
      }
      return results.filter((version, index) => results.indexOf(version) == index).reverse();
+  }
+
+  change_sorting(event$) {
+    localStorage.setItem('sorting_by_updated', JSON.stringify({status: event$.checked}));
+    this.sorting_by_updated$.next(event$.checked)
+  }
+
+  get_sorting_from_storage() {
+    return (!!JSON.parse(localStorage.getItem('sorting_by_updated'))?.status)
+  }
+
+  bugs_sorting(bugs: Bug[], by_updated: boolean): Bug[] {
+    if (by_updated) {
+      bugs = [...bugs.sort((a, b) => b.last_change_time.getTime() - a.last_change_time.getTime())];
+    } else {
+      bugs = [...bugs.sort((a, b) =>  b.id - a.id)];
+    }
+    return bugs;
   }
 }

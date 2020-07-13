@@ -39,7 +39,7 @@
 }
 
 .search-space {
-  margin: 0.5em;
+  margin: 0.5em 0.5em 0 0.5em;
   display: flex;
   flex-direction: row;
 }
@@ -192,5 +192,12 @@ img.avatar-image {
   display: inline-block;
 }
 .importence-block {
-  display: inline-flex;
+  display: flex;
+    margin-right: 5px;
+    width: auto;
+}
+.sorting-block {
+  display: flex;
+  justify-content: flex-end;
+  height: 1em;
 }
