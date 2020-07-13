@@ -8,7 +8,7 @@ import { FormControl } from '@angular/forms';
 import { StaticData } from '../static-data';
 import { User } from '../models/user';
 import { startWith, map, switchMap } from 'rxjs/operators';
-import { SettingsService } from '../services/settings.service';
+import { SettingsService, SettingsInterface } from '../services/settings.service';
 import {BreakpointObserver, Breakpoints, BreakpointState} from '@angular/cdk/layout';
 
 export interface Counters {
@@ -119,8 +119,18 @@ export class SearchPageComponent implements OnInit {
     this.bugDetail$ = this.bugDetail.bug$;
     this.bugs$ = this.bugzilla.bugs$;
     this.users$ = this.bugzilla.users$
-
     this.productsArray = Object.values(this.products);
+    this.settings.settingsData$.pipe(map((settings: SettingsInterface) => {
+      let newProducts = [];
+      Object.values(this.products).forEach(product => {
+        if (settings.hidden_products?.indexOf(product.realName) === -1) {
+          product.active = this.productsArray.find(prod => prod.realName === product.realName)?.active;
+          newProducts.push(product);
+        }
+      })
+      this.productsArray = newProducts;
+    })).subscribe();
+
     this.severitiesArray = Object.values(this.severities);
     this.prioritiesArray = Object.values(this.priorities);
     this.statusesArray = Object.values(this.statuses);
@@ -129,8 +139,6 @@ export class SearchPageComponent implements OnInit {
       Breakpoints.XSmall,
       Breakpoints.Small,
       Breakpoints.Medium,
-      Breakpoints.Large,
-      Breakpoints.XLarge
     ]).subscribe( (state: BreakpointState) => {
       if (state.breakpoints[Breakpoints.Medium] || state.breakpoints[Breakpoints.Small] || state.breakpoints[Breakpoints.XSmall]) {
            this.smallForm = true;

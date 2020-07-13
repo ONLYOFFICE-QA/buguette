@@ -1,15 +1,35 @@
 <h1 mat-dialog-title>Settings</h1>
-<div mat-dialog-content class="dialog-content" *ngIf="(settings.settingsData$ | async) as settingsData">
-  <div class="setting-element">
-    <mat-slide-toggle [checked]="settingsData.comment_and_creator" (change)="comment_and_creator_change($event)"
-      matTooltip="Enables searching by bug and comment creators">
-      Creator and Commentator
-    </mat-slide-toggle>
-  </div>
-  <div class="setting-element">
-    <mat-slide-toggle [checked]="settingsData.autoload_images" (change)="autoload_images_change($event)"
-      matTooltip="Enables downloading all images in attachments in comments and show it inline in comment">
-      Enable auloloading all attachment images
-    </mat-slide-toggle>
-  </div>
-</div>
+
+<mat-tab-group mat-align-tabs="center" *ngIf="(settings.settingsData$ | async) as settingsData" dynamicHeight>
+  <mat-tab label="General">
+    <div mat-dialog-content class="dialog-content">
+      <div class="setting-element">
+        <mat-slide-toggle [checked]="settingsData.comment_and_creator" (change)="comment_and_creator_change($event)"
+          matTooltip="Enables searching by bug and comment creators">
+          Creator and Commentator
+        </mat-slide-toggle>
+      </div>
+      <div class="setting-element">
+        <mat-slide-toggle [checked]="settingsData.autoload_images" (change)="autoload_images_change($event)"
+          matTooltip="Enables downloading all images in attachments in comments and show it inline in comment">
+          Enable auloloading all attachment images
+        </mat-slide-toggle>
+      </div>
+    </div>
+  </mat-tab>
+  <mat-tab label="Projects">
+      <mat-list role="list">
+        <mat-list-item *ngFor="let product of products" role="listitem">
+          <button mat-icon-button (click)="product_visibility_change(product)">
+            <mat-icon>
+              {{(settingsData?.hidden_products?.indexOf(product.realName) >= 0)?"visibility_off":"visibility"}}
+            </mat-icon>
+          </button>
+          {{product.name}}
+        </mat-list-item>
+      </mat-list>
+  </mat-tab>
+</mat-tab-group>
+
+
+

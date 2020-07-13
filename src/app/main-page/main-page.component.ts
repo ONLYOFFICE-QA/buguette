@@ -1,10 +1,11 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {BugzillaService} from '../services/bugzilla.service';
+import {BugzillaService, Product} from '../services/bugzilla.service';
 import {SettingsService} from '../services/settings.service';
 import { AuthGuardService } from '../guards/auth-guard.service';
 import { switchMap, pluck } from 'rxjs/operators';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import { StaticData } from '../static-data';
 
 @Component({
   selector: 'app-main-page',
@@ -51,6 +52,7 @@ export class MainPageComponent implements OnInit {
   styleUrls: ['app-main-page-dialog-settings.scss']
 })
 export class MainPageDialogSettings {
+  products = Object.values(StaticData.PRODUCTS);
 
   constructor(public dialogRef: MatDialogRef<MainPageDialogSettings>, public settings: SettingsService,) {}
 
@@ -64,5 +66,9 @@ export class MainPageDialogSettings {
 
   autoload_images_change($event) {
     this.settings.autoload_images_change($event.checked);
+  }
+
+  product_visibility_change(product: Product) {
+    this.settings.product_visibility_change(product);
   }
 }
