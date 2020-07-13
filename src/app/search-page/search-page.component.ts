@@ -182,13 +182,15 @@ export class SearchPageComponent implements OnInit {
   }
 
   get_active_products(): string[] {
-    const activeProducts = this.productsArray.filter(product => product.active);
+    const activeProducts = this.productsArray.
+    filter(product => product.active);
     let result = [];
     if (activeProducts.length == 0) {
       result = Object.keys(this.products);
     } else {
       result = activeProducts.map(product => product.realName);
     }
+    result = result.map(product => [product].concat(this.products[product].addition || [])).flat()
     return result;
   }
 

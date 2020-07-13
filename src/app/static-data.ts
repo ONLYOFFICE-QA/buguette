@@ -6,9 +6,12 @@ export class StaticData {
 
   public static readonly PRODUCTS =
   {"Office Canvas Document Editor": { name: "Documents", color: "#cbcbff", active: false, realName: "Office Canvas Document Editor" },
-  "Office Canvas Spreadsheet Editor": { name: "Spreadsheets", color: "#c5ffc5", active: false, realName: "Office Canvas Spreadsheet Editor" },
+  "Office Canvas Spreadsheet Editor":
+   { name: "Spreadsheets", color: "#c5ffc5", active: false, realName: "Office Canvas Spreadsheet Editor", addition: ["Office Canvas Spreadsheet Viewer"] },
+  "Office Canvas Spreadsheet Viewer": { name: "Spreadsheets Viewer", color: "#c5ffc5", active: false, realName: "Office Canvas Spreadsheet Viewer"},
   "Office Canvas Presentation Editor": { name: "Presentations", color: "#ffa7a7", active: false, realName: "Office Canvas Presentation Editor" },
   "Chromium Desktop Editors": { name: "Desktop", color: "#c49000", active: false, realName: "Chromium Desktop Editors" },
+  "R7 Office": { name: "R7", color: "#ff8b15", active: false, realName: "R7 Office" },
   "documenteditors plugins": { name: "Plugins", color: "#ff8ee2", active: false, realName: "documenteditors plugins" },
   "DocumentBuilder": { name: "Builder", color: "#feffba", active: false, realName: "DocumentBuilder" },
   "Documents iOS App": { name: "iOS", color: "#849fff", active: false, realName: "Documents iOS App" },

@@ -66,6 +66,7 @@ export interface Product {
   color: string;
   active: boolean;
   realName: string;
+  addition?: string[];
 }
 
 export interface AttachmentResponceObject {
