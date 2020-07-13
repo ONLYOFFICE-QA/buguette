@@ -11,6 +11,7 @@
 </ng-container>
 <ng-container *ngIf="images[id] && imageAutoload">
   <div class="attachment">
+    <span style="text-align: center;">{{bugData.attachment_name}}</span>
     <img class="attachment-image" [src]="images[id]">
   </div>
 </ng-container>
