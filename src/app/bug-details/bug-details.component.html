@@ -42,17 +42,17 @@
       </div>
       <div class="addition-params">
         <div class="addition-params-icon"
-         matTooltip="Created: {{bug.creation_time | date : 'd MMMM y, HH:mm'}}&#13;Updated: {{bug.last_change_time | date : 'd MMMM y, HH:mm'}}">
+         matTooltip="Created: {{bug.creation_time.getTime() | date : 'd MMMM y, HH:mm'}}&#13;Updated: {{bug.last_change_time.getTime() | date : 'd MMMM y, HH:mm'}}">
           <mat-icon aria-hidden="false" aria-label="Example home icon"  matTooltipClass="multiline-tooltip">
             date_range
           </mat-icon>
         </div>
         <div class="addition-params-data">
           <div class="params-data">
-            {{bug.creation_time | date : 'd MMMM y'}}
+            {{bug.creation_time.getTime() | date : 'd MMMM y'}}
           </div>
-          <div class="params-data" *ngIf="bug.last_change_time !== bug.creation_time">
-            {{bug.last_change_time | date : 'd MMMM y'}}
+          <div class="params-data" *ngIf="bug.last_change_time.getTime() !== bug.creation_time.getTime()">
+            {{bug.last_change_time.getTime() | date : 'd MMMM y'}}
           </div>
         </div>
       </div>
@@ -88,7 +88,7 @@
   </div>
   <div class="right-block-comment">
     <div class="comment-date">
-      {{comment.creation_time | date : 'd MMMM y, HH:mm'}}
+      {{comment.creation_time.getTime() | date : 'd MMMM y, HH:mm'}}
     </div>
     <app-detail-attachment
     [id]="comment.attachment_id"
