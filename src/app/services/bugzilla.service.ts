@@ -167,6 +167,9 @@ export class BugzillaService {
 
     if (searchParams.quicksearch) {
       // ALL is need because by default, bugzilla will search only by opened bugs
+       if (Number(searchParams.quicksearch)) {
+         searchParams.quicksearch = 'bug_id:' + searchParams.quicksearch
+       }
       params = params.append('quicksearch',  "ALL " + searchParams.quicksearch);
     }
     params = params.append('include_fields', 'status');
