@@ -1,11 +1,11 @@
-import { Component, OnInit, getDebugNode } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Observable } from 'rxjs';
 import { Bug } from '../models/bug';
 import { BugzillaService, StructuredUsers } from '../services/bugzilla.service';
 import { BugDetailService } from './bug-detail.service';
 import { StaticData }  from '../static-data';
-import { switchMap, map } from 'rxjs/operators';
+import { switchMap, map, distinctUntilChanged } from 'rxjs/operators';
 import { SettingsService } from '../services/settings.service';
 
 
@@ -15,7 +15,7 @@ import { SettingsService } from '../services/settings.service';
   styleUrls: ['./bug-details.component.scss']
 })
 export class BugDetailsComponent implements OnInit {
-  bug$: ReplaySubject<Bug>;
+  bug$: Observable<Bug>;
   users$: ReplaySubject<StructuredUsers>;
   severitiesRestructured = {};
   productRestructured = {};
@@ -31,7 +31,9 @@ export class BugDetailsComponent implements OnInit {
               private settings: SettingsService) { }
 
   ngOnInit(): void {
-    this.bug$ = this.bugDetailService.bug$
+    this.bug$ = this.bugDetailService.bug$.pipe(distinctUntilChanged((prev, curr) => {
+      return (prev.id === curr.id) && curr.comments.length == 0
+    }));
     this.bug$.subscribe(bug => {
       this.bugzillaLink = StaticData.BUGZILLA_LINK + '/show_bug.cgi?id=' + bug.id;
     })
@@ -41,7 +43,7 @@ export class BugDetailsComponent implements OnInit {
     this.activatedRoute.params.pipe(switchMap(params => {
       return this.bugzilla.get_bug_and_comments(params.id).pipe(map(bug => {
         if (bug.id.toString() === params.id) {
-           this.bug$.next(bug);
+          this.bugDetailService.bug$.next(bug);
         }
       }));
     })).subscribe();
