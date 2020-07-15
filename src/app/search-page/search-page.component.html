@@ -2,7 +2,7 @@
   <div class="actions-for-filter">
     <div class="filter-block">
       <div class="product-select-block">
-        <mat-card class="filter-item" (click)="change_product_active(product)" *ngFor="let product of productsArray"
+        <mat-card class="filter-item" (click)="change_product_active(product)" *ngFor="let product of productsArray$ | async"
           [ngClass]="{'mat-elevation-z7': product.active, 'mat-elevation-z0': !product.active}"
           [ngStyle]="{'background-color': product.active?product.color:'#e2e2e2'}">
           {{product.name}}
@@ -34,7 +34,7 @@
     <mat-divider class="filter-block-divider" [vertical]="true"></mat-divider>
     <div class="filter-block">
       <div class="statuses-block">
-        <mat-card class="filter-item" (click)="status.active = !status.active" *ngFor="let status of statusesArray"
+        <mat-card class="filter-item" (click)="change_status_active(status)" *ngFor="let status of statusesArray$ | async"
           [ngClass]="{'mat-elevation-z10 active': status.active, 'mat-elevation-z0': !status.active}"
           [ngStyle]="{'background-color': status.active?'white':'#e2e2e2'}">
           {{status.name}}
@@ -42,10 +42,10 @@
       </div>
       <div class="importence-block">
         <div class="severity-block">
-          <button mat-icon-button *ngFor="let severity of severitiesArray" class="bug-severity"
-          (click)="severitySelected[severity.name] = !severitySelected[severity.name]"
+          <button mat-icon-button *ngFor="let severity of severitiesArray$ | async" class="bug-severity"
+          (click)="change_severity_active(severity)"
           matTooltip={{severity.name}} [ngStyle]="{'color': severity.color}"
-          [ngClass]="{'mat-elevation-z7': severitySelected[severity.name], 'mat-elevation-z0': !severitySelected[severity.name]}">
+          [ngClass]="{'mat-elevation-z7': severity.active, 'mat-elevation-z0': !severity.active}">
           <mat-icon>{{severity.isFeature?"insights":"bug_report"}}</mat-icon>
           </button>
         </div>
@@ -59,7 +59,7 @@
                 (+{{priorityControl.value.length - 1}})
               </span>
             </mat-select-trigger>
-            <mat-option *ngFor="let priority of prioritiesArray" [value]="priority">{{priority.name}}</mat-option>
+            <mat-option *ngFor="let priority of prioritiesArray$ | async" [value]="priority">{{priority.name}}</mat-option>
           </mat-select>
         </mat-form-field>
 
@@ -78,10 +78,7 @@
         </div>
       </div>
       <div class="sorting-block">
-        <mat-slide-toggle
-        [formControl]="sortingControl"
-        (change)="change_sorting($event)"
-        [checked]="sorting_by_updated$ | async">Sorting by updated</mat-slide-toggle>
+        <mat-slide-toggle [formControl]="sortingControl">Sorting by updated</mat-slide-toggle>
         </div>
     </div>
     <mat-divider class="filter-block-divider" [vertical]="true"></mat-divider>

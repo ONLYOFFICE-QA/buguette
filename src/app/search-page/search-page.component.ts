@@ -1,15 +1,16 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { BugzillaService, SearchParams, Severity, Status, Product, Priority, StructuredUsers } from '../services/bugzilla.service';
 import { BugDetailService } from '../bug-details/bug-detail.service';
-import { ReplaySubject, Observable, merge } from 'rxjs';
+import { SearchKeeperService, CustomSearch } from '../services/search-keeper.service';
+import { ReplaySubject, Observable, merge, BehaviorSubject } from 'rxjs';
 import { Bug, UserDetail } from '../models/bug';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { StaticData } from '../static-data';
 import { User } from '../models/user';
-import { startWith, map, switchMap } from 'rxjs/operators';
+import { startWith, map, switchMap, take } from 'rxjs/operators';
 import { SettingsService, SettingsInterface } from '../services/settings.service';
-import {BreakpointObserver, Breakpoints, BreakpointState} from '@angular/cdk/layout';
+import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
 
 export interface Counters {
   all?: number;
@@ -29,15 +30,14 @@ export class SearchPageComponent implements OnInit {
   users$: Observable<StructuredUsers>;
   currentCounts: Counters = {};
 
-  productsArray: Product[];
-  severitiesArray: Severity[];
-  prioritiesArray: Priority[];
-  statusesArray: Status[];
+  productsArray$: BehaviorSubject<Product[]>;
+  severitiesArray$: BehaviorSubject<Severity[]>;
+  statusesArray$: BehaviorSubject<Status[]>;
+  prioritiesArray$: BehaviorSubject<Priority[]>;
   versionsArray: Status[];
 
   bugs$: ReplaySubject<Bug[]>;
   bugDetail$: ReplaySubject<Bug>;
-  sorting_by_updated$: ReplaySubject<boolean> = new ReplaySubject(1);
   productsColoreRestructured = {};
   loading = false;
   severitySelected = {};
@@ -57,7 +57,7 @@ export class SearchPageComponent implements OnInit {
 
   constructor(public bugzilla: BugzillaService,
     private router: Router,
-    private route: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private cd: ChangeDetectorRef,
     private breakpointObserver: BreakpointObserver,
     private bugDetail: BugDetailService,
@@ -79,14 +79,14 @@ export class SearchPageComponent implements OnInit {
     this.filteredBugs = merge(this.quickFilterControl.valueChanges, this.sortingControl.valueChanges).pipe(
       startWith(''),
       switchMap(_ => {
-      return this.bugs$.pipe(map((bugs: Bug[]) => {
-        this.currentCounts.all = bugs.length;
-        let _filteredBugs = this.bugs_filtering(this.quickFilterControl.value, bugs)
-        this.currentCounts.hidden = this.currentCounts.all - _filteredBugs.length;
-        this.cd.detectChanges();
-        return _filteredBugs;
-      }));
-    }), map(bugs => this.bugs_sorting(bugs, this.sortingControl.value)));
+        return this.bugs$.pipe(map((bugs: Bug[]) => {
+          this.currentCounts.all = bugs.length;
+          let _filteredBugs = this.bugs_filtering(this.quickFilterControl.value, bugs)
+          this.currentCounts.hidden = this.currentCounts.all - _filteredBugs.length;
+          this.cd.detectChanges();
+          return _filteredBugs;
+        }));
+      }), map(bugs => this.bugs_sorting(bugs, this.sortingControl.value)));
   }
 
   private user_filtering(userInput: (string | undefined), users: User[]): User[] {
@@ -123,36 +123,119 @@ export class SearchPageComponent implements OnInit {
     this.bugDetail$ = this.bugDetail.bug$;
     this.bugs$ = this.bugzilla.bugs$;
     this.users$ = this.bugzilla.users$
-    this.productsArray = Object.values(this.products);
-    this.settings.settingsData$.pipe(map((settings: SettingsInterface) => {
-      let newProducts = [];
-      if (settings.hidden_products) {
-        Object.values(this.products).forEach(product => {
-          if (settings.hidden_products?.indexOf(product.realName) === -1) {
-            product.active = this.productsArray.find(prod => prod.realName === product.realName)?.active;
-            newProducts.push(product);
-          }
-        })
-      this.productsArray = newProducts;
-      }
-    })).subscribe();
-    this.sorting_by_updated$.next(this.get_sorting_from_storage());
+    this.productsArray$ = new BehaviorSubject(Object.values(this.products));
+    this.severitiesArray$ = new BehaviorSubject(Object.values(this.severities));
+    this.statusesArray$ = new BehaviorSubject(Object.values(this.statuses));
+    this.prioritiesArray$ = new BehaviorSubject(Object.values(this.priorities));
 
-    this.severitiesArray = Object.values(this.severities);
-    this.prioritiesArray = Object.values(this.priorities);
-    this.statusesArray = Object.values(this.statuses);
+    this.settings.settingsData$.pipe(switchMap((settings: SettingsInterface) => {
+      return this.activatedRoute.queryParams.pipe(map(search => {
+        let newProducts = [];
+        let hiddenProducts = [];
+        if (settings.hidden_products) {
+          if (search.products) {
+            hiddenProducts = settings.hidden_products.filter(hiddenProduct => {
+              return [...search.products].indexOf(this.products[hiddenProduct].id.toString()) == -1
+            })
+          }
+          Object.values(this.products).forEach(product => {
+            if (hiddenProducts?.indexOf(product.realName) === -1) {
+              product.active = this.productsArray$.getValue().find(prod => prod.realName === product.realName)?.active;
+              newProducts.push(product);
+            }
+          })
+        }
+        this.productsArray$.next(newProducts);
+      }));
+    })).subscribe();
+
+    this.activatedRoute.queryParams.pipe(take(1), switchMap(search => {
+      return this.users$.pipe(map(users =>{
+        return [search, users];
+      }))
+    })).subscribe(result => {
+      let currentSearch = result[0]
+      let users = result[1];
+      if (currentSearch.products) {
+        this.productsArray$.next(this.get_active_objects(this.productsArray$, currentSearch.products))
+      }
+      if (currentSearch.sorting_by_updated) {
+        this.sortingControl.setValue(true);
+      }
+      if (currentSearch.severities) {
+        this.severitiesArray$.next(this.get_active_objects(this.severitiesArray$, currentSearch.severities))
+      }
+      if (currentSearch.statuses) {
+        this.statusesArray$.next(this.get_active_objects(this.statusesArray$, currentSearch.statuses))
+      }
+      if (currentSearch.priorities) {
+        this.priorityControl.setValue(
+          this.prioritiesArray$.getValue().
+          filter(currentPriority => currentSearch.priorities.indexOf(currentPriority.id.toString()) >= 0)
+          );
+      }
+      if (currentSearch.versions) {
+        this.versionControl.setValue(currentSearch.versions);
+      }
+      if (currentSearch.creator) {
+        this.createrControl.setValue(users[currentSearch.creator]);
+      }
+      if (currentSearch.assigned) {
+        this.assignedToControl.setValue(users[currentSearch.assigned]);
+      }
+    });
+
+    this.sortingControl.valueChanges.subscribe(value => {
+      if (value) {
+        this.keep_current_search_to_query({ sorting_by_updated: value })
+      } else {
+        this.keep_current_search_to_query({ sorting_by_updated: null })
+      }
+    })
+
+    this.priorityControl.valueChanges.subscribe(priorities => {
+      if (priorities) {
+        this.keep_current_search_to_query({ priorities: priorities.map(priority => priority.id) })
+      }
+    })
+
+    this.versionControl.valueChanges.subscribe(versions => {
+      if (versions) {
+        this.keep_current_search_to_query({ versions })
+      }
+    })
+
+    this.createrControl.valueChanges.subscribe(creator => {
+      if (this.createrControl.value?.username) {
+        this.keep_current_search_to_query({ creator: creator.username })
+      }
+    })
+
+    this.assignedToControl.valueChanges.subscribe(assigner => {
+      if (this.assignedToControl.value?.username) {
+        this.keep_current_search_to_query({ assigned: assigner.username })
+      }
+    })
+
     this.filteredVersions = this.get_versions_list();
     this.breakpointObserver.observe([
       Breakpoints.XSmall,
       Breakpoints.Small,
       Breakpoints.Medium,
-    ]).subscribe( (state: BreakpointState) => {
+    ]).subscribe((state: BreakpointState) => {
       if (state.breakpoints[Breakpoints.Medium] || state.breakpoints[Breakpoints.Small] || state.breakpoints[Breakpoints.XSmall]) {
-           this.smallForm = true;
+        this.smallForm = true;
       } else {
         this.smallForm = false;
       }
     });
+  }
+
+  get_active_objects(objects$, searchBy: string[]) {
+    return objects$.getValue().map(obj => {
+      obj.active = (searchBy.indexOf(obj.id.toString()) >= 0)
+      return obj;
+    })
   }
 
   displayUser(user: UserDetail): string {
@@ -178,12 +261,12 @@ export class SearchPageComponent implements OnInit {
 
   get_details(bug: Bug): void {
     this.bugDetail$.next(bug);
-    this.router.navigate(['bug', bug.id], { relativeTo: this.route });
+    this.router.navigate(['bug', bug.id], { relativeTo: this.activatedRoute, queryParamsHandling: 'merge' });
   }
 
   get_active_products(): string[] {
-    const activeProducts = this.productsArray.
-    filter(product => product.active);
+    const activeProducts = this.productsArray$.getValue().
+      filter(product => product.active);
     let result = [];
     if (activeProducts.length == 0) {
       result = Object.keys(this.products);
@@ -195,15 +278,15 @@ export class SearchPageComponent implements OnInit {
   }
 
   get_active_statuses(): string[] {
-    return this.statusesArray.
+    return this.statusesArray$.getValue().
       filter(status => status.active).
       map(status => [status.realName].concat(status.addition || [])).flat();
   }
 
   get_active_severities(): string[] {
-    return this.severitiesArray.
-    filter((severity: Severity) => this.severitySelected[severity.name]).
-    map((severity: Severity) => severity.realName);
+    return this.severitiesArray$.getValue().
+      filter((severity: Severity) => severity.active).
+      map((severity: Severity) => severity.realName);
   }
 
   get_active_versions(): string[] {
@@ -224,7 +307,24 @@ export class SearchPageComponent implements OnInit {
 
   change_product_active(product: Product) {
     product.active = !product.active;
+    let activeProducts = this.productsArray$.getValue().
+      filter(product => product.active).map(product => product.id);
     this.filteredVersions = this.get_versions_list();
+    this.keep_current_search_to_query({ products: activeProducts });
+  }
+
+  change_severity_active(severity: Severity) {
+    severity.active = !severity.active;
+    let activeSeverities = this.severitiesArray$.getValue().
+      filter(currentSeverity => currentSeverity.active).map(currentSeverity => currentSeverity.id);
+    this.keep_current_search_to_query({ severities: activeSeverities });
+  }
+
+  change_status_active(status: Status) {
+    status.active = !status.active;
+    let activeStatuses = this.statusesArray$.getValue().
+      filter(currentStatus => currentStatus.active).map(currentStatus => currentStatus.id);
+    this.keep_current_search_to_query({ statuses: activeStatuses });
   }
 
   get_versions_list() {
@@ -234,29 +334,28 @@ export class SearchPageComponent implements OnInit {
     const versionsInArrays: string[][] = active_products.map(productName => {
       return versions[productName].map(version => version.name);
     })
-     results = [].concat(...versionsInArrays)
-     const newVersionList = results.filter((version, index) => results.indexOf(version) == index).reverse();
-     if (this.versionControl.value) {
+    results = [].concat(...versionsInArrays)
+    const newVersionList = results.filter((version, index) => results.indexOf(version) == index).reverse();
+    if (this.versionControl.value) {
       this.versionControl.setValue(newVersionList.filter(selected => this.versionControl.value.indexOf(selected) >= 0))
-     }
-     return results.filter((version, index) => results.indexOf(version) == index).reverse();
-  }
-
-  change_sorting(event$) {
-    localStorage.setItem('sorting_by_updated', JSON.stringify({status: event$.checked}));
-    this.sorting_by_updated$.next(event$.checked)
-  }
-
-  get_sorting_from_storage() {
-    return (!!JSON.parse(localStorage.getItem('sorting_by_updated'))?.status)
+    }
+    return results.filter((version, index) => results.indexOf(version) == index).reverse();
   }
 
   bugs_sorting(bugs: Bug[], by_updated: boolean): Bug[] {
     if (by_updated) {
       bugs = [...bugs.sort((a, b) => b.last_change_time.getTime() - a.last_change_time.getTime())];
     } else {
-      bugs = [...bugs.sort((a, b) =>  b.id - a.id)];
+      bugs = [...bugs.sort((a, b) => b.id - a.id)];
     }
     return bugs;
+  }
+
+  keep_current_search_to_query(params: CustomSearch) {
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: params,
+      queryParamsHandling: 'merge',
+    });
   }
 }
