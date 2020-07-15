@@ -41,20 +41,24 @@ export interface userParams {
 }
 
 export interface Severity {
+  id: number;
   name: string;
   color: string;
   realName: string;
   isFeature?: boolean;
-  addition?: String[]
+  addition?: String[],
+  active?: boolean;
 }
 
 export interface Priority {
+  id: number;
   name: string;
   realName: string;
   addition?: String[]
 }
 
 export interface Status {
+  id: number;
   name: string;
   realName: string;
   active: boolean;
@@ -62,6 +66,7 @@ export interface Status {
 }
 
 export interface Product {
+  id: number;
   name: string;
   color: string;
   active: boolean;
