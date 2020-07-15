@@ -137,6 +137,8 @@ export class SearchPageComponent implements OnInit {
             hiddenProducts = settings.hidden_products.filter(hiddenProduct => {
               return [...search.products].indexOf(this.products[hiddenProduct].id.toString()) == -1
             })
+          } else {
+            hiddenProducts = settings.hidden_products;
           }
           Object.values(this.products).forEach(product => {
             if (hiddenProducts?.indexOf(product.realName) === -1) {
@@ -182,6 +184,9 @@ export class SearchPageComponent implements OnInit {
       }
       if (currentSearch.assigned) {
         this.assignedToControl.setValue(users[currentSearch.assigned]);
+      }
+      if (Object.keys(currentSearch).length !== 0) {
+        this.search();
       }
     });
 
