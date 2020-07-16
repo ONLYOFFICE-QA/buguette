@@ -215,12 +215,16 @@ export class SearchPageComponent implements OnInit {
     this.createrControl.valueChanges.subscribe(creator => {
       if (this.createrControl.value?.username) {
         this.keep_current_search_to_query({ creator: creator.username })
+      } else {
+        this.keep_current_search_to_query({ creator: null })
       }
     })
 
     this.assignedToControl.valueChanges.subscribe(assigner => {
       if (this.assignedToControl.value?.username) {
         this.keep_current_search_to_query({ assigned: assigner.username })
+      } else {
+        this.keep_current_search_to_query({ assigned: null })
       }
     })
 
