@@ -146,6 +146,8 @@ export class SearchPageComponent implements OnInit {
               newProducts.push(product);
             }
           })
+        } else {
+          newProducts = Object.values(this.products);
         }
         this.productsArray$.next(newProducts);
       }));
