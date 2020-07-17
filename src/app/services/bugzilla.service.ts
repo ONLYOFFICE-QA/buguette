@@ -20,6 +20,10 @@ export interface StructuredUsers {
   [key: string]: User
 }
 
+export interface StructuredProducts {
+  [key: string]: Product
+}
+
 export interface SearchParams {
   ids?: Array<number>,
   products?: Array<string>,

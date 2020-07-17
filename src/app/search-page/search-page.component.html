@@ -4,6 +4,8 @@
       <div class="product-select-block">
         <mat-card class="filter-item" (click)="change_product_active(product)" *ngFor="let product of productsArray$ | async"
           [ngClass]="{'mat-elevation-z7': product.active, 'mat-elevation-z0': !product.active}"
+          [matTooltip]="'+ ' + product.addition?.join()"
+          [matTooltipDisabled]="!product.addition"
           [ngStyle]="{'background-color': product.active?product.color:'#e2e2e2'}">
           {{product.name}}
         </mat-card>
