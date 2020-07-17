@@ -149,7 +149,7 @@
         <h1>All bugs hidden. Try to clear quick search</h1>
       </div>
       <cdk-virtual-scroll-viewport [itemSize]="50" class="result-list-view">
-        <mat-card (click)="get_details(bug)" [ngClass]="{'mat-elevation-z10': (bugDetail$ | async)?.id == bug.id}"
+        <mat-card (click)="get_details(bug)" (auxclick)="open_bug_in_new_tab(bug)" [ngClass]="{'mat-elevation-z10': (bugDetail$ | async)?.id == bug.id}"
           [ngStyle]="{'border-left': '0.4em solid ' + products[bug.product].color}" routerLinkActive="active"
           class="result-item" *cdkVirtualFor="let bug of bugs">
           <mat-icon class="bug-severity" matTooltip={{bug.severity}} aria-hidden="false"
@@ -185,3 +185,4 @@
   </div>
   <router-outlet></router-outlet>
 </div>
+<a href="" target="_blank" hidden #newTabElement></a>
