@@ -82,9 +82,12 @@
 
 <mat-card *ngFor="let comment of (bug$ | async)?.comments | slice:1" class="result comment mat-elevation-z2">
   <div class="left-block-comment">
-    <div class="creator-image" *ngIf="(users$ | async)[comment.creator_username] as user">
+    <ng-container *ngIf="(users$ | async) as users">
+    <div class="creator-image" *ngIf="users[comment.creator_username] as user">
       <img class="avatar-image" matTooltip={{user.real_name}} [src]="user.avatar || '/assets/avatars/default.jpg'">
     </div>
+    <span *ngIf="!users[comment.creator_username]" matTooltip="User not found">{{comment.creator_username}}</span>
+    </ng-container>
   </div>
   <div class="right-block-comment">
     <div class="comment-date">
