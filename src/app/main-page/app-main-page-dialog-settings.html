@@ -19,6 +19,7 @@
   </mat-tab>
   <mat-tab label="Projects">
       <mat-list role="list">
+        <mat-dialog-content style="margin: 0; padding: 0;">
         <mat-list-item *ngFor="let product of products" role="listitem">
           <button mat-icon-button (click)="product_visibility_change(product)">
             <mat-icon>
@@ -27,9 +28,8 @@
           </button>
           {{product.name}}
         </mat-list-item>
+        </mat-dialog-content>
       </mat-list>
   </mat-tab>
 </mat-tab-group>
-
-
 
