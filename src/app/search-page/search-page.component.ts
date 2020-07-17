@@ -255,15 +255,20 @@ export class SearchPageComponent implements OnInit {
 
   search(): void {
     const params: SearchParams = {};
-    params.products = this.get_active_products();
-    params.statuses = this.get_active_statuses();
-    params.severities = this.get_active_severities();
-    params.priorities = this.get_active_priorities();
-    params.creator = this.get_active_creater();
-    params.assigned_to = this.get_active_assigned_to();
-    params.versions = this.get_active_versions();
-    params.quicksearch = this.quickFilterControl.value;
-    params.creator_and_commentator = this.settings.settingsData$.getValue().comment_and_creator;
+    // ALL is need because by default, bugzilla will search only by opened bugs
+    if (Number(this.quickFilterControl.value)) {
+      params.quicksearch = "bug_id:" + this.quickFilterControl.value;
+    } else {
+      params.products = this.get_active_products();
+      params.statuses = this.get_active_statuses();
+      params.severities = this.get_active_severities();
+      params.priorities = this.get_active_priorities();
+      params.creator = this.get_active_creater();
+      params.assigned_to = this.get_active_assigned_to();
+      params.versions = this.get_active_versions();
+      params.quicksearch = this.quickFilterControl.value;
+      params.creator_and_commentator = this.settings.settingsData$.getValue().comment_and_creator;
+    }
     this.loading = true
     this.bugzilla.get_bugs(params).subscribe(_ => {
       this.loading = false;
