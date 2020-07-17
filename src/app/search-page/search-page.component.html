@@ -148,10 +148,11 @@
       <div *ngIf="(currentCounts.all == currentCounts.hidden) && currentCounts.all !== 0">
         <h1>All bugs hidden. Try to clear quick search</h1>
       </div>
-      <cdk-virtual-scroll-viewport [itemSize]="50" class="result-list-view">
-        <mat-card (click)="get_details(bug)" (auxclick)="open_bug_in_new_tab(bug)" [ngClass]="{'mat-elevation-z10': (bugDetail$ | async)?.id == bug.id}"
+      <cdk-virtual-scroll-viewport [itemSize]="50" class="result-list-view" #bugList>
+        <a *cdkVirtualFor="let bug of bugs" onclick="return false" routerLink="/bug/{{bug.id}}" target="_blank" class="bug-list-link-wrapper">
+          <mat-card (click)="get_details(bug)" [ngClass]="{'mat-elevation-z10': (bugDetail$ | async)?.id == bug.id}"
           [ngStyle]="{'border-left': '0.4em solid ' + products[bug.product].color}" routerLinkActive="active"
-          class="result-item" *cdkVirtualFor="let bug of bugs">
+          class="result-item" >
           <mat-icon class="bug-severity" matTooltip={{bug.severity}} aria-hidden="false"
             [ngStyle]="{'color': severities[bug.severity]?.color, 'margin': 'auto'}">
             {{severities[bug.severity]?.isFeature?"insights":"bug_report"}}</mat-icon>
@@ -177,6 +178,8 @@
             <span>&nbsp;{{bug.buguetteStatus}}</span>
           </div>
         </mat-card>
+        </a>
+
       </cdk-virtual-scroll-viewport>
     </div>
   </ng-container>

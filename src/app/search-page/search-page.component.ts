@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { BugzillaService, SearchParams, Severity, Status, Product, Priority, StructuredUsers, StructuredProducts } from '../services/bugzilla.service';
 import { BugDetailService } from '../bug-details/bug-detail.service';
 import { CustomSearch } from '../services/search-keeper.service';
@@ -23,8 +23,6 @@ export interface Counters {
   styleUrls: ['./search-page.component.scss']
 })
 export class SearchPageComponent implements OnInit {
-  @ViewChild('newTabElement') link:ElementRef;
-
   statuses = StaticData.STATUSES;
   products: StructuredProducts = StaticData.PRODUCTS;
   severities = StaticData.SEVERITIES;
@@ -375,11 +373,5 @@ export class SearchPageComponent implements OnInit {
       queryParams: params,
       queryParamsHandling: 'merge',
     });
-  }
-
-  open_bug_in_new_tab(bug: Bug) {
-    const link = this.router.createUrlTree(['bug', bug.id], { relativeTo: this.activatedRoute, queryParamsHandling: 'merge' }).toString()
-    this.link.nativeElement.setAttribute('href', link)
-    this.link.nativeElement.click();
   }
 }
