@@ -5,7 +5,7 @@ import { CustomSearch } from '../services/search-keeper.service';
 import { ReplaySubject, Observable, merge, BehaviorSubject } from 'rxjs';
 import { Bug, UserDetail } from '../models/bug';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { StaticData } from '../static-data';
 import { User } from '../models/user';
 import { startWith, map, switchMap, take } from 'rxjs/operators';
@@ -15,6 +15,16 @@ import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/l
 export interface Counters {
   all?: number;
   hidden?: number;
+}
+
+export class UserRegistrationFormValidators {
+  static userShouldBeSelected(control: AbstractControl): ValidationErrors | null {
+      if (control.value instanceof User || control.value == '') {
+          return null;
+      }
+      // If there is no validation failure, return null
+      return { shouldBeSelected: true };
+  }
 }
 
 @Component({
@@ -44,8 +54,8 @@ export class SearchPageComponent implements OnInit {
   smallForm = false;
 
   priorityControl = new FormControl();
-  createrControl = new FormControl();
-  assignedToControl = new FormControl();
+  createrControl = new FormControl('', [UserRegistrationFormValidators.userShouldBeSelected]);
+  assignedToControl = new FormControl('', [UserRegistrationFormValidators.userShouldBeSelected]);
   quickFilterControl = new FormControl();
   versionControl = new FormControl();
   sortingControl = new FormControl();
@@ -373,5 +383,10 @@ export class SearchPageComponent implements OnInit {
       queryParams: params,
       queryParamsHandling: 'merge',
     });
+  }
+
+  is_user(value) {
+    console.log(value)
+    return !!value?.email
   }
 }

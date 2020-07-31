@@ -97,6 +97,7 @@
             <input matInput
               [placeholder]="(settings.settingsData$ | async)?.comment_and_creator?'Creator or Commentator': 'Creator'"
               aria-label="Creator" [matAutocomplete]="auto" [formControl]="createrControl">
+              <mat-error>Field is ignored. Please, select user from list</mat-error>
             <button mat-button *ngIf="createrControl.value" matSuffix mat-icon-button aria-label="Clear"
               (click)="createrControl.reset()">
               <mat-icon>close</mat-icon>
@@ -122,6 +123,7 @@
           <mat-form-field class="assigned-field">
             <input matInput placeholder="Assigned To" aria-label="Assigned To" [matAutocomplete]="auto"
               [formControl]="assignedToControl">
+              <mat-error>Field is ignored. Please, select user from list</mat-error>
             <button mat-button *ngIf="assignedToControl.value" matSuffix mat-icon-button aria-label="Clear"
               (click)="assignedToControl.reset()">
               <mat-icon>close</mat-icon>
