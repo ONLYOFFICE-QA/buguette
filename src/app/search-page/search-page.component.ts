@@ -201,6 +201,9 @@ export class SearchPageComponent implements OnInit {
       if (currentSearch.assigned) {
         this.assignedToControl.setValue(users[currentSearch.assigned]);
       }
+      if (currentSearch.quick_search) {
+        this.quickFilterControl.setValue(currentSearch.quick_search);
+      }
       if (Object.keys(currentSearch).length !== 0) {
         this.search();
       }
@@ -217,6 +220,14 @@ export class SearchPageComponent implements OnInit {
     this.priorityControl.valueChanges.subscribe(priorities => {
       if (priorities) {
         this.keep_current_search_to_query({ priorities: priorities.map(priority => priority.id) })
+      }
+    })
+
+    this.quickFilterControl.valueChanges.subscribe(quick_search => {
+      if (quick_search) {
+        this.keep_current_search_to_query({ quick_search: quick_search })
+      } else {
+        this.keep_current_search_to_query({ quick_search: null })
       }
     })
 
