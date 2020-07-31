@@ -35,6 +35,7 @@ export class MainPageComponent implements OnInit {
 
   logout() {
     this.bugzilla.logout();
+    window.navigator.credentials.preventSilentAccess();
   }
 
   settingsOpen() {
