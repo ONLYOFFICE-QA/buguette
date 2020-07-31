@@ -189,7 +189,11 @@ export class SearchPageComponent implements OnInit {
           );
       }
       if (currentSearch.versions) {
-        this.versionControl.setValue(currentSearch.versions);
+        let _versions = currentSearch.versions
+        if (!Array.isArray(_versions)) {
+          _versions = [_versions]
+        }
+        this.versionControl.setValue(_versions);
       }
       if (currentSearch.creator) {
         this.createrControl.setValue(users[currentSearch.creator]);
