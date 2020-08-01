@@ -5,7 +5,7 @@ import { CustomSearch } from '../services/search-keeper.service';
 import { ReplaySubject, Observable, merge, BehaviorSubject } from 'rxjs';
 import { Bug, UserDetail } from '../models/bug';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { FormControl, AbstractControl, ValidationErrors } from '@angular/forms';
 import { StaticData } from '../static-data';
 import { User } from '../models/user';
 import { startWith, map, switchMap, take } from 'rxjs/operators';
@@ -204,7 +204,8 @@ export class SearchPageComponent implements OnInit {
       if (currentSearch.quick_search) {
         this.quickFilterControl.setValue(currentSearch.quick_search);
       }
-      if (Object.keys(currentSearch).length !== 0) {
+      let searchKeyses = Object.keys(currentSearch).filter(key => key !== 'sorting_by_updated');
+      if (searchKeyses.length > 0 ) {
         this.search();
       }
     });
@@ -400,8 +401,54 @@ export class SearchPageComponent implements OnInit {
     });
   }
 
+  keep_current_search_to_query_force(params) {
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: params,
+    });
+  }
+
   is_user(value) {
-    console.log(value)
     return !!value?.email
+  }
+
+  sorting_control_toogle() {
+    this.sortingControl.setValue(!this.sortingControl.value)
+  }
+
+  clear_filters() {
+    this.priorityControl.reset()
+    this.createrControl.reset()
+    this.assignedToControl.reset()
+    this.quickFilterControl.reset()
+    this.versionControl.reset()
+    this.clear_products_filtering();
+    this.clear_statuses_filtering();
+    this.clear_severity_filtering();
+    this.keep_current_search_to_query_force({ sorting_by_updated: this.sortingControl.value })
+  }
+
+  clear_products_filtering() {
+    let _newProducts = this.productsArray$.getValue().map(product => {
+      product.active = false
+      return product;
+    });
+    this.productsArray$.next(_newProducts);
+  }
+
+  clear_statuses_filtering() {
+    let _newStatuses = this.statusesArray$.getValue().map(status => {
+      status.active = false
+      return status;
+    });
+    this.statusesArray$.next(_newStatuses);
+  }
+
+  clear_severity_filtering() {
+    let _newSeverities = this.severitiesArray$.getValue().map(severity => {
+      severity.active = false
+      return severity;
+    });
+    this.severitiesArray$.next(_newSeverities);
   }
 }

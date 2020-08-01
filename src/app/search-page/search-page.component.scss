@@ -68,7 +68,6 @@
 }
 
 .result-list {
-  margin-top: 0.5em;
   flex-direction: column;
   overflow: auto;
   flex: 3;
@@ -203,4 +202,7 @@ img.avatar-image {
 }
 .bug-list-link-wrapper {
   text-decoration: none;
+}
+.bugs-toolbar {
+  float: right;
 }

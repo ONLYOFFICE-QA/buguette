@@ -81,8 +81,10 @@
           </mat-form-field>
         </div>
       </div>
-      <div class="sorting-block">
-        <mat-slide-toggle [formControl]="sortingControl">Sorting by updated</mat-slide-toggle>
+      <div class="bugs-toolbar">
+        <button mat-button [matMenuTriggerFor]="actionMenu">
+          Addition settings
+        </button>
       </div>
     </div>
     <mat-divider class="filter-block-divider" [vertical]="true"></mat-divider>
@@ -196,3 +198,13 @@
   <router-outlet></router-outlet>
 </div>
 <a href="" target="_blank" hidden #newTabElement></a>
+<mat-menu #actionMenu="matMenu">
+  <button mat-menu-item (click)="sorting_control_toogle()">
+    <mat-icon>{{sortingControl.value?"toggle_on":"toggle_off"}}</mat-icon>
+    <span>Sort by updated_at</span>
+  </button>
+  <button mat-menu-item (click)="clear_filters()">
+    <mat-icon>delete_forever</mat-icon>
+    <span>Clear filters</span>
+  </button>
+</mat-menu>
