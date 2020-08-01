@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {BugzillaService, Product} from '../services/bugzilla.service';
-import {SettingsService} from '../services/settings.service';
+import { ActivatedRoute } from '@angular/router';
+import { BugzillaService, Product } from '../services/bugzilla.service';
+import { SettingsService } from '../services/settings.service';
 import { AuthGuardService } from '../guards/auth-guard.service';
 import { switchMap, pluck } from 'rxjs/operators';
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { StaticData } from '../static-data';
 
 @Component({
@@ -15,20 +15,20 @@ import { StaticData } from '../static-data';
 export class MainPageComponent implements OnInit {
 
   constructor(private activatedRoute: ActivatedRoute,
-     public bugzilla: BugzillaService,
-     public auth: AuthGuardService,
-     public dialog: MatDialog) { }
+    public bugzilla: BugzillaService,
+    public auth: AuthGuardService,
+    public dialog: MatDialog) { }
 
   ngOnInit(): void {
 
     this.activatedRoute.params.pipe(
       pluck('id'),
-      switchMap( _ => {
+      switchMap(_ => {
         const userdata = JSON.parse(localStorage.getItem('user_data'));
         if (userdata.id) {
-          return this.bugzilla.get_user({id: userdata.id});
+          return this.bugzilla.get_user({ id: userdata.id });
         } else {
-          return this.bugzilla.get_user({names: userdata.username});
+          return this.bugzilla.get_user({ names: userdata.username });
         }
       })).subscribe();
   }
@@ -55,7 +55,7 @@ export class MainPageComponent implements OnInit {
 export class MainPageDialogSettings {
   products = Object.values(StaticData.PRODUCTS);
 
-  constructor(public dialogRef: MatDialogRef<MainPageDialogSettings>, public settings: SettingsService,) {}
+  constructor(public dialogRef: MatDialogRef<MainPageDialogSettings>, public settings: SettingsService,) { }
 
   onNoClick(): void {
     this.dialogRef.close();
