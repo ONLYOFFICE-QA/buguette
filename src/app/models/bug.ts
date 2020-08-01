@@ -70,7 +70,7 @@ export class Bug {
   get_buguette_status() {
     switch(this.status) {
       case 'RESOLVED': {
-        return "FIXED"
+        return this.resolution;
       }
       case 'VERIFIED': {
         return "VERIFIED";

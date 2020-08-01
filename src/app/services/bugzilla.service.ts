@@ -178,6 +178,7 @@ export class BugzillaService {
       params = params.append('quicksearch',  "ALL " + searchParams.quicksearch);
     }
     params = params.append('include_fields', 'status');
+    params = params.append('include_fields', 'resolution');
     params = params.append('include_fields', 'severity');
     params = params.append('include_fields', 'summary');
     params = params.append('include_fields', 'assigned_to');
@@ -249,6 +250,12 @@ export class BugzillaService {
       case 'NEW': {
         params = params.append('bug_status', 'NEW');
         params = params.append('resolution', '---');
+        break;
+      }
+      case 'INVALID': {
+        params = params.append('bug_status', 'RESOLVED');
+        params = params.append('resolution', 'INVALID');
+        params = params.append('resolution', 'WONTFIX');
         break;
       }
       default: {
