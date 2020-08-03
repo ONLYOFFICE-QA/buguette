@@ -28,9 +28,9 @@ export class StaticData {
   "enhancement": { id: 5, name: "Enhancement", realName: "enhancement", isFeature: true, color: "#30ac09", active: false }};
 
   public static readonly STATUSES =
-  {"NEW": { id: 1, name: "New/Assigned", realName: "NEW", addition: ["ASSIGNED", 'REOPENED'], active: false },
+  {"NEW": { id: 1, name: "New/Assigned/Reopen", realName: "NEW", addition: ["ASSIGNED", 'REOPENED'], active: false },
   "RESOLVED": { id: 2, name: "Resolved", realName: "RESOLVED", active: false },
-  "VERIFIED": { id: 3, name: "Verified", realName: "VERIFIED", addition: ["CLOSED"], active: false }};
+  "VERIFIED": { id: 3, name: "Verified/Closed", realName: "VERIFIED", addition: ["CLOSED"], active: false }};
 
   public static readonly PRIORITIES =
   {"P1": { id: 1, name: "P1", realName: "P1" },
