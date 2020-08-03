@@ -11,11 +11,9 @@ export class BookmarksService {
   constructor() { }
 
   public keep_to_bookmarks() {
-    console.log('keep_to_bookmarks');
   }
 
   public apply_search(bookmark) {
     this.currentBookmark$.next(bookmark);
-    console.log('keep_to_bookmarks');
   }
 }

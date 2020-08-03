@@ -48,7 +48,6 @@ export class MainPageComponent implements OnInit {
 
   apply_search(bookmark) {
     this.bookmarksService.apply_search(bookmark);
-    console.log(bookmark);
   }
 
   keep_bookmark() {
