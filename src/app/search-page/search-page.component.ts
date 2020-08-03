@@ -1,7 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { BugzillaService, SearchParams, Severity, Status, Product, Priority, StructuredUsers, StructuredProducts } from '../services/bugzilla.service';
+import { BugzillaService, SearchParams, Severity, Status, Product, Priority, StructuredUsers, StructuredProducts, CustomSearch } from '../services/bugzilla.service';
 import { BugDetailService } from '../bug-details/bug-detail.service';
-import { CustomSearch } from '../services/search-keeper.service';
 import { ReplaySubject, Observable, merge, BehaviorSubject } from 'rxjs';
 import { Bug, UserDetail } from '../models/bug';
 import { ActivatedRoute, Router } from '@angular/router';

@@ -116,6 +116,18 @@ export interface VersionInterface {
   sort_key: number;
 }
 
+export interface CustomSearch {
+  products?: number[];
+  severities?: number[];
+  statuses?: number[];
+  priorities?: number[];
+  versions?: string[];
+  creator?: string;
+  assigned?: string;
+  quick_search?: string;
+  sorting_by_updated?: boolean;
+}
+
 @Injectable({
   providedIn: 'root'
 })
