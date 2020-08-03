@@ -1,6 +1,9 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row class="toolbar">
     <span>Buguette</span>
+    <button *ngIf="(bugzilla.currentUser$ |async)" mat-icon-button class="example-icon" [matMenuTriggerFor]="bookmarks">
+      <mat-icon>bookmarks</mat-icon>
+    </button>
     <span class="toolbar-fill-space"></span>
     <span *ngIf="(bugzilla.currentUser$ |async) as user; else loading">
       {{user?.email}}
@@ -16,11 +19,15 @@
 
 
 <div class="main-page">
-  <!-- <router-outlet></router-outlet> -->
   <app-search-page></app-search-page>
 </div>
 
 <mat-menu #appMenu="matMenu">
   <button (click)="settingsOpen()" mat-menu-item>Settings</button>
   <button (click)="logout()" mat-menu-item>Logout</button>
+</mat-menu>
+
+<mat-menu #bookmarks="matMenu">
+  <button *ngFor="let savedSearch of (bugzilla.currentUser$ |async)?.savedSearches"
+   (click)="apply_search(savedSearch)" mat-menu-item>{{savedSearch.name}}</button>
 </mat-menu>

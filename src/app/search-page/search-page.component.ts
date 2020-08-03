@@ -11,6 +11,7 @@ import { User } from '../models/user';
 import { startWith, map, switchMap, take } from 'rxjs/operators';
 import { SettingsService, SettingsInterface } from '../services/settings.service';
 import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
+import { BookmarksService } from '../services/bookmarks.service';
 
 export interface Counters {
   all?: number;
@@ -67,6 +68,7 @@ export class SearchPageComponent implements OnInit {
 
   constructor(public bugzilla: BugzillaService,
     private router: Router,
+    private bookmarksService: BookmarksService,
     private activatedRoute: ActivatedRoute,
     private cd: ChangeDetectorRef,
     private breakpointObserver: BreakpointObserver,
@@ -152,7 +154,7 @@ export class SearchPageComponent implements OnInit {
           }
           Object.values(this.products).forEach(product => {
             if (hiddenProducts?.indexOf(product.realName) === -1) {
-              product.active = this.productsArray$.getValue().find(prod => prod.realName === product.realName)?.active;
+              product.active = (search?.products?.indexOf(product.id.toString()) > -1);
               newProducts.push(product);
             }
           })
@@ -163,52 +165,21 @@ export class SearchPageComponent implements OnInit {
       }));
     })).subscribe();
 
-    this.activatedRoute.queryParams.pipe(take(1), switchMap(search => {
-      return this.users$.pipe(map(users =>{
+    this.activatedRoute.queryParams.pipe(take(1), switchMap((search: CustomSearch) => {
+      return this.users$.pipe(map((users: StructuredUsers) => {
         return [search, users];
       }))
-    })).subscribe(result => {
-      let currentSearch = result[0]
-      let users = result[1];
-      if (currentSearch.products) {
-        this.productsArray$.next(this.get_active_objects(this.productsArray$, currentSearch.products))
-      }
-      if (currentSearch.sorting_by_updated) {
-        this.sortingControl.setValue(true);
-      }
-      if (currentSearch.severities) {
-        this.severitiesArray$.next(this.get_active_objects(this.severitiesArray$, currentSearch.severities))
-      }
-      if (currentSearch.statuses) {
-        this.statusesArray$.next(this.get_active_objects(this.statusesArray$, currentSearch.statuses))
-      }
-      if (currentSearch.priorities) {
-        this.priorityControl.setValue(
-          this.prioritiesArray$.getValue().
-          filter(currentPriority => currentSearch.priorities.indexOf(currentPriority.id.toString()) >= 0)
-          );
-      }
-      if (currentSearch.versions) {
-        let _versions = currentSearch.versions
-        if (!Array.isArray(_versions)) {
-          _versions = [_versions]
-        }
-        this.versionControl.setValue(_versions);
-      }
-      if (currentSearch.creator) {
-        this.createrControl.setValue(users[currentSearch.creator]);
-      }
-      if (currentSearch.assigned) {
-        this.assignedToControl.setValue(users[currentSearch.assigned]);
-      }
-      if (currentSearch.quick_search) {
-        this.quickFilterControl.setValue(currentSearch.quick_search);
-      }
-      let searchKeyses = Object.keys(currentSearch).filter(key => key !== 'sorting_by_updated');
-      if (searchKeyses.length > 0 ) {
-        this.search();
-      }
+    })).subscribe((result: [CustomSearch, StructuredUsers]) => {
+      this.preapply_filters(result[0], result[1]);
     });
+
+
+    this.bookmarksService.currentBookmark$.pipe(switchMap(currentSearch => {
+      return this.users$.pipe(map(users => {
+        this.preapply_filters(currentSearch.saved_search, users);
+        this.keep_current_search_to_query_force(currentSearch.saved_search);
+      }))
+    })).subscribe()
 
     this.sortingControl.valueChanges.subscribe(value => {
       if (value) {
@@ -268,9 +239,50 @@ export class SearchPageComponent implements OnInit {
     });
   }
 
-  get_active_objects(objects$, searchBy: string[]) {
+  preapply_filters(currentSearch: CustomSearch, users: StructuredUsers) {
+    if (currentSearch.products) {
+      this.productsArray$.next(this.get_active_objects(this.productsArray$, currentSearch.products))
+    }
+    if (currentSearch.sorting_by_updated) {
+      this.sortingControl.setValue(true);
+    }
+    if (currentSearch.severities) {
+      this.severitiesArray$.next(this.get_active_objects(this.severitiesArray$, currentSearch.severities))
+    }
+    if (currentSearch.statuses) {
+      this.statusesArray$.next(this.get_active_objects(this.statusesArray$, currentSearch.statuses))
+    }
+    if (currentSearch.priorities) {
+      this.priorityControl.setValue(
+        this.prioritiesArray$.getValue().
+        filter(currentPriority => currentSearch.priorities.indexOf(currentPriority.id) >= 0)
+        );
+    }
+    if (currentSearch.versions) {
+      let _versions = currentSearch.versions
+      if (!Array.isArray(_versions)) {
+        _versions = [_versions]
+      }
+      this.versionControl.setValue(_versions);
+    }
+    if (currentSearch.creator) {
+      this.createrControl.setValue(users[currentSearch.creator]);
+    }
+    if (currentSearch.assigned) {
+      this.assignedToControl.setValue(users[currentSearch.assigned]);
+    }
+    if (currentSearch.quick_search) {
+      this.quickFilterControl.setValue(currentSearch.quick_search);
+    }
+    let searchKeyses = Object.keys(currentSearch).filter(key => key !== 'sorting_by_updated');
+    if (searchKeyses.length > 0 ) {
+      // this.search();
+    }
+  }
+
+  get_active_objects(objects$, searchBy: number[]) {
     return objects$.getValue().map(obj => {
-      obj.active = (searchBy.indexOf(obj.id.toString()) >= 0)
+      obj.active = (searchBy.indexOf(obj.id) >= 0)
       return obj;
     })
   }
@@ -401,7 +413,7 @@ export class SearchPageComponent implements OnInit {
     });
   }
 
-  keep_current_search_to_query_force(params) {
+  keep_current_search_to_query_force(params: CustomSearch) {
     this.router.navigate([], {
       relativeTo: this.activatedRoute,
       queryParams: params,
@@ -450,5 +462,9 @@ export class SearchPageComponent implements OnInit {
       return severity;
     });
     this.severitiesArray$.next(_newSeverities);
+  }
+
+  keep_bookmark() {
+    console.log('keep_bookmarkkeep_bookmarkkeep_bookmark')
   }
 }

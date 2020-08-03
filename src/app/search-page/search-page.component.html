@@ -182,8 +182,9 @@
               <img class="avatar-image"
                 [src]="(users$ | async)[bug.assigned_to_detail.username]?.avatar || '/assets/avatars/default.jpg'">
             </div>
-
-            <div class="bug-status" style="margin: auto;">
+            <div class="bug-status"
+            matTooltip="{{bug.status}} {{bug.resolution}}"
+            [ngStyle]="{color: (bug.resolution == '' || bug.resolution == 'FIXED')?'black':'red', margin: 'auto'}">
               <span>&nbsp;{{bug.buguetteStatus}}</span>
             </div>
           </mat-card>
@@ -202,6 +203,10 @@
   <button mat-menu-item (click)="sorting_control_toogle()">
     <mat-icon>{{sortingControl.value?"toggle_on":"toggle_off"}}</mat-icon>
     <span>Sorting by updated</span>
+  </button>
+  <button mat-menu-item (click)="keep_bookmark()">
+    <mat-icon>save</mat-icon>
+    <span>Keep filters</span>
   </button>
   <button mat-menu-item (click)="clear_filters()">
     <mat-icon>delete_forever</mat-icon>

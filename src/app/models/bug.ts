@@ -44,6 +44,7 @@ export class Bug {
   isEmpty = false;
   creation_time: Date;
   last_change_time: Date;
+  buguetteStatusColor: string;
   constructor(bugData: BugResponceData) {
     this.id = bugData['id']
     this.summary = bugData['summary']
@@ -63,6 +64,7 @@ export class Bug {
     this.creator = bugData['creator']
     this.creator_detail = this.get_user_detail(bugData['creator_detail'])
     this.buguetteStatus = this.get_buguette_status()
+    this.buguetteStatusColor = this.get_buguette_statusColor()
     this.creation_time = new Date(bugData['creation_time']);
     this.last_change_time = new Date(bugData['last_change_time']);
   }
@@ -70,7 +72,7 @@ export class Bug {
   get_buguette_status() {
     switch(this.status) {
       case 'RESOLVED': {
-        return this.resolution;
+        return "RESOLVED";
       }
       case 'VERIFIED': {
         return "VERIFIED";
@@ -79,6 +81,10 @@ export class Bug {
          return this.status;
       }
    }
+  }
+
+  get_buguette_statusColor() {
+    return 'black';
   }
 
   get_user_detail(data: UserDetail) {

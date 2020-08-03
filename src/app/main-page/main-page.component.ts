@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BugzillaService, Product } from '../services/bugzilla.service';
+import { BookmarksService } from '../services/bookmarks.service';
 import { SettingsService } from '../services/settings.service';
 import { AuthGuardService } from '../guards/auth-guard.service';
 import { switchMap, pluck } from 'rxjs/operators';
@@ -13,14 +14,13 @@ import { StaticData } from '../static-data';
   styleUrls: ['./main-page.component.scss']
 })
 export class MainPageComponent implements OnInit {
-
   constructor(private activatedRoute: ActivatedRoute,
+    public bookmarksService: BookmarksService,
     public bugzilla: BugzillaService,
     public auth: AuthGuardService,
     public dialog: MatDialog) { }
 
   ngOnInit(): void {
-
     this.activatedRoute.params.pipe(
       pluck('id'),
       switchMap(_ => {
@@ -44,6 +44,15 @@ export class MainPageComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
     });
+  }
+
+  apply_search(bookmark) {
+    this.bookmarksService.apply_search(bookmark);
+    console.log(bookmark);
+  }
+
+  keep_bookmark() {
+    this.bookmarksService.keep_to_bookmarks()
   }
 }
 

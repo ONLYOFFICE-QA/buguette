@@ -237,25 +237,9 @@ export class BugzillaService {
 
   append_status(params: HttpParams, statusName: string): HttpParams {
     switch(statusName) {
-      case 'FIXED': {
-        params = params.append('bug_status', 'RESOLVED');
-        params = params.append('resolution', 'FIXED');
-        break;
-      }
-      case 'VERIFIED': {
-        params = params.append('bug_status', 'VERIFIED');
-        params = params.append('resolution', 'FIXED');
-        break;
-      }
       case 'NEW': {
         params = params.append('bug_status', 'NEW');
         params = params.append('resolution', '---');
-        break;
-      }
-      case 'INVALID': {
-        params = params.append('bug_status', 'RESOLVED');
-        params = params.append('resolution', 'INVALID');
-        params = params.append('resolution', 'WONTFIX');
         break;
       }
       default: {

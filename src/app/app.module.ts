@@ -19,6 +19,7 @@ import { BugDetailsComponent } from './bug-details/bug-details.component';
 import { BugDetailService } from './bug-details/bug-detail.service';
 import { DetailAttachmentComponent } from './bug-details/detail-attachment/detail-attachment.component';
 import { DetailCommentTextComponent } from './bug-details/detail-comment-text/detail-comment-text.component';
+import { BookmarksService } from './services/bookmarks.service';
 
 
 @NgModule({
@@ -40,7 +41,7 @@ import { DetailCommentTextComponent } from './bug-details/detail-comment-text/de
     BrowserAnimationsModule,
     ScrollingModule,
   ],
-  providers: [AuthGuardService, HttpService, BugzillaService, BugDetailService],
+  providers: [AuthGuardService, HttpService, BugzillaService, BugDetailService, BookmarksService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
