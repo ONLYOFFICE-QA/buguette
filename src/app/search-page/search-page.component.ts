@@ -287,7 +287,7 @@ export class SearchPageComponent implements OnInit {
     }
     let searchKeyses = Object.keys(currentSearch).filter(key => key !== 'sorting_by_updated');
     if (searchKeyses.length > 0 ) {
-      // this.search();
+       this.search();
     }
   }
 
