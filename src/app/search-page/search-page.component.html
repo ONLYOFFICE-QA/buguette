@@ -98,7 +98,7 @@
         </div>
         <form *ngIf="(filteredCreator | async) as creators" [ngClass]="{'creator-assigned-form': !smallForm}">
           <mat-form-field class="creator-field">
-            <input matInput
+            <input matInput [errorStateMatcher]="matcher"
               [placeholder]="(settings.settingsData$ | async)?.comment_and_creator?'Creator or Commentator': 'Creator'"
               aria-label="Creator" [matAutocomplete]="auto" [formControl]="createrControl">
             <mat-error>Field is ignored. Please, select user from list</mat-error>
@@ -126,7 +126,7 @@
         </div>
         <form *ngIf="(filteredAssignedTo | async) as assigneters" [ngClass]="{'creator-assigned-form': !smallForm}">
           <mat-form-field class="assigned-field">
-            <input matInput placeholder="Assigned To" aria-label="Assigned To" [matAutocomplete]="auto"
+            <input matInput placeholder="Assigned To" aria-label="Assigned To" [matAutocomplete]="auto" [errorStateMatcher]="matcher"
               [formControl]="assignedToControl">
             <mat-error>Field is ignored. Please, select user from list</mat-error>
             <button mat-button *ngIf="assignedToControl.value" matSuffix mat-icon-button aria-label="Clear"

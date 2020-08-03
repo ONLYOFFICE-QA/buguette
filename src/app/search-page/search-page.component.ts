@@ -5,13 +5,14 @@ import { CustomSearch } from '../services/search-keeper.service';
 import { ReplaySubject, Observable, merge, BehaviorSubject } from 'rxjs';
 import { Bug, UserDetail } from '../models/bug';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormControl, AbstractControl, ValidationErrors } from '@angular/forms';
+import { FormControl, AbstractControl, ValidationErrors, FormGroupDirective, NgForm } from '@angular/forms';
 import { StaticData } from '../static-data';
 import { User } from '../models/user';
 import { startWith, map, switchMap, take } from 'rxjs/operators';
 import { SettingsService, SettingsInterface } from '../services/settings.service';
 import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
 import { BookmarksService } from '../services/bookmarks.service';
+import { ErrorStateMatcher } from '@angular/material/core';
 
 export interface Counters {
   all?: number;
@@ -20,11 +21,18 @@ export interface Counters {
 
 export class UserRegistrationFormValidators {
   static userShouldBeSelected(control: AbstractControl): ValidationErrors | null {
-      if (control.value instanceof User || control.value == '') {
+      if (control.value instanceof User || control.value == null) {
           return null;
       }
       // If there is no validation failure, return null
       return { shouldBeSelected: true };
+  }
+}
+
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const isSubmitted = form && form.submitted;
+    return control?.value && control?.invalid;
   }
 }
 
@@ -34,6 +42,9 @@ export class UserRegistrationFormValidators {
   styleUrls: ['./search-page.component.scss']
 })
 export class SearchPageComponent implements OnInit {
+  matcher = new MyErrorStateMatcher();
+
+
   statuses = StaticData.STATUSES;
   products: StructuredProducts = StaticData.PRODUCTS;
   severities = StaticData.SEVERITIES;
