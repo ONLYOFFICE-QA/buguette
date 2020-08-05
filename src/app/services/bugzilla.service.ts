@@ -251,7 +251,7 @@ export class BugzillaService {
     switch(statusName) {
       case 'NEW': {
         params = params.append('bug_status', 'NEW');
-        params = params.append('resolution', '---');
+        // params = params.append('resolution', '---');
         break;
       }
       default: {
