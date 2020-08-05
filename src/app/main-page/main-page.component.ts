@@ -1,12 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BugzillaService, Product } from '../services/bugzilla.service';
 import { BookmarksService } from '../services/bookmarks.service';
 import { SettingsService } from '../services/settings.service';
 import { AuthGuardService } from '../guards/auth-guard.service';
-import { switchMap, pluck } from 'rxjs/operators';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { switchMap, pluck, take, map } from 'rxjs/operators';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { StaticData } from '../static-data';
+import { FormControl, Validators } from '@angular/forms';
+import { SavedSearchObject } from '../models/user';
 
 @Component({
   selector: 'app-main-page',
@@ -39,20 +41,16 @@ export class MainPageComponent implements OnInit {
   }
 
   settingsOpen() {
-    const dialogRef = this.dialog.open(MainPageDialogSettings);
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-    });
+    this.dialog.open(MainPageDialogSettings);
   }
 
   apply_search(bookmark) {
     this.bookmarksService.apply_search(bookmark);
   }
+}
 
-  keep_bookmark() {
-    this.bookmarksService.keep_to_bookmarks()
-  }
+export interface SettingsDataInterface {
+  currentTabIndex: number;
 }
 
 @Component({
@@ -62,8 +60,16 @@ export class MainPageComponent implements OnInit {
 })
 export class MainPageDialogSettings {
   products = Object.values(StaticData.PRODUCTS);
+  bookmarkNewControl = new FormControl('', Validators.required);
 
-  constructor(public dialogRef: MatDialogRef<MainPageDialogSettings>, public settings: SettingsService,) { }
+  constructor(
+    public dialogRef: MatDialogRef<MainPageDialogSettings>,
+    @Inject(MAT_DIALOG_DATA) public data: SettingsDataInterface,
+    public settings: SettingsService,
+    private activatedRoute: ActivatedRoute,
+    public bugzillaService: BugzillaService,
+    public bookmarkService: BookmarksService) {}
+
 
   onNoClick(): void {
     this.dialogRef.close();
@@ -79,5 +85,23 @@ export class MainPageDialogSettings {
 
   product_visibility_change(product: Product) {
     this.settings.product_visibility_change(product);
+  }
+
+  keep_bookmark() {
+    this.activatedRoute.queryParams.pipe(take(1), map(params => {
+      let newBookmark: SavedSearchObject;
+      newBookmark = {
+        name: this.bookmarkNewControl.value,
+        saved_search: params,
+        fromBugzilla: false
+      }
+      this.bookmarkService.keep_to_bookmarks(newBookmark);
+    })).subscribe()
+  }
+
+  delete_bookmark(bookmark: SavedSearchObject) {
+    if (!bookmark.fromBugzilla) {
+      this.bookmarkService.delete_bookmark(bookmark.name)
+    }
   }
 }

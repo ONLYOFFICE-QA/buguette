@@ -1,6 +1,6 @@
 <h1 mat-dialog-title>Settings</h1>
 
-<mat-tab-group mat-align-tabs="center" *ngIf="(settings.settingsData$ | async) as settingsData" dynamicHeight>
+<mat-tab-group mat-align-tabs="center" *ngIf="(settings.settingsData$ | async) as settingsData" dynamicHeight selectedIndex="{{data?.currentTabIndex}}">
   <mat-tab label="General">
     <div mat-dialog-content class="dialog-content">
       <div class="setting-element">
@@ -31,5 +31,24 @@
         </mat-dialog-content>
       </mat-list>
   </mat-tab>
+  <mat-tab label="Bookmarks">
+      <form class="new_bookmark-form">
+        <mat-form-field class="example-full-width">
+          <mat-label>New name of bookmark</mat-label>
+          <input matInput autocomplete="off" [formControl]="bookmarkNewControl">
+        </mat-form-field>
+        <button mat-button [disabled]=!bookmarkNewControl.value (click)="keep_bookmark()">Save</button>
+      </form>
+    <mat-list role="list">
+      <mat-dialog-content style="margin: 0; padding: 0;">
+      <mat-list-item *ngFor="let savedSearche of (bugzillaService.currentUser$ |async)?.savedSearches$ | async" role="listitem">
+        <button mat-icon-button (click)="delete_bookmark(savedSearche)">
+          <mat-icon> {{savedSearche.fromBugzilla?"security":"delete_forever"}} </mat-icon>
+        </button>
+        {{savedSearche.name}}
+      </mat-list-item>
+      </mat-dialog-content>
+    </mat-list>
+</mat-tab>
 </mat-tab-group>
 

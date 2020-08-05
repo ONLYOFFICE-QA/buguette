@@ -12,6 +12,8 @@ import { SettingsService, SettingsInterface } from '../services/settings.service
 import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
 import { BookmarksService } from '../services/bookmarks.service';
 import { ErrorStateMatcher } from '@angular/material/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MainPageDialogSettings } from '../main-page/main-page.component';
 
 export interface Counters {
   all?: number;
@@ -83,6 +85,7 @@ export class SearchPageComponent implements OnInit {
     private cd: ChangeDetectorRef,
     private breakpointObserver: BreakpointObserver,
     private bugDetail: BugDetailService,
+    public dialog: MatDialog,
     public settings: SettingsService) {
     this.filteredCreator = this.createrControl.valueChanges.pipe(startWith(''), switchMap(input => {
       return this.users$.pipe(map((structuredUsers: StructuredUsers) => {
@@ -290,9 +293,9 @@ export class SearchPageComponent implements OnInit {
     }
   }
 
-  get_active_objects(objects$, searchBy: number[]) {
+  get_active_objects(objects$, searchBy: (string | number)[]) {
     return objects$.getValue().map(obj => {
-      obj.active = (searchBy.indexOf(obj.id) >= 0)
+      obj.active = ([...searchBy].map(x => +x).indexOf(obj.id) >= 0)
       return obj;
     })
   }
@@ -474,7 +477,7 @@ export class SearchPageComponent implements OnInit {
     this.severitiesArray$.next(_newSeverities);
   }
 
-  keep_bookmark() {
-    console.log('keep_bookmarkkeep_bookmarkkeep_bookmark')
+  keep_bookmark(): void {
+    this.dialog.open(MainPageDialogSettings, {data: { currentTabIndex: 2}});
   }
 }

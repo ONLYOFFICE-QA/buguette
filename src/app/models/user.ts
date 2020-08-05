@@ -1,6 +1,7 @@
 import { SafeUrl } from '@angular/platform-browser';
-import { ReplaySubject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { StaticData }  from '../static-data';
+import { map } from 'rxjs/operators';
 
 export interface UserResponceData {
   id?: string;
@@ -11,9 +12,10 @@ export interface UserResponceData {
 }
 
 export interface SavedSearchObject {
-  id: number;
+  id?: number;
   name: string;
-  query: string
+  query?: string
+  fromBugzilla: boolean;
   saved_search: CustomSearch;
 }
 
@@ -37,8 +39,8 @@ export class User {
   real_name?: string;
   email: string;
   avatar?: SafeUrl;
-  savedSearches$: ReplaySubject<{}>;
-  savedSearches: SavedSearchObject[];
+  savedSearches$;
+  savedSearches: SavedSearchObject[] = [];
   constructor(UserData: UserResponceData) {
     this.id = UserData['id']
 
@@ -46,10 +48,13 @@ export class User {
     this.real_name = UserData['real_name']?.replace(/\./g,' ')
     this.email = UserData['email']
     this.username = this.get_username(UserData['email']) // just for avatars
-    this.savedSearches$ = new ReplaySubject(1);
     if (UserData.saved_searches) {
-      this.get_saved_searches(UserData.saved_searches)
+      this.get_saved_searches(UserData.saved_searches);
     }
+
+    this.savedSearches$ = new BehaviorSubject([]).pipe(map(() => {
+      return this.get_saved_searches_from_storage();
+    }));
   }
 
   get_username(email: string) {
@@ -68,9 +73,18 @@ export class User {
       currentSavedSearch.saved_search['priorities'] = this.get_ids_by_names(params.getAll('priority'), StaticData.PRIORITIES)
       currentSavedSearch.saved_search['versions'] = params.getAll('version')
       currentSavedSearch.saved_search['statuses'] = this.get_statuse_ids_by_status_and_resulutions(params.getAll('bug_status'), StaticData.STATUSES)
+      currentSavedSearch.fromBugzilla = true;
+      this.savedSearches.push(currentSavedSearch);
     });
-    this.savedSearches$.next(savedSearchesData);
-    this.savedSearches = savedSearchesData;
+  }
+
+  get_saved_searches_from_storage() {
+    let bookmarks = localStorage.getItem('bookmarks');
+    if (!bookmarks) {
+      bookmarks = '[]';
+    }
+    let storBookmarks = JSON.parse(bookmarks);
+    return Object.values(storBookmarks).concat(this.savedSearches)
   }
 
   get_reporter(params: URLSearchParams): string {

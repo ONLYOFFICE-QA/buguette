@@ -28,6 +28,10 @@
 </mat-menu>
 
 <mat-menu #bookmarks="matMenu">
-  <button *ngFor="let savedSearch of (bugzilla.currentUser$ |async)?.savedSearches"
-   (click)="apply_search(savedSearch)" mat-menu-item>{{savedSearch.name}}</button>
+  <button *ngFor="let savedSearch of (bugzilla.currentUser$ |async)?.savedSearches$ | async"
+   (click)="apply_search(savedSearch)" mat-menu-item>
+   <mat-icon aria-hidden="false" *ngIf="savedSearch.fromBugzilla">security</mat-icon>
+   {{savedSearch.name}}
+  </button>
 </mat-menu>
+
