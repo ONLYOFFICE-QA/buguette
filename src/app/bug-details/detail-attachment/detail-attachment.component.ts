@@ -2,7 +2,6 @@ import { Component, OnInit, Input, OnChanges, SimpleChange } from '@angular/core
 import { AttachmentResponce, BugzillaService } from 'src/app/services/bugzilla.service';
 import { FileHelperService } from 'src/app/services/file-helper.service';
 import { Comment } from '../../models/comment';
-import { SettingsService } from 'src/app/services/settings.service';
 
 @Component({
   selector: 'app-detail-attachment',
@@ -17,10 +16,9 @@ export class DetailAttachmentComponent implements OnInit, OnChanges {
   images = {};
 
   constructor(private bugzilla: BugzillaService,
-    private filehelper: FileHelperService) { }
+              private filehelper: FileHelperService) { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   ngOnChanges(changes: { id: SimpleChange, bugData: SimpleChange, imageAutoload: SimpleChange }) {
     if (this.bugData?.attachmentIsImage && changes.imageAutoload?.currentValue) {
@@ -34,12 +32,12 @@ export class DetailAttachmentComponent implements OnInit, OnChanges {
   download_attachment(id: number): void {
     this.loading = true;
     this.bugzilla.get_attachment(id).subscribe((attachmentsResponce: AttachmentResponce) => {
-      let data = attachmentsResponce.attachments[id]["data"]
-      let type = attachmentsResponce.attachments[id]["content_type"]
-      let name = attachmentsResponce.attachments[id]["file_name"]
+      const data = attachmentsResponce.attachments[id].data;
+      const type = attachmentsResponce.attachments[id].content_type;
+      const name = attachmentsResponce.attachments[id].file_name;
       this.filehelper.download_file_by_base64(data, type, name);
       this.loading = false;
-    })
+    });
   }
 
   download_image(id: number) {
@@ -47,6 +45,6 @@ export class DetailAttachmentComponent implements OnInit, OnChanges {
       if (result.attachments[id].content_type.indexOf('image') >= 0) {
         this.images[id] = this.bugzilla.sanitizer_data(result.attachments[id]);
       }
-    })
+    });
   }
 }
