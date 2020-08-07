@@ -12,7 +12,7 @@ export class HttpService {
     if (localStorage.getItem('user_data')) {
       params = this.user_data(params);
     }
-    return this.http.get('https://bugzilla.onlyoffice.com/rest' + path, { params: params });
+    return this.http.get('https://bugzilla.onlyoffice.com/rest' + path, { params });
   }
 
   user_data(params: HttpParams): HttpParams {
