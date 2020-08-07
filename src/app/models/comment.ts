@@ -1,13 +1,13 @@
 
 export interface CommentResponce {
-  [index: number]: { comments: CommentResponceData[] }
+  [index: number]: { comments: CommentResponceData[] };
 }
 
 export interface CommentResponceData {
   id: number;
-  bugId: number;
-  attachment_id: number;
-  creationTime: string;
+  bug_id: number; // eslint-disable-line variable-name
+  attachment_id: number; // eslint-disable-line variable-name
+  creation_time: string; // eslint-disable-line variable-name
   creator: string;
   text: string;
   count: string;
@@ -25,27 +25,27 @@ export interface UserDetail {
 export class Comment {
   id: number;
   bugId: number;
-  attachment_id: number;
-  attachment_name: string;
+  attachmentId: number;
+  attachmentName: string;
   creationTime: Date;
-  creator_username: string;
+  creatorUsername: string;
   creator: string;
   text: string;
   count: string;
-  attachment_is_image: boolean;
+  attachmentIsImage: boolean;
   constructor(commentData: CommentResponceData) {
-    this.id = commentData['id']
-    this.bugId = commentData['bug_id']
-    this.creationTime = new Date(commentData['creation_time']);
-    this.creator = commentData['creator']
-    this.creator_username = this.get_creator_username(commentData['creator'])
-    this.text = this.get_text(commentData['text'])
-    this.attachment_id = commentData['attachment_id']
-    if (this.attachment_id) {
-      this.attachment_name = this.get_attachment_name(commentData['text'])
-      this.attachment_is_image = this.attachment_is_image_check()
+    this.id = commentData.id;
+    this.bugId = commentData.bug_id;
+    this.creationTime = new Date(commentData.creation_time);
+    this.creator = commentData.creator;
+    this.creatorUsername = this.get_creator_username(commentData.creator);
+    this.text = this.get_text(commentData.text);
+    this.attachmentId = commentData.attachment_id;
+    if (this.attachmentId) {
+      this.attachmentName = this.get_attachment_name(commentData.text);
+      this.attachmentIsImage = this.attachment_is_image_check();
     }
-    this.count = commentData['count']
+    this.count = commentData.count;
   }
 
   get_creator_username(email: string) {
@@ -53,22 +53,22 @@ export class Comment {
   }
 
   get_attachment_name(text: string): string {
-    return text.split('\n')[1]
+    return text.split('\n')[1];
   }
 
   attachment_is_image_check(): boolean {
-    let result = (/\.(gif|jpe?g|tiff|png|webp|bmp)$/i).test(this.attachment_name)
+    let result = (/\.(gif|jpe?g|tiff|png|webp|bmp)$/i).test(this.attachmentName);
     if (!result) {
-      let name = this.attachment_name.toLowerCase();
-      result = ["скринш", "screen"].some(x => name.indexOf(x) >= 0)
+      const name = this.attachmentName.toLowerCase();
+      result = ['скринш', 'screen'].some(x => name.indexOf(x) >= 0);
     }
-    return result
+    return result;
   }
 
   get_text(text: string): string {
     if (/Created\ attachment\s(\d+)/.test(text.split('\n')[0])) {
-      let newText = text.split('\n')
-      newText.splice(0, 3)
+      const newText = text.split('\n');
+      newText.splice(0, 3);
       text = newText.join('\n');
     }
     return text;

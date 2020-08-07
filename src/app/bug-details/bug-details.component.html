@@ -66,14 +66,14 @@
     </div>
     <mat-divider></mat-divider>
     <div class="comment main-comment">
-      <span class="comment-text" *ngIf="image_autoload && bug.comments[0]?.attachment_is_image">
+      <span class="comment-text" *ngIf="image_autoload && bug.comments[0]?.attachmentIsImage">
         {{bug.comments[0]?.text}}
       </span>
       <app-detail-attachment
-      [id]="bug.comments[0]?.attachment_id"
+      [id]="bug.comments[0]?.attachmentId"
       [imageAutoload]="image_autoload"
       [bugData]="bug.comments[0]"></app-detail-attachment>
-      <span class="comment-text" *ngIf="!image_autoload || !bug.comments[0]?.attachment_is_image">
+      <span class="comment-text" *ngIf="!image_autoload || !bug.comments[0]?.attachmentIsImage">
         {{bug.comments[0]?.text}}
       </span>
     </div>
@@ -83,10 +83,10 @@
 <mat-card *ngFor="let comment of (bug$ | async)?.comments | slice:1" class="result comment mat-elevation-z2">
   <div class="left-block-comment">
     <ng-container *ngIf="(users$ | async) as users">
-    <div class="creator-image" *ngIf="users[comment.creator_username] as user">
+    <div class="creator-image" *ngIf="users[comment.creatorUsername] as user">
       <img class="avatar-image" matTooltip={{user.realName}} [src]="user.avatar || '/assets/avatars/default.jpg'">
     </div>
-    <span *ngIf="!users[comment.creator_username]" matTooltip="User not found">{{comment.creator_username}}</span>
+    <span *ngIf="!users[comment.creatorUsername]" matTooltip="User not found">{{comment.creatorUsername}}</span>
     </ng-container>
   </div>
   <div class="right-block-comment">
@@ -94,7 +94,7 @@
       {{comment.creationTime.getTime() | date : 'd MMMM y, HH:mm'}}
     </div>
     <app-detail-attachment
-    [id]="comment.attachment_id"
+    [id]="comment.attachmentId"
     [imageAutoload]="image_autoload"
     [bugData]="comment"></app-detail-attachment>
     <div class="comment-text" *ngIf="comment.text">
