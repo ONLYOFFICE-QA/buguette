@@ -171,16 +171,16 @@
             <div class="bug-priority">
               <span *ngIf="bug.priority !== 'P1'">&nbsp;{{bug.priority}}</span>
             </div>
-            <div mat-card-avatar class="avatar-image" matTooltip={{bug.creator_detail.realName}}>
+            <div mat-card-avatar class="avatar-image" matTooltip={{bug.creatorDetail.realName}}>
               <img class="avatar-image"
-                [src]="(users$ | async)[bug.creator_detail.username.trim()]?.avatar || '/assets/avatars/default.jpg'">
+                [src]="(users$ | async)[bug.creatorDetail.username.trim()]?.avatar || '/assets/avatars/default.jpg'">
             </div>
             <div class="arrow-forward">
               <mat-icon>arrow_forward</mat-icon>
             </div>
-            <div mat-card-avatar class="avatar-image" matTooltip={{bug.assigned_to_detail.realName}}>
+            <div mat-card-avatar class="avatar-image" matTooltip={{bug.assignedToDetail.realName}}>
               <img class="avatar-image"
-                [src]="(users$ | async)[bug.assigned_to_detail.username]?.avatar || '/assets/avatars/default.jpg'">
+                [src]="(users$ | async)[bug.assignedToDetail.username]?.avatar || '/assets/avatars/default.jpg'">
             </div>
             <div class="bug-status"
             matTooltip="{{bug.status}} {{bug.resolution}}"

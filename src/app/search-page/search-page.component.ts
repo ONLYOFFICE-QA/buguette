@@ -411,7 +411,7 @@ export class SearchPageComponent implements OnInit {
 
   bugs_sorting(bugs: Bug[], byUpdated: boolean): Bug[] {
     if (byUpdated) {
-      bugs = [...bugs.sort((a, b) => b.last_change_time.getTime() - a.last_change_time.getTime())];
+      bugs = [...bugs.sort((a, b) => b.lastChangeTime.getTime() - a.lastChangeTime.getTime())];
     } else {
       bugs = [...bugs.sort((a, b) => b.id - a.id)];
     }

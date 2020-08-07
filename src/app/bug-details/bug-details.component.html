@@ -26,23 +26,23 @@
         </div>
       </div>
       <div class="addition-params">
-        <div class="addition-params-icon" matTooltip="QA contact {{bug.qa_contact}}">
+        <div class="addition-params-icon" matTooltip="QA contact {{bug.qaContact}}">
           <mat-icon aria-hidden="false">
             people_alt</mat-icon>
         </div>
         <div class="addition-params-data">
           <div class="params-data">
-            Creator: {{bug.creator_detail.realName || "loading..."}}
+            Creator: {{bug.creatorDetail.realName || "loading..."}}
           </div>
           <div class="params-data">
             Assigned to:
-            {{bug.assigned_to_detail?bug.assigned_to_detail?.realName:bug.assigned_to}}
+            {{bug.assignedToDetail?bug.assignedToDetail?.realName:bug.assignedTo}}
           </div>
         </div>
       </div>
       <div class="addition-params">
         <div class="addition-params-icon"
-         matTooltip="Created: {{bug.creationTime.getTime() | date : 'd MMMM y, HH:mm'}}&#13;Updated: {{bug.last_change_time.getTime() | date : 'd MMMM y, HH:mm'}}">
+         matTooltip="Created: {{bug.creationTime.getTime() | date : 'd MMMM y, HH:mm'}}&#13;Updated: {{bug.lastChangeTime.getTime() | date : 'd MMMM y, HH:mm'}}">
           <mat-icon aria-hidden="false" aria-label="Example home icon"  matTooltipClass="multiline-tooltip">
             date_range
           </mat-icon>
@@ -51,8 +51,8 @@
           <div class="params-data">
             {{bug.creationTime.getTime() | date : 'd MMMM y'}}
           </div>
-          <div class="params-data" *ngIf="bug.last_change_time.getTime() !== bug.creationTime.getTime()">
-            {{bug.last_change_time.getTime() | date : 'd MMMM y'}}
+          <div class="params-data" *ngIf="bug.lastChangeTime.getTime() !== bug.creationTime.getTime()">
+            {{bug.lastChangeTime.getTime() | date : 'd MMMM y'}}
           </div>
         </div>
       </div>
