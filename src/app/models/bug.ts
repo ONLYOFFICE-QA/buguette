@@ -14,7 +14,7 @@ export interface BugResponceData {
 }
 
 export interface UserDetail {
-  real_name: string;
+  realName: string;
   id: number;
   email: string;
   name: string;
@@ -37,12 +37,12 @@ export class Bug {
   qa_contact_detail: UserDetail;
   assigned_to: string;
   // set default assigned_to_detail because it can be empty
-  assigned_to_detail: UserDetail = {  real_name: "", id: 0, email: "", name: "", username: ""};
+  assigned_to_detail: UserDetail = {  realName: "", id: 0, email: "", name: "", username: ""};
   creator: string;
   creator_detail: UserDetail;
   comments: Comment[] = [];
   isEmpty = false;
-  creation_time: Date;
+  creationTime: Date;
   last_change_time: Date;
   buguetteStatusColor: string;
   constructor(bugData: BugResponceData) {
@@ -65,7 +65,7 @@ export class Bug {
     this.creator_detail = this.get_user_detail(bugData['creator_detail'])
     this.buguetteStatus = this.get_buguette_status()
     this.buguetteStatusColor = this.get_buguette_statusColor()
-    this.creation_time = new Date(bugData['creation_time']);
+    this.creationTime = new Date(bugData['creation_time']);
     this.last_change_time = new Date(bugData['last_change_time']);
   }
 
@@ -90,6 +90,7 @@ export class Bug {
   get_user_detail(data: UserDetail) {
     const detail = data;
     detail.username = data.email.split('@')[0];
+    detail.realName = data['real_name'];
     return detail;
   }
 }

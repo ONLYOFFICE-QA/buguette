@@ -121,7 +121,7 @@ export class SearchPageComponent implements OnInit {
   private _filterUsers(value: string, users: User[]): User[] {
     const filterValue = value.toLowerCase();
     return users.filter(user => {
-      const splittedName = user.real_name.toLowerCase().split(' ');
+      const splittedName = user.realName.toLowerCase().split(' ');
       let result = false;
       splittedName.forEach(word => {
         if (word.indexOf(filterValue) === 0) {
@@ -129,7 +129,7 @@ export class SearchPageComponent implements OnInit {
         }
       });
       if (!result) {
-        result = user.real_name.toLowerCase().indexOf(filterValue) === 0;
+        result = user.realName.toLowerCase().indexOf(filterValue) === 0;
       }
       return result;
     });
@@ -301,7 +301,7 @@ export class SearchPageComponent implements OnInit {
   }
 
   displayUser(user: UserDetail): string {
-    return user && user.real_name ? user.real_name : '';
+    return user && user.realName ? user.realName : '';
   }
 
   search(): void {

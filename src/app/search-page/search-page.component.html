@@ -110,7 +110,7 @@
               <mat-option *ngFor="let user of creators" [value]="user">
                 <img class="creator-image" aria-hidden [src]="user.avatar || '/assets/avatars/default.jpg'" height="25"
                   [hidden]="smallForm">
-                <span>{{user.real_name}}</span>
+                <span>{{user.realName}}</span>
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
@@ -137,7 +137,7 @@
               <mat-option *ngFor="let user of assigneters" [value]="user">
                 <img class="creator-image" aria-hidden [src]="user.avatar || '/assets/avatars/default.jpg'" height="25"
                   [hidden]="smallForm">
-                <span>{{user.real_name}}</span>
+                <span>{{user.realName}}</span>
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
@@ -171,14 +171,14 @@
             <div class="bug-priority">
               <span *ngIf="bug.priority !== 'P1'">&nbsp;{{bug.priority}}</span>
             </div>
-            <div mat-card-avatar class="avatar-image" matTooltip={{bug.creator_detail.real_name}}>
+            <div mat-card-avatar class="avatar-image" matTooltip={{bug.creator_detail.realName}}>
               <img class="avatar-image"
                 [src]="(users$ | async)[bug.creator_detail.username.trim()]?.avatar || '/assets/avatars/default.jpg'">
             </div>
             <div class="arrow-forward">
               <mat-icon>arrow_forward</mat-icon>
             </div>
-            <div mat-card-avatar class="avatar-image" matTooltip={{bug.assigned_to_detail.real_name}}>
+            <div mat-card-avatar class="avatar-image" matTooltip={{bug.assigned_to_detail.realName}}>
               <img class="avatar-image"
                 [src]="(users$ | async)[bug.assigned_to_detail.username]?.avatar || '/assets/avatars/default.jpg'">
             </div>

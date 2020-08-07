@@ -27,7 +27,7 @@ export class Comment {
   bugId: number;
   attachment_id: number;
   attachment_name: string;
-  creation_time: Date;
+  creationTime: Date;
   creator_username: string;
   creator: string;
   text: string;
@@ -36,7 +36,7 @@ export class Comment {
   constructor(commentData: CommentResponceData) {
     this.id = commentData['id']
     this.bugId = commentData['bug_id']
-    this.creation_time = new Date(commentData['creation_time']);
+    this.creationTime = new Date(commentData['creation_time']);
     this.creator = commentData['creator']
     this.creator_username = this.get_creator_username(commentData['creator'])
     this.text = this.get_text(commentData['text'])
