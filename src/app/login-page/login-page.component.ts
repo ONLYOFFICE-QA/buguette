@@ -8,7 +8,7 @@ import { StaticData } from '../static-data';
 
 
 export interface FormStatusInterface {
-  loading?: "waiting" | "start" | "complite" | "error"
+  loading?: 'waiting' | 'start' | 'complite' | 'error';
 }
 
 @Component({
@@ -46,24 +46,24 @@ export class LoginPageComponent implements OnInit {
     if ((window as any).PasswordCredential || (window as any).FederatedCredential) {
       (window as any).navigator.credentials.get({password: true}).then((data: {id: string, password: string}) => {
         if (data) {
-          this.formKey.controls.username.setValue(data.id)
-          this.formKey.controls.key.setValue(data.password)
-          this.api_token_authorize(data.id, data.password)
+          this.formKey.controls.username.setValue(data.id);
+          this.formKey.controls.key.setValue(data.password);
+          this.api_token_authorize(data.id, data.password);
         }
-      })
+      });
      }
   }
 
   onSubmit() {
     this.loginInvalid = false;
     if (this.form.valid) {
-      this.formStatus.loading = "start";
+      this.formStatus.loading = 'start';
       this.buttonsDisableFlag = true;
       const username: string = this.form.get('username').value;
       const password = this.form.get('password').value;
       this.bugzilla.login(username, password).subscribe((res: UserData) => {
         this.login(res);
-        this.bugzilla.currentUser$.next(new User({ 'email': username }));
+        this.bugzilla.currentUser$.next(new User({ email: username }));
         // this.bugzilla.get_user({'names': username}).subscribe();
       }, err => this.login_invalid(err));
     }
@@ -71,21 +71,21 @@ export class LoginPageComponent implements OnInit {
 
   storePassword(username: string, password: string) {
     if ((window as any).PasswordCredential || (window as any).FederatedCredential) {
-      var cred = new (window as any).PasswordCredential({
+      const cred = new (window as any).PasswordCredential({
         id: username,
-        password: password,
+        password,
       });
-      navigator.credentials.store(cred)
+      navigator.credentials.store(cred);
     }
   }
 
   onSubmitToken() {
     if (this.formKey.valid) {
-      this.formStatus.loading = "start";
+      this.formStatus.loading = 'start';
       this.buttonsDisableFlag = true;
       const params: UserParams = {};
-      params['names'] = this.formKey.get('username').value
-      params['apiKey'] = this.formKey.get('key').value
+      params.names = this.formKey.get('username').value;
+      params.apiKey = this.formKey.get('key').value;
       this.bugzilla.get_user(params).subscribe(res => {
         if (res?.users[0].saved_searches) {
           this.api_token_authorize(params.names, params.apiKey);
@@ -100,7 +100,7 @@ export class LoginPageComponent implements OnInit {
 
   login_invalid(err) {
     this.loading = false;
-    this.formStatus.loading = "waiting";
+    this.formStatus.loading = 'waiting';
     this.buttonsDisableFlag = false;
     this.loginInvalid = true;
     console.error(err);
@@ -108,7 +108,7 @@ export class LoginPageComponent implements OnInit {
 
   token_invalid(err) {
     this.loading = false;
-    this.formStatus.loading = "waiting";
+    this.formStatus.loading = 'waiting';
     this.buttonsDisableFlag = false;
     this.tokenInvalid = true;
     console.error(err);
@@ -116,7 +116,7 @@ export class LoginPageComponent implements OnInit {
 
   email_invalid() {
     this.loading = false;
-    this.formStatus.loading = "waiting";
+    this.formStatus.loading = 'waiting';
     this.buttonsDisableFlag = false;
     this.emailInvalid = true;
   }
@@ -129,8 +129,8 @@ export class LoginPageComponent implements OnInit {
 
   api_token_authorize(username: string, apiKey: string) {
     this.formStatus.loading = 'complite';
-    localStorage.setItem('user_data', JSON.stringify({ api_key: apiKey, username: username }));
-    this.storePassword(username, apiKey)
+    localStorage.setItem('user_data', JSON.stringify({ api_key: apiKey, username }));
+    this.storePassword(username, apiKey);
     this.router.navigate(['/']);
   }
 
