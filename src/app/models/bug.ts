@@ -93,7 +93,11 @@ export class Bug {
   }
 
   get_buguette_statusColor() {
-    return 'black';
+    if (this.resolution === 'INVALID' || this.resolution === 'WANTFIX') {
+      return 'red';
+    } else {
+      return 'black';
+    }
   }
 
   get_user_detail(data: UserDetail) {

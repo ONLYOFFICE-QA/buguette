@@ -184,7 +184,7 @@
             </div>
             <div class="bug-status"
             matTooltip="{{bug.status}} {{bug.resolution}}"
-            [ngStyle]="{color: (bug.resolution == '' || bug.resolution == 'FIXED')?'black':'red', margin: 'auto'}">
+            [ngStyle]="{color: bug.buguetteStatusColor, margin: 'auto'}">
               <span>&nbsp;{{bug.buguetteStatus}}</span>
             </div>
           </mat-card>
