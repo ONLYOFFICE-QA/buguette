@@ -11,7 +11,7 @@ describe('workspace-project App', () => {
   it('should redirect to login page if not login', () => {
     page.navigateTo();
     page.is_login_page().then(url => {
-      url.split('/').pop()
+      url.split('/').pop();
       expect(url.split('/').pop()).toEqual('login');
     });
   });
