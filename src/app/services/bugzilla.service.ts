@@ -5,39 +5,39 @@ import { Bug, BugResponceData } from '../models/bug';
 import { CommentResponce, Comment, CommentResponceData } from '../models/comment';
 import { User } from '../models/user';
 import { Router } from '@angular/router';
-import { StaticData }  from '../static-data';
+import { StaticData } from '../static-data';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { map, switchMap } from 'rxjs/operators';
 import { forkJoin, Observable, ReplaySubject, BehaviorSubject } from 'rxjs';
 
 export interface UserData {
-  id: number,
-  token: string
-  api_key?: string
+  id: number;
+  token: string;
+  api_key?: string;
 }
 
 export interface StructuredUsers {
-  [key: string]: User
+  [key: string]: User;
 }
 
 export interface StructuredProducts {
-  [key: string]: Product
+  [key: string]: Product;
 }
 
 export interface SearchParams {
-  ids?: Array<number>,
-  products?: Array<string>,
-  statuses?: Array<string>,
-  severities?: Array<string>,
-  priorities?: Array<string>,
-  versions?: Array<string>,
-  creator?: string,
-  assigned_to?: string,
-  quicksearch?: string,
-  creator_and_commentator?: boolean,
+  ids?: Array<number>;
+  products?: Array<string>;
+  statuses?: Array<string>;
+  severities?: Array<string>;
+  priorities?: Array<string>;
+  versions?: Array<string>;
+  creator?: string;
+  assigned_to?: string;
+  quicksearch?: string;
+  creator_and_commentator?: boolean;
 }
 
-export interface userParams {
+export interface UserParams {
   id?: string;
   names?: string;
   apiKey?: string;
@@ -50,7 +50,7 @@ export interface Severity {
   color: string;
   realName: string;
   isFeature?: boolean;
-  addition?: String[],
+  addition?: string[];
   active?: boolean;
 }
 
@@ -58,7 +58,7 @@ export interface Priority {
   id: number;
   name: string;
   realName: string;
-  addition?: String[]
+  addition?: string[];
 }
 
 export interface Status {
@@ -66,7 +66,7 @@ export interface Status {
   name: string;
   realName: string;
   active: boolean;
-  addition?: Array<string>
+  addition?: Array<string>;
 }
 
 export interface Product {
@@ -95,18 +95,18 @@ export interface AttachmentResponceObject {
 export interface AttachmentResponce {
   bugs: {
     [key: number]: AttachmentResponceObject[]
-  },
+  };
   attachments: {
     [key: number]: AttachmentResponceObject
-  }
+  };
 }
 
 export interface StructuredProductVersions {
-  [key: string]: VersionInterface[]
+  [key: string]: VersionInterface[];
 }
 
 export interface ProductResponce {
-  products: {name: string, versions: VersionInterface[]}[]
+  products: {name: string, versions: VersionInterface[]}[];
 }
 
 export interface VersionInterface {
@@ -139,7 +139,7 @@ export class BugzillaService {
   currentUser$: ReplaySubject<User> = new ReplaySubject(1);
   versions$: BehaviorSubject<StructuredProductVersions> = new BehaviorSubject({});
 
-  constructor(private httpService: HttpService, private router: Router, private _sanitizer: DomSanitizer,) {  }
+  constructor(private httpService: HttpService, private router: Router, private sanitizer: DomSanitizer) {  }
 
   login(login: string, password: string): Observable<UserData> {
     let params = new HttpParams();
@@ -151,7 +151,7 @@ export class BugzillaService {
   logout(): void {
     const userdata = JSON.parse(localStorage.getItem('user_data'));
     if (userdata?.token) {
-      let params = new HttpParams();
+      const params = new HttpParams();
       this.httpService.getRequest('/logout', params);
     }
     localStorage.removeItem('user_data');
@@ -187,7 +187,7 @@ export class BugzillaService {
     }
 
     if (searchParams.quicksearch) {
-      params = params.append('quicksearch',  "ALL " + searchParams.quicksearch);
+      params = params.append('quicksearch',  'ALL ' + searchParams.quicksearch);
     }
     params = params.append('include_fields', 'status');
     params = params.append('include_fields', 'resolution');
@@ -209,31 +209,31 @@ export class BugzillaService {
         params = params.append('creator', searchParams.creator);
       }
       return this.httpService.getRequest('/bug', params).pipe(map((response: {bugs: BugResponceData[]}) => {
-        const _bugs = [];
+        const bugs = [];
         response.bugs.forEach(bug => {
-          _bugs.push(new Bug(bug))
+          bugs.push(new Bug(bug));
         });
-          this.bugs$.next(_bugs.reverse());
-          return _bugs;
+        this.bugs$.next(bugs.reverse());
+        return bugs;
       }));
-    }))
+    }));
   }
 
   get_comments(bugId: number): Observable<any> {
-    let url = '/bug/' + bugId + '/comment';
+    const url = '/bug/' + bugId + '/comment';
     return this.httpService.getRequest(url, new HttpParams()).pipe(map((response: {bugs: CommentResponce}) => {
       const comments = [];
       response.bugs[bugId].comments.forEach(commentData => {
         comments.push(new Comment(commentData));
       });
-      return comments
+      return comments;
     }));
   }
 
   get_comment_by_id(commentId: number): Observable<Comment> {
-    let url = '/bug/comment/' + commentId;
+    const url = '/bug/comment/' + commentId;
     return this.httpService.getRequest(url, new HttpParams()).pipe(map((response: {comments: CommentResponceData}) => {
-      return new Comment(response.comments[commentId])
+      return new Comment(response.comments[commentId]);
     }));
   }
 
@@ -248,7 +248,7 @@ export class BugzillaService {
   }
 
   append_status(params: HttpParams, statusName: string): HttpParams {
-    switch(statusName) {
+    switch (statusName) {
       case 'NEW': {
         params = params.append('bug_status', 'NEW');
         // params = params.append('resolution', '---');
@@ -272,9 +272,8 @@ export class BugzillaService {
   }
 
   get_bug_and_comments(id: number): Observable<Bug> {
-    const bug = this.get_bug_by_id(id);
     const comments = this.get_comments(id);
-    return forkJoin([bug, comments]).pipe(map(result => {
+    return forkJoin([this.get_bug_by_id(id), comments]).pipe(map(result => {
       const bug = result[0];
       bug.comments = result[1];
       result[0].comments = result[1];
@@ -291,7 +290,7 @@ export class BugzillaService {
     }));
   }
 
-  get_user(userParams: userParams): Observable<any> {
+  get_user(userParams: UserParams): Observable<any> {
     let params = new HttpParams();
     if (userParams.id) {
       params = params.append('ids', userParams.id);
@@ -308,26 +307,26 @@ export class BugzillaService {
     return this.httpService.getRequest('/user', params).pipe(map(res => {
       this.currentUser$.next(new User(res.users[0]));
       return res;
-    }))
+    }));
   }
 
   get_product_versions() {
     let params = new HttpParams();
-    let names = Object.keys(StaticData.PRODUCTS)
+    const names = Object.keys(StaticData.PRODUCTS);
     names.forEach(name => {
       params = params.append('names', name);
-    })
+    });
     return this.httpService.getRequest('/product', params).pipe(map((res: ProductResponce) => {
       return this.get_structured_versions(res);
     }));
   }
 
   get_structured_versions(responce: ProductResponce): StructuredProductVersions {
-    let result: StructuredProductVersions = {};
+    const result: StructuredProductVersions = {};
     responce.products.forEach(product => {
-      result[product.name] = product.versions
+      result[product.name] = product.versions;
     });
-    return result
+    return result;
   }
 
   get_user_data(): Observable<true> {
@@ -336,13 +335,13 @@ export class BugzillaService {
     const versions = this.get_product_versions();
     return forkJoin([comment, attachments, versions]).pipe(map(result => {
       this.versions$.next(result[2]);
-      let avatars = this.restructure_attachments(result[1])
+      const avatars = this.restructure_attachments(result[1]);
       // test needed
-      let users = {};
+      const users = {};
       JSON.parse(result[0].text).forEach((userData: {email: string, real_name: string}) => {
-        let newUser = new User(userData);
-        newUser.avatar = avatars[newUser.username]
-        users[newUser.username] = newUser
+        const newUser = new User(userData);
+        newUser.avatar = avatars[newUser.username];
+        users[newUser.username] = newUser;
       });
       this.users$.next(users);
       return true;
@@ -350,15 +349,15 @@ export class BugzillaService {
   }
 
   restructure_attachments(attachments: AttachmentResponce): {[key: string]: SafeUrl} {
-    let restructuredAttachments = {};
-    attachments.bugs[StaticData.BUG_WITH_ATTACHMENTS].filter(attachment => attachment.is_obsolete == 0).forEach(attachment => {
+    const restructuredAttachments = {};
+    attachments.bugs[StaticData.BUG_WITH_ATTACHMENTS].filter(attachment => attachment.is_obsolete === 0).forEach(attachment => {
       restructuredAttachments[attachment.summary] = this.sanitizer_data(attachment);
     });
-    return restructuredAttachments
+    return restructuredAttachments;
   }
 
   sanitizer_data(attachment: AttachmentResponceObject): SafeUrl {
-    return this._sanitizer.bypassSecurityTrustUrl("data:" + attachment.content_type + ";base64," + attachment.data);
+    return this.sanitizer.bypassSecurityTrustUrl('data:' + attachment.content_type + ';base64,' + attachment.data);
   }
 
   handleError(error: any): string {

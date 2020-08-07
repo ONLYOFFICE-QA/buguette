@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { BugzillaService, UserData, userParams } from '../services/bugzilla.service';
+import { BugzillaService, UserData, UserParams } from '../services/bugzilla.service';
 import { User } from '../models/user';
 import { AuthGuardService } from '../guards/auth-guard.service';
 import { StaticData } from '../static-data';
@@ -83,7 +83,7 @@ export class LoginPageComponent implements OnInit {
     if (this.formKey.valid) {
       this.formStatus.loading = "start";
       this.buttonsDisableFlag = true;
-      const params: userParams = {};
+      const params: UserParams = {};
       params['names'] = this.formKey.get('username').value
       params['apiKey'] = this.formKey.get('key').value
       this.bugzilla.get_user(params).subscribe(res => {
