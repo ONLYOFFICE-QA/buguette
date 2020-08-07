@@ -45,9 +45,11 @@ export class LoginPageComponent implements OnInit {
 
     if ((window as any).PasswordCredential || (window as any).FederatedCredential) {
       (window as any).navigator.credentials.get({password: true}).then((data: {id: string, password: string}) => {
-        this.formKey.controls.username.setValue(data.id)
-        this.formKey.controls.key.setValue(data.password)
-        this.api_token_authorize(data.id, data.password)
+        if (data) {
+          this.formKey.controls.username.setValue(data.id)
+          this.formKey.controls.key.setValue(data.password)
+          this.api_token_authorize(data.id, data.password)
+        }
       })
      }
   }
