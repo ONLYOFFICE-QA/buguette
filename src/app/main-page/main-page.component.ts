@@ -17,10 +17,10 @@ import { SavedSearchObject } from '../models/user';
 })
 export class MainPageComponent implements OnInit {
   constructor(private activatedRoute: ActivatedRoute,
-    public bookmarksService: BookmarksService,
-    public bugzilla: BugzillaService,
-    public auth: AuthGuardService,
-    public dialog: MatDialog) { }
+              public bookmarksService: BookmarksService,
+              public bugzilla: BugzillaService,
+              public auth: AuthGuardService,
+              public dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.activatedRoute.params.pipe(
@@ -41,7 +41,7 @@ export class MainPageComponent implements OnInit {
   }
 
   settingsOpen() {
-    this.dialog.open(MainPageDialogSettings);
+    this.dialog.open(MainPageDialogSettingsComponent);
   }
 
   apply_search(bookmark) {
@@ -58,12 +58,12 @@ export interface SettingsDataInterface {
   templateUrl: 'app-main-page-dialog-settings.html',
   styleUrls: ['app-main-page-dialog-settings.scss']
 })
-export class MainPageDialogSettings {
+export class MainPageDialogSettingsComponent {
   products = Object.values(StaticData.PRODUCTS);
   bookmarkNewControl = new FormControl('', Validators.required);
 
   constructor(
-    public dialogRef: MatDialogRef<MainPageDialogSettings>,
+    public dialogRef: MatDialogRef<MainPageDialogSettingsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: SettingsDataInterface,
     public settings: SettingsService,
     private activatedRoute: ActivatedRoute,
@@ -94,14 +94,14 @@ export class MainPageDialogSettings {
         name: this.bookmarkNewControl.value,
         saved_search: params,
         fromBugzilla: false
-      }
+      };
       this.bookmarkService.keep_to_bookmarks(newBookmark);
-    })).subscribe()
+    })).subscribe();
   }
 
   delete_bookmark(bookmark: SavedSearchObject) {
     if (!bookmark.fromBugzilla) {
-      this.bookmarkService.delete_bookmark(bookmark.name)
+      this.bookmarkService.delete_bookmark(bookmark.name);
     }
   }
 }

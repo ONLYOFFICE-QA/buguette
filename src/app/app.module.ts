@@ -8,7 +8,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginPageComponent } from './login-page/login-page.component';
-import { MainPageComponent, MainPageDialogSettings } from './main-page/main-page.component';
+import { MainPageComponent, MainPageDialogSettingsComponent } from './main-page/main-page.component';
 import { AuthGuardService } from './guards/auth-guard.service';
 import { HttpService } from './services/http-request.service';
 import { BugzillaService } from './services/bugzilla.service';
@@ -26,7 +26,7 @@ import { BookmarksService } from './services/bookmarks.service';
   declarations: [
     AppComponent,
     LoginPageComponent,
-    MainPageComponent, MainPageDialogSettings,
+    MainPageComponent, MainPageDialogSettingsComponent,
     SearchPageComponent,
     BugDetailsComponent,
     DetailAttachmentComponent,

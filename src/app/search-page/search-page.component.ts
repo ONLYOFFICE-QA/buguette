@@ -13,7 +13,7 @@ import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/l
 import { BookmarksService } from '../services/bookmarks.service';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MainPageDialogSettings } from '../main-page/main-page.component';
+import { MainPageDialogSettingsComponent } from '../main-page/main-page.component';
 
 export interface Counters {
   all?: number;
@@ -478,6 +478,6 @@ export class SearchPageComponent implements OnInit {
   }
 
   keep_bookmark(): void {
-    this.dialog.open(MainPageDialogSettings, { data: { currentTabIndex: 2 } });
+    this.dialog.open(MainPageDialogSettingsComponent, { data: { currentTabIndex: 2 } });
   }
 }
