@@ -96,7 +96,7 @@
         <div class="creator-image-empty" *ngIf="!createrControl.value" [hidden]="smallForm">
           <mat-icon class="icon-empty" aria-hidden="false">create</mat-icon>
         </div>
-        <form *ngIf="(filteredCreator | async) as creators" [ngClass]="{'creator-assigned-form': !smallForm}">
+        <form [ngClass]="{'creator-assigned-form': !smallForm}">
           <mat-form-field class="creator-field">
             <input matInput [errorStateMatcher]="matcher"
               [placeholder]="(settings.settingsData$ | async)?.comment_and_creator?'Creator or Commentator': 'Creator'"
@@ -107,7 +107,7 @@
               <mat-icon>close</mat-icon>
             </button>
             <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayUser">
-              <mat-option *ngFor="let user of creators" [value]="user">
+              <mat-option *ngFor="let user of (filteredCreator | async)" [value]="user">
                 <img class="creator-image" aria-hidden [src]="user.avatar || '/assets/avatars/default.jpg'" height="25"
                   [hidden]="smallForm">
                 <span>{{user.realName}}</span>
@@ -124,7 +124,7 @@
         <div class="assigned-image-empty" *ngIf="!assignedToControl.value" [hidden]="smallForm">
           <mat-icon class="icon-empty" aria-hidden="false">assignment_ind</mat-icon>
         </div>
-        <form *ngIf="(filteredAssignedTo | async) as assigneters" [ngClass]="{'creator-assigned-form': !smallForm}">
+        <form [ngClass]="{'creator-assigned-form': !smallForm}">
           <mat-form-field class="assigned-field">
             <input matInput placeholder="Assigned To" aria-label="Assigned To" [matAutocomplete]="auto" [errorStateMatcher]="matcher"
               [formControl]="assignedToControl">
@@ -134,7 +134,7 @@
               <mat-icon>close</mat-icon>
             </button>
             <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayUser">
-              <mat-option *ngFor="let user of assigneters" [value]="user">
+              <mat-option *ngFor="let user of (filteredAssignedTo | async)" [value]="user">
                 <img class="creator-image" aria-hidden [src]="user.avatar || '/assets/avatars/default.jpg'" height="25"
                   [hidden]="smallForm">
                 <span>{{user.realName}}</span>

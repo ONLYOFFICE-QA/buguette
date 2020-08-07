@@ -4,7 +4,7 @@ import { BugDetailService } from '../bug-details/bug-detail.service';
 import { ReplaySubject, Observable, merge, BehaviorSubject } from 'rxjs';
 import { Bug, UserDetail } from '../models/bug';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormControl, AbstractControl, ValidationErrors, FormGroupDirective, NgForm } from '@angular/forms';
+import { FormControl, AbstractControl, ValidationErrors, FormGroupDirective, NgForm, FormGroup } from '@angular/forms';
 import { StaticData } from '../static-data';
 import { User } from '../models/user';
 import { startWith, map, switchMap, take } from 'rxjs/operators';
@@ -67,8 +67,8 @@ export class SearchPageComponent implements OnInit {
   smallForm = false;
 
   priorityControl = new FormControl();
-  createrControl = new FormControl('', [UserRegistrationFormValidators.userShouldBeSelected]);
-  assignedToControl = new FormControl('', [UserRegistrationFormValidators.userShouldBeSelected]);
+  createrControl = new FormControl({value: '', disabled: true}, [UserRegistrationFormValidators.userShouldBeSelected]);
+  assignedToControl = new FormControl({value: '', disabled: true}, [UserRegistrationFormValidators.userShouldBeSelected]);
   quickFilterControl = new FormControl();
   versionControl = new FormControl();
   sortingControl = new FormControl();
@@ -88,16 +88,20 @@ export class SearchPageComponent implements OnInit {
               public dialog: MatDialog,
               public settings: SettingsService) {
     this.filteredCreator = this.createrControl.valueChanges.pipe(startWith(''), switchMap(input => {
-      return this.users$.pipe(map((structuredUsers: StructuredUsers) => {
-        const users = Object.values(structuredUsers);
-        return this.user_filtering(input, users);
+      return this.users$.pipe(switchMap((structuredUsers: StructuredUsers) => {
+        return this.bugzilla.currentUser$.pipe(map(currentUser => {
+          const users = Object.values(structuredUsers);
+          return this.user_filtering(input, users, currentUser);
+        }));
       }));
     }));
 
     this.filteredAssignedTo = this.assignedToControl.valueChanges.pipe(startWith(''), switchMap(input => {
-      return this.users$.pipe(map((structuredUsers: StructuredUsers) => {
-        const users = Object.values(structuredUsers);
-        return this.user_filtering(input, users);
+      return this.users$.pipe(switchMap((structuredUsers: StructuredUsers) => {
+        return this.bugzilla.currentUser$.pipe(map(currentUser => {
+          const users = Object.values(structuredUsers);
+          return this.user_filtering(input, users, currentUser);
+        }));
       }));
     }));
 
@@ -114,13 +118,27 @@ export class SearchPageComponent implements OnInit {
       }), map(bugs => this.bugs_sorting(bugs, this.sortingControl.value)));
   }
 
-  private user_filtering(userInput: (string | undefined), users: User[]): User[] {
-    return (typeof userInput === 'string') ? this._filterUsers(userInput, users) : users.slice();
+  private user_filtering(userInput: (string | undefined), users: User[], currentUser: User): User[] {
+    if (typeof userInput === 'string') {
+      return this._filterUsers(userInput, users, currentUser);
+    } else {
+      return this._get_allUsers_but_i_first(users, currentUser);
+    }
   }
 
-  private _filterUsers(value: string, users: User[]): User[] {
+  private _get_allUsers_but_i_first(users: User[], currentUser: User): User[] {
+    if (users.length === 0) { return users; }
+    const currentUserIndex = users.map((user: User) => user.email).indexOf(currentUser.email);
+    if (currentUserIndex > -1) {
+      const currentUserWithAvatar = users.splice(currentUserIndex, 1);
+      users.unshift(currentUserWithAvatar[0]);
+    }
+    return users;
+  }
+
+  private _filterUsers(value: string, users: User[], currentUser: User): User[] {
     const filterValue = value.toLowerCase();
-    return users.filter(user => {
+    const filteredUsers = users.filter(user => {
       const splittedName = user.realName.toLowerCase().split(' ');
       let result = false;
       splittedName.forEach(word => {
@@ -133,6 +151,11 @@ export class SearchPageComponent implements OnInit {
       }
       return result;
     });
+    if (value.length === 0) {
+      return this._get_allUsers_but_i_first(filteredUsers, currentUser);
+    } else {
+      return filteredUsers;
+    }
   }
 
   private bugs_filtering(userInput: string, bugs: Bug[]) {
@@ -176,6 +199,11 @@ export class SearchPageComponent implements OnInit {
         }
         this.productsArray$.next(newProducts);
       }));
+    })).subscribe();
+
+    this.bugzilla.currentUser$.pipe(take(1), map(() => {
+      this.createrControl.enable();
+      this.assignedToControl.enable();
     })).subscribe();
 
     this.activatedRoute.queryParams.pipe(take(1), switchMap((search: CustomSearch) => {
