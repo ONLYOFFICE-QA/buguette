@@ -17,7 +17,7 @@ export class AuthGuardService implements CanActivate {
     this.loader$.next(true);
     return this.bugzilla.get_user_data().pipe(map(x => {
       this.loader$.next(false);
-      return x
+      return x;
     }));
   }
 }
