@@ -44,6 +44,12 @@ export interface UserParams {
   email?: string;
 }
 
+export interface UpdateBugParams {
+  status?: string;
+  resolution?: string;
+  severity?: string;
+}
+
 export interface Severity {
   id: number;
   name: string;
@@ -358,6 +364,24 @@ export class BugzillaService {
 
   sanitizer_data(attachment: AttachmentResponceObject): SafeUrl {
     return this.sanitizer.bypassSecurityTrustUrl('data:' + attachment.content_type + ';base64,' + attachment.data);
+  }
+
+  update_bug(id: number, updateBugData: UpdateBugParams) {
+    return this.httpService.putRequest('/bug/' + id, updateBugData).pipe(map(responce => {
+      return responce.bugs[0];
+    }));
+  }
+
+  create_comment(bugId: number, comment: string): Observable<Comment> {
+    let params = {
+      comment,
+      is_markdown: true
+    };
+
+    const url = '/bug/' + bugId + '/comment';
+    return this.httpService.postRequest(url, params).pipe(switchMap((res: {id: number}) => {
+      return this.get_comment_by_id(res.id)
+    }));
   }
 
   handleError(error: any): string {

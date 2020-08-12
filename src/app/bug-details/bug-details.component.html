@@ -20,7 +20,8 @@
         </div>
         <div class="addition-params-data">
           <div class="params-data"><span
-              [ngStyle]="{'background-color': products[bug.product].color}">{{products[bug.product].name}}</span></div>
+              [ngStyle]="{'background-color': products[bug.product]?.color}">{{products[bug.product]?products[bug.product].name:bug.product}}</span>
+          </div>
           <div class="params-data">{{bug.component}}</div>
           <div class="params-data">{{bug.version}}</div>
         </div>
@@ -42,8 +43,8 @@
       </div>
       <div class="addition-params">
         <div class="addition-params-icon"
-         matTooltip="Created: {{bug.creationTime.getTime() | date : 'd MMMM y, HH:mm'}}&#13;Updated: {{bug.lastChangeTime.getTime() | date : 'd MMMM y, HH:mm'}}">
-          <mat-icon aria-hidden="false" aria-label="Example home icon"  matTooltipClass="multiline-tooltip">
+          matTooltip="Created: {{bug.creationTime.getTime() | date : 'd MMMM y, HH:mm'}}&#13;Updated: {{bug.lastChangeTime.getTime() | date : 'd MMMM y, HH:mm'}}">
+          <mat-icon aria-hidden="false" aria-label="Example home icon" matTooltipClass="multiline-tooltip">
             date_range
           </mat-icon>
         </div>
@@ -69,10 +70,8 @@
       <span class="comment-text" *ngIf="image_autoload && bug.comments[0]?.attachmentIsImage">
         {{bug.comments[0]?.text}}
       </span>
-      <app-detail-attachment
-      [id]="bug.comments[0]?.attachmentId"
-      [imageAutoload]="image_autoload"
-      [bugData]="bug.comments[0]"></app-detail-attachment>
+      <app-detail-attachment [id]="bug.comments[0]?.attachmentId" [imageAutoload]="image_autoload"
+        [bugData]="bug.comments[0]"></app-detail-attachment>
       <span class="comment-text" *ngIf="!image_autoload || !bug.comments[0]?.attachmentIsImage">
         {{bug.comments[0]?.text}}
       </span>
@@ -80,29 +79,78 @@
   </mat-card-content>
 </mat-card>
 
-<mat-card *ngFor="let comment of (bug$ | async)?.comments | slice:1" class="result comment mat-elevation-z2">
-  <div class="left-block-comment">
-    <ng-container *ngIf="(users$ | async) as users">
-    <div class="creator-image" *ngIf="users[comment.creatorUsername] as user">
-      <img class="avatar-image" matTooltip={{user.realName}} [src]="user.avatar || '/assets/avatars/default.jpg'">
+<ng-container *ngIf="(bug$ | async) as bug">
+  <mat-card *ngFor="let comment of bug?.comments | slice:1"
+   class="result comment mat-elevation-z2">
+    <div class="left-block-comment">
+      <ng-container *ngIf="(users$ | async) as users">
+        <div class="creator-image" *ngIf="users[comment.creatorUsername] as user">
+          <img class="avatar-image" matTooltip={{user.realName}} [src]="user.avatar || '/assets/avatars/default.jpg'">
+        </div>
+        <span *ngIf="!users[comment.creatorUsername]" matTooltip="User not found">{{comment.creatorUsername}}</span>
+      </ng-container>
     </div>
-    <span *ngIf="!users[comment.creatorUsername]" matTooltip="User not found">{{comment.creatorUsername}}</span>
-    </ng-container>
-  </div>
-  <div class="right-block-comment">
-    <div class="comment-date">
-      {{comment.creationTime.getTime() | date : 'd MMMM y, HH:mm'}}
+    <div class="right-block-comment">
+      <div class="comment-date">
+        {{comment.creationTime.getTime() | date : 'd MMMM y, HH:mm'}}
+      </div>
+      <app-detail-attachment [id]="comment.attachmentId" [imageAutoload]="image_autoload" [bugData]="comment">
+      </app-detail-attachment>
+      <div class="comment-text" *ngIf="comment.text">
+        <app-detail-comment-text [text]="comment.text"></app-detail-comment-text>
+      </div>
     </div>
-    <app-detail-attachment
-    [id]="comment.attachmentId"
-    [imageAutoload]="image_autoload"
-    [bugData]="comment"></app-detail-attachment>
-    <div class="comment-text" *ngIf="comment.text">
-      <app-detail-comment-text [text]="comment.text"></app-detail-comment-text>
-    </div>
-  </div>
-</mat-card>
+  </mat-card>
 
+  <mat-card class="result comment mat-elevation-z2 new-comment" *ngIf="bug.comments.length > 0">
+    <div class="left-block-comment">
+      <ng-container>
+        <div class="creator-image" *ngIf="(currentUser$ | async) as currentUser">
+          <img class="avatar-image" matTooltip={{currentUser.realName}}
+            [src]="currentUser.avatar || '/assets/avatars/default.jpg'">
+        </div>
+      </ng-container>
+    </div>
+    <div class="right-block-comment">
+      <div class="new-comment-block">
+        <form [formGroup]="newCommentFormGroup">
+
+          <div class="actions">
+            <div class="status-change-comment">
+              <mat-form-field>
+                <mat-label></mat-label>
+
+                <mat-select formControlName="newStatusControl" disableRipple>
+                  <mat-option value="{{bugStatusNext}}">{{bug.status}} {{bug.resolution}}</mat-option>
+                  <mat-option value="{{status}}" *ngFor="let status of statuses[bugStatusNext].nextStatus">{{status}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="severity-change-comment">
+              <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="newSeverityControl">
+                <mat-button-toggle value="{{severity.realName}}" *ngFor="let severity of this.severitiesArray$ | async">
+                  <mat-icon [ngStyle]="{'color': severity.color}">{{severity.isFeature?"insights":"bug_report"}}
+                  </mat-icon>
+                </mat-button-toggle>
+              </mat-button-toggle-group>
+            </div>
+          </div>
+          <mat-progress-bar mode="query" *ngIf="newCommentLoading"></mat-progress-bar>
+          <div class="comment-form" [ngClass]="{'new_comment_space_for_loading': !newCommentLoading}">
+            <mat-form-field class="new-comment-form">
+              <mat-label>Leave a comment</mat-label>
+              <textarea matInput formControlName="newCommentControl" class="new-comment-text-area"></textarea>
+            </mat-form-field>
+            <button mat-icon-button class="send-comment-button" [disabled]="sendCommentDisable" (click)="update_bug(bug)">
+              <mat-icon>send</mat-icon>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </mat-card>
+</ng-container>
 
 <ng-template #loading>
   <mat-spinner style="margin: auto;"></mat-spinner>

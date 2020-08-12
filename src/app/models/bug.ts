@@ -1,4 +1,4 @@
-import { Comment } from './comment';
+import { Comment, CommentResponceData } from './comment';
 
 export interface BugResponceData {
   id?: number;
@@ -75,10 +75,30 @@ export class Bug {
     this.buguetteStatus = this.get_buguette_status();
     this.buguetteStatusColor = this.get_buguette_statusColor();
     this.creationTime = new Date(bugData.creation_time);
-    this.lastChangeTime = new Date(bugData.last_change_time);
+    this.lastChangeTime = this.set_lastChangeTime(bugData.last_change_time);
   }
 
-  get_buguette_status() {
+  set_lastChangeTime(stringDate: string): Date {
+    return new Date(stringDate);
+  }
+
+  set_severity(severity: string): void {
+    this.severity = severity;
+  }
+
+  set_resolution(resolution: string): void {
+    this.resolution = resolution;
+    this.buguetteStatus = this.get_buguette_status();
+    this.get_buguette_statusColor();
+  }
+
+  set_status(status: string): void {
+    this.status = status;
+    this.buguetteStatus = this.get_buguette_status();
+    this.get_buguette_statusColor();
+  }
+
+  get_buguette_status(): string {
     switch (this.status) {
       case 'RESOLVED': {
         return 'RESOLVED';
@@ -100,10 +120,14 @@ export class Bug {
     }
   }
 
-  get_user_detail(data: UserDetail) {
+  get_user_detail(data: UserDetail): UserDetail {
     const detail = data;
     detail.username = data.email.split('@')[0];
     detail.realName = data.real_name;
     return detail;
+  }
+
+  add_new_comment(comment: CommentResponceData): void {
+    this.comments.push(new Comment(comment));
   }
 }

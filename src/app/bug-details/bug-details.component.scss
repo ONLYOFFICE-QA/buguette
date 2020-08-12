@@ -105,3 +105,48 @@
 .bug-detail-header {
   flex: 1;
 }
+
+.new-comment-form {
+  width: 100%;
+  margin-left: 1em;
+}
+
+.comment-form {
+  display: flex;
+}
+
+.red-color-status {
+  color: red;
+
+}
+
+.new-comment {
+  margin-bottom: 20em;
+}
+
+.new-comment-text-area {
+  height: 5em;
+}
+
+.actions {
+  display: inline-block;
+}
+
+.severity-change-comment {
+  display: inline-block;
+  margin: 0 1em;
+}
+
+.status-change-comment {
+  display: inline-block;
+  margin: 0 1em;
+}
+
+.send-comment-button {
+  place-self: flex-end;
+  margin: 0.5em;
+}
+
+.new_comment_space_for_loading {
+  padding-top: 4px;
+}

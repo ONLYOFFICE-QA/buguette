@@ -26,6 +26,7 @@ import {MatListModule} from '@angular/material/list';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatRippleModule} from '@angular/material/core';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 
 @NgModule({
@@ -56,6 +57,7 @@ import {MatRippleModule} from '@angular/material/core';
     MatAutocompleteModule,
     MatTooltipModule,
     MatDialogModule,
+    MatButtonToggleModule,
     MatRippleModule
   ],
   exports: [
@@ -85,6 +87,7 @@ import {MatRippleModule} from '@angular/material/core';
     MatAutocompleteModule,
     MatTooltipModule,
     MatDialogModule,
+    MatButtonToggleModule,
     MatRippleModule
   ]
 })
