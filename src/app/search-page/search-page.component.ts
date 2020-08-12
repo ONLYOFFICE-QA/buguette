@@ -312,9 +312,7 @@ export class SearchPageComponent implements OnInit {
     if (currentSearch.assigned) {
       this.assignedToControl.setValue(users[currentSearch.assigned]);
     }
-    if (currentSearch.quick_search) {
-      this.quickFilterControl.setValue(currentSearch.quick_search);
-    }
+    this.quickFilterControl.setValue(currentSearch.quick_search);
     const searchKeyses = Object.keys(currentSearch).filter(key => key !== 'sorting_by_updated');
     if (searchKeyses.length > 0) {
       this.search();
