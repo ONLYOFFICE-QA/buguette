@@ -183,7 +183,7 @@ export class SearchPageComponent implements OnInit {
         if (settings.hidden_products) {
           if (search.products) {
             hiddenProducts = settings.hidden_products.filter(hiddenProduct => {
-              return [...search.products].indexOf(this.products[hiddenProduct].id.toString()) === -1;
+              return [...search.products].indexOf(this.products[hiddenProduct]?.id.toString()) === -1;
             });
           } else {
             hiddenProducts = settings.hidden_products;
