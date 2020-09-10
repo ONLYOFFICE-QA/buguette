@@ -7,8 +7,7 @@ export class StaticData {
   public static readonly PRODUCTS =
   {'Office Canvas Document Editor': {id: 1, name: 'Documents', color: '#cbcbff', active: false, realName: 'Office Canvas Document Editor' },
   'Office Canvas Spreadsheet Editor':
-   {id: 2, name: 'Spreadsheets', color: '#c5ffc5', active: false, realName: 'Office Canvas Spreadsheet Editor', addition: ['Office Canvas Spreadsheet Viewer'] },
-  'Office Canvas Spreadsheet Viewer': { id: 3, name: 'Spreadsheets Viewer', color: '#c5ffc5', active: false, realName: 'Office Canvas Spreadsheet Viewer'},
+   {id: 2, name: 'Spreadsheets', color: '#c5ffc5', active: false, realName: 'Office Canvas Spreadsheet Editor' },
   'Office Canvas Presentation Editor': { id: 4, name: 'Presentations', color: '#ffa7a7', active: false, realName: 'Office Canvas Presentation Editor' },
   'Chromium Desktop Editors': { id: 5, name: 'Desktop', color: '#ff8b15', active: false, realName: 'Chromium Desktop Editors' },
   'R7 Office': { id: 6, name: 'R7', color: '#c49000', active: false, realName: 'R7 Office' },
