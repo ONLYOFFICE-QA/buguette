@@ -366,7 +366,7 @@ export class SearchPageComponent implements OnInit {
     } else {
       result = activeProducts.map(product => product.realName);
     }
-    result = result.map(product => [product].concat(this.products[product].addition || [])).flat();
+    result = result.map(product => [product].concat(this.products[product]?.addition || [])).flat();
     return result;
   }
 
@@ -425,7 +425,7 @@ export class SearchPageComponent implements OnInit {
     const activeProducts = this.get_active_products();
     const versions = this.bugzilla.versions$.getValue();
     const versionsInArrays: string[][] = activeProducts.map(productName => {
-      return versions[productName].map(version => version.name);
+      return versions[productName]?.map(version => version.name);
     });
     results = [].concat(...versionsInArrays);
     const newVersionList = results.filter((version, index) => results.indexOf(version) === index).reverse();
