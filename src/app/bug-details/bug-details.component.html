@@ -136,7 +136,7 @@
               </mat-button-toggle-group>
             </div>
           </div>
-          <mat-progress-bar mode="query" *ngIf="newCommentLoading"></mat-progress-bar>
+          <mat-progress-bar [mode]="progress.mode" [value]="progress.value" *ngIf="newCommentLoading"></mat-progress-bar>
           <div class="comment-form" [ngClass]="{'new_comment_space_for_loading': !newCommentLoading}">
             <mat-form-field class="new-comment-form">
               <mat-label>Leave a comment</mat-label>

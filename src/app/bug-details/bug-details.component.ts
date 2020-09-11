@@ -29,6 +29,7 @@ export class BugDetailsComponent implements OnInit {
   bugzillaLink: string;
   sendCommentDisable = true;
   newCommentLoading = false;
+  progress = {mode: 'buffer', value: 0};
 
   newCommentFormGroup = new FormGroup({
     newSeverityControl: new FormControl(),
@@ -124,18 +125,34 @@ export class BugDetailsComponent implements OnInit {
   }
 
   update_bug(bug: Bug) {
+    this.progress.value = 0;
+    this.progress.mode = 'buffer';
+
     this.newCommentLoading = true;
     this.sendCommentDisable = true;
 
     this.bugzilla.create_comment(bug.id, this.newCommentFormGroup.controls.newCommentControl.value).pipe(switchMap(comment => {
+      this.progress.mode = 'determinate';
       return this.bug$.pipe(take(1), map(bug => {
         bug.comments.push(comment);
         this.newCommentFormGroup.controls.newCommentControl.reset();
         this.newCommentLoading = false;
+        this.progress.value += 50;
       }))
     })).subscribe()
 
+    let updateBugData = this.get_updateBugData(bug);
+    if (updateBugData.severity || updateBugData.status || updateBugData.resolution) {
+      this.update_bug_data(bug)
+    } else {
+      this.progress.mode = 'determinate';
+      this.progress.value += 50;
+    }
+  }
+
+  update_bug_data(bug: Bug): void {
     this.bugzilla.update_bug(bug.id, this.get_updateBugData(bug)).pipe(switchMap(res => {
+      this.progress.mode = 'determinate';
       return this.bug$.pipe(take(1), map(bug => {
         console.log(res);
         bug.set_lastChangeTime(res.last_change_time);
@@ -149,6 +166,7 @@ export class BugDetailsComponent implements OnInit {
           bug.set_resolution(res.changes.resolution.added);
         }
         this.set_bug_status_change_variants(bug);
+        this.progress.value += 50;
       }))
 
     })).subscribe();
