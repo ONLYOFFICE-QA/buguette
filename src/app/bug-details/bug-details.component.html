@@ -1,3 +1,4 @@
+<ng-container *ngIf="!loadingObserv">
 <mat-card class="result" *ngIf="(bug$ | async) as bug; else loading">
   <mat-card-header class="bug-detail-header">
     <mat-card-title style="word-break: break-word;">
@@ -151,6 +152,9 @@
     </div>
   </mat-card>
 </ng-container>
+</ng-container>
+<div *ngIf="loadingObserv; then loading">
+</div>
 
 <ng-template #loading>
   <mat-spinner style="margin: auto;"></mat-spinner>

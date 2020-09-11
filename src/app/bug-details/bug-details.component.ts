@@ -19,6 +19,7 @@ export class BugDetailsComponent implements OnInit {
   bug$: Observable<Bug>;
   users$: ReplaySubject<StructuredUsers>;
   currentUser$: Observable<User>;
+  loadingObserv: boolean = false;
   severitiesRestructured = {};
   bugStatusNext;
   productRestructured = {};
@@ -62,11 +63,12 @@ export class BugDetailsComponent implements OnInit {
       this.newCommentFormGroup.controls.newSeverityControl.setValue(this.get_severity_by_name(bug.severity).realName);
     });
 
-
     this.users$ = this.bugzilla.users$;
 
     this.activatedRoute.params.pipe(switchMap(params => {
+      this.loadingObserv = true;
       return this.bugzilla.get_bug_and_comments(params.id).pipe(map(bug => {
+        this.loadingObserv = false;
         if (bug.id.toString() === params.id) {
           this.bugDetailService.bug$.next(bug);
         }

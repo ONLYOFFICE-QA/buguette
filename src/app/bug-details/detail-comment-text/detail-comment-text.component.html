@@ -12,6 +12,9 @@
       <a [href]="this.commentTextObjects.objects[0].link" target="_blank">{{this.commentTextObjects.objects[0].message}}</a>
     </div>
   </div>
+  <div *ngSwitchCase="'duplicate-message'">
+    <a routerLink="/bug/{{this.commentTextObjects.id}}" queryParamsHandling="merge" routerLinkActive="active">{{this.commentTextObjects.objects[0]}}</a>
+  </div>
   <span *ngSwitchDefault>
     {{this.commentTextObjects.objects[0]}}
   </span>

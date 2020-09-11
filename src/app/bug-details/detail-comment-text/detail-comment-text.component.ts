@@ -1,8 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 export interface CommentTextObjectsInterface {
-  commentType?: 'push' | 'generic-comment';
+  commentType?: 'push' | 'generic-comment' | 'duplicate-message';
   objects?: any[];
+  id?: number;
 }
 
 export interface CommitResultObjectInterface {
@@ -10,6 +11,10 @@ export interface CommitResultObjectInterface {
   link?: string;
   message?: string;
   author?: string;
+}
+
+export interface DuplicateMessageObjectInterface {
+  id?: number;
 }
 
 @Component({
@@ -27,6 +32,9 @@ export class DetailCommentTextComponent implements OnInit {
     if (this.text.indexOf('Commit pushed to') === 0) {
       this.commentTextObjects.commentType = 'push';
       this.commentTextObjects.objects = this.parce_pushed_commit(this.text);
+    } else if(this.text.indexOf('marked as a duplicate') >= 0) {
+      this.commentTextObjects.commentType = 'duplicate-message';
+      this.parce_duplicate_message();
     } else {
       this.commentTextObjects.commentType = 'generic-comment';
       this.commentTextObjects.objects = [this.text];
@@ -48,4 +56,9 @@ export class DetailCommentTextComponent implements OnInit {
     return [results];
   }
 
+  parce_duplicate_message() {
+    const results: DuplicateMessageObjectInterface = {};
+    this.commentTextObjects.objects = [this.text];
+    this.commentTextObjects.id = +this.text.match(/\d+/gm)[0].trim();
+  }
 }
