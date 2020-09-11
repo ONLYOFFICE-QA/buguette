@@ -188,9 +188,14 @@ export class SearchPageComponent implements OnInit {
           } else {
             hiddenProducts = settings.hidden_products;
           }
+          let productIdsArray = search?.products;
+          if (typeof productIdsArray === "string") {
+            productIdsArray = [productIdsArray];
+          }
+          productIdsArray = productIdsArray?.map(value => +value);
           Object.values(this.products).forEach(product => {
             if (hiddenProducts?.indexOf(product.realName) === -1) {
-              product.active = (search?.products?.indexOf(product.id.toString()) > -1);
+              product.active = (productIdsArray?.indexOf(product.id) > -1);
               newProducts.push(product);
             }
           });
@@ -337,9 +342,15 @@ export class SearchPageComponent implements OnInit {
     }
   }
 
-  get_active_objects(objects$, searchBy: (string | number)[]) {
+  get_active_objects(objects$, searchBy) {
     return objects$.getValue().map(obj => {
-      obj.active = ([...searchBy].map(x => +x).indexOf(obj.id) >= 0);
+      let searchByArray:(string | number)[];;
+      if (!searchBy?.length) {
+        searchByArray = searchBy.map(x => +x);
+      } else {
+        searchByArray = [searchBy].map(x => +x);
+      }
+      obj.active = (searchByArray.indexOf(obj.id) >= 0);
       return obj;
     });
   }
