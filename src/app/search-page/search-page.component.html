@@ -127,7 +127,6 @@
           <mat-form-field class="assigned-field">
             <input matInput placeholder="Assigned To" aria-label="Assigned To" [matAutocomplete]="assignedauto" [errorStateMatcher]="matcher"
               [formControl]="assignedToControl">
-            <mat-error>Field is ignored. Please, select user from list</mat-error>
             <button mat-button *ngIf="assignedToControl.value" matSuffix mat-icon-button aria-label="Clear"
               (click)="assignedToControl.reset()">
               <mat-icon>close</mat-icon>

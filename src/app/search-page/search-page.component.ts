@@ -68,7 +68,7 @@ export class SearchPageComponent implements OnInit {
 
   priorityControl = new FormControl();
   createrControl = new FormControl({value: '', disabled: true});
-  assignedToControl = new FormControl({value: '', disabled: true}, [UserRegistrationFormValidators.userShouldBeSelected]);
+  assignedToControl = new FormControl({value: '', disabled: true});
   quickFilterControl = new FormControl();
   versionControl = new FormControl();
   sortingControl = new FormControl();
@@ -262,7 +262,7 @@ export class SearchPageComponent implements OnInit {
       if (this.assignedToControl.value?.username) {
         this.keep_current_search_to_query({ assigned: assigner.username });
       } else {
-        this.keep_current_search_to_query({ assigned: null });
+        this.keep_current_search_to_query({ assigned: this.assignedToControl.value });
       }
     });
 
@@ -310,7 +310,7 @@ export class SearchPageComponent implements OnInit {
       this.set_creater_control_value(currentSearch.creator, users);
     }
     if (currentSearch.assigned) {
-      this.assignedToControl.setValue(users[currentSearch.assigned]);
+      this.set_assined_to_control_value(currentSearch.assigned, users);
     }
     this.quickFilterControl.setValue(currentSearch.quick_search);
     const searchKeyses = Object.keys(currentSearch).filter(key => key !== 'sorting_by_updated');
@@ -325,6 +325,15 @@ export class SearchPageComponent implements OnInit {
     } else {
       let tempUser = new User({email: creator, real_name: creator})
       this.createrControl.setValue(tempUser);
+    }
+  }
+
+  set_assined_to_control_value(assignedTo: (User | string), users): void {
+    if (assignedTo instanceof User) {
+      this.assignedToControl.setValue(users[assignedTo.username]);
+    } else {
+      let tempUser = new User({email: assignedTo, real_name: assignedTo})
+      this.assignedToControl.setValue(tempUser);
     }
   }
 
@@ -408,7 +417,11 @@ export class SearchPageComponent implements OnInit {
   }
 
   get_active_assigned_to(): string {
-    return this.assignedToControl.value?.username;
+    let value: (User | string) = this.assignedToControl.value;
+    if (value instanceof User)  {
+      value = value.username;
+    }
+    return value;
   }
 
   change_product_active(product: Product) {
