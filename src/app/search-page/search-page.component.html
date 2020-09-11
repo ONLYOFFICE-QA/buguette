@@ -101,10 +101,11 @@
             <input matInput [errorStateMatcher]="matcher"
               [placeholder]="(settings.settingsData$ | async)?.comment_and_creator?'Creator or Commentator': 'Creator'"
               aria-label="Creator" [matAutocomplete]="auto" [formControl]="createrControl">
-            <button mat-button *ngIf="createrControl.value" matSuffix mat-icon-button aria-label="Clear"
+            <button mat-button type="button" *ngIf="createrControl.value" matSuffix mat-icon-button aria-label="Clear"
               (click)="createrControl.reset()">
               <mat-icon>close</mat-icon>
             </button>
+            <button (click)="search()" hidden></button>
             <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayUser">
               <mat-option *ngFor="let user of (filteredCreator | async)" [value]="user">
                 <img class="creator-image" aria-hidden [src]="user.avatar || '/assets/avatars/default.jpg'" height="25"
@@ -127,10 +128,11 @@
           <mat-form-field class="assigned-field">
             <input matInput placeholder="Assigned To" aria-label="Assigned To" [matAutocomplete]="assignedauto" [errorStateMatcher]="matcher"
               [formControl]="assignedToControl">
-            <button mat-button *ngIf="assignedToControl.value" matSuffix mat-icon-button aria-label="Clear"
+            <button mat-button type="button" *ngIf="assignedToControl.value" matSuffix mat-icon-button aria-label="Clear"
               (click)="assignedToControl.reset()">
               <mat-icon>close</mat-icon>
             </button>
+            <button (click)="search()" hidden></button>
             <mat-autocomplete #assignedauto="matAutocomplete" [displayWith]="displayUser">
               <mat-option *ngFor="let user of (filteredAssignedTo | async)" [value]="user">
                 <img class="creator-image" aria-hidden [src]="user.avatar || '/assets/avatars/default.jpg'" height="25"
