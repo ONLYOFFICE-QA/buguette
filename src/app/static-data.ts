@@ -30,7 +30,7 @@ export class StaticData {
   {NEW: { id: 1, name: 'New/Assigned/Reopen', realName: 'NEW', addition: ['ASSIGNED', 'REOPENED'],
           active: false, nextStatus: ['FIXED', 'INVALID', 'WANTFIX'] },
   RESOLVED: { id: 2, name: 'Resolved', realName: 'RESOLVED', active: false , nextStatus: ['VERIFIED', 'NEW'], addition: []},
-  VERIFIED: { id: 3, name: 'Verified/Closed', realName: 'VERIFIED', addition: ['CLOSED'], active: false, nextStatus: []}};
+  VERIFIED: { id: 3, name: 'Verified/Closed', realName: 'VERIFIED', addition: ['CLOSED'], active: false, nextStatus: ['NEW', 'RESOLVED']}};
 
   public static readonly PRIORITIES =
   {P1: { id: 1, name: 'P1', realName: 'P1' },
