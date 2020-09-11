@@ -101,7 +101,6 @@
             <input matInput [errorStateMatcher]="matcher"
               [placeholder]="(settings.settingsData$ | async)?.comment_and_creator?'Creator or Commentator': 'Creator'"
               aria-label="Creator" [matAutocomplete]="auto" [formControl]="createrControl">
-            <mat-error>Field is ignored. Please, select user from list</mat-error>
             <button mat-button *ngIf="createrControl.value" matSuffix mat-icon-button aria-label="Clear"
               (click)="createrControl.reset()">
               <mat-icon>close</mat-icon>

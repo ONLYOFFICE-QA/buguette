@@ -67,7 +67,7 @@ export class SearchPageComponent implements OnInit {
   smallForm = false;
 
   priorityControl = new FormControl();
-  createrControl = new FormControl({value: '', disabled: true}, [UserRegistrationFormValidators.userShouldBeSelected]);
+  createrControl = new FormControl({value: '', disabled: true});
   assignedToControl = new FormControl({value: '', disabled: true}, [UserRegistrationFormValidators.userShouldBeSelected]);
   quickFilterControl = new FormControl();
   versionControl = new FormControl();
@@ -254,7 +254,7 @@ export class SearchPageComponent implements OnInit {
       if (this.createrControl.value?.username) {
         this.keep_current_search_to_query({ creator: creator.username });
       } else {
-        this.keep_current_search_to_query({ creator: null });
+        this.keep_current_search_to_query({ creator: this.createrControl.value });
       }
     });
 
@@ -307,7 +307,7 @@ export class SearchPageComponent implements OnInit {
       this.versionControl.setValue(versions);
     }
     if (currentSearch.creator) {
-      this.createrControl.setValue(users[currentSearch.creator]);
+      this.set_creater_control_value(currentSearch.creator, users);
     }
     if (currentSearch.assigned) {
       this.assignedToControl.setValue(users[currentSearch.assigned]);
@@ -316,6 +316,15 @@ export class SearchPageComponent implements OnInit {
     const searchKeyses = Object.keys(currentSearch).filter(key => key !== 'sorting_by_updated');
     if (searchKeyses.length > 0) {
       this.search();
+    }
+  }
+
+  set_creater_control_value(creator: (User | string), users): void {
+    if (creator instanceof User) {
+      this.createrControl.setValue(users[creator.username]);
+    } else {
+      let tempUser = new User({email: creator, real_name: creator})
+      this.createrControl.setValue(tempUser);
     }
   }
 
@@ -391,7 +400,11 @@ export class SearchPageComponent implements OnInit {
   }
 
   get_active_creater(): string {
-    return this.createrControl.value?.username;
+    let value: (User | string) = this.createrControl.value;
+    if (value instanceof User)  {
+      value = value.username;
+    }
+    return value;
   }
 
   get_active_assigned_to(): string {
