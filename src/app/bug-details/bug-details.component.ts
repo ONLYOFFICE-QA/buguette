@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ReplaySubject, Observable, BehaviorSubject, merge } from 'rxjs';
+import { ReplaySubject, Observable, BehaviorSubject, merge, of, empty } from 'rxjs';
 import { Bug } from '../models/bug';
 import { BugzillaService, StructuredUsers, Severity, UpdateBugParams } from '../services/bugzilla.service';
 import { BugDetailService } from './bug-detail.service';
@@ -8,6 +8,7 @@ import { StaticData } from '../static-data';
 import { switchMap, map, distinctUntilChanged, take } from 'rxjs/operators';
 import { SettingsService } from '../services/settings.service';
 import { User } from '../models/user';
+import { Comment } from '../models/comment';
 import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
@@ -30,7 +31,7 @@ export class BugDetailsComponent implements OnInit {
   bugzillaLink: string;
   sendCommentDisable = true;
   newCommentLoading = false;
-  progress = {mode: 'buffer', value: 0};
+  progress = { mode: 'buffer', value: 0 };
 
   newCommentFormGroup = new FormGroup({
     newSeverityControl: new FormControl(),
@@ -41,6 +42,7 @@ export class BugDetailsComponent implements OnInit {
   constructor(private activatedRoute: ActivatedRoute,
     private bugzilla: BugzillaService,
     private bugDetailService: BugDetailService,
+    private cd: ChangeDetectorRef,
     private settings: SettingsService) {
 
     this.currentUser$ = this.bugzilla.users$.pipe(take(1), switchMap(users => {
@@ -135,43 +137,50 @@ export class BugDetailsComponent implements OnInit {
 
     this.bugzilla.create_comment(bug.id, this.newCommentFormGroup.controls.newCommentControl.value).pipe(switchMap(comment => {
       this.progress.mode = 'determinate';
-      return this.bug$.pipe(take(1), map(bug => {
-        bug.comments.push(comment);
-        this.newCommentFormGroup.controls.newCommentControl.reset();
-        this.newCommentLoading = false;
-        this.progress.value += 50;
-      }))
-    })).subscribe()
-
-    let updateBugData = this.get_updateBugData(bug);
-    if (updateBugData.severity || updateBugData.status || updateBugData.resolution) {
-      this.update_bug_data(bug)
-    } else {
-      this.progress.mode = 'determinate';
       this.progress.value += 50;
-    }
+      this.cd.detectChanges();
+      return this.update_bug_comment(comment).pipe(switchMap(() => {
+        return this.update_bug_data(bug).pipe(map(() => {
+          this.newCommentLoading = false;
+        }))
+      }));
+    })).subscribe()
   }
 
-  update_bug_data(bug: Bug): void {
-    this.bugzilla.update_bug(bug.id, this.get_updateBugData(bug)).pipe(switchMap(res => {
-      this.progress.mode = 'determinate';
-      return this.bug$.pipe(take(1), map(bug => {
-        console.log(res);
-        bug.set_lastChangeTime(res.last_change_time);
-        if (res.changes.severity) {
-          bug.set_severity(res.changes.severity.added);
-        }
-        if (res.changes.status) {
-          bug.set_status(res.changes.status.added);
-        }
-        if (res.changes.resolution) {
-          bug.set_resolution(res.changes.resolution.added);
-        }
-        this.set_bug_status_change_variants(bug);
-        this.progress.value += 50;
-      }))
+  update_bug_comment(comment: Comment): Observable<Bug> {
+    return this.bug$.pipe(take(1), map(bug => {
+      bug.comments.push(comment);
+      this.newCommentFormGroup.controls.newCommentControl.reset();
+      return bug;
+    }))
+  }
 
-    })).subscribe();
+  update_bug_data(bug: Bug): Observable<Bug> {
+    let updateBugData = this.get_updateBugData(bug);
+    if (updateBugData.severity || updateBugData.status || updateBugData.resolution) {
+      return this.bugzilla.update_bug(bug.id, this.get_updateBugData(bug)).pipe(switchMap(res => {
+        return this.bug$.pipe(take(1), map(bug => {
+          console.log(res);
+          bug.set_lastChangeTime(res.last_change_time);
+          if (res.changes.severity) {
+            bug.set_severity(res.changes.severity.added);
+          }
+          if (res.changes.status) {
+            bug.set_status(res.changes.status.added);
+          }
+          if (res.changes.resolution) {
+            bug.set_resolution(res.changes.resolution.added);
+          }
+          this.set_bug_status_change_variants(bug);
+          this.progress.value += 50;
+          return bug;
+        }))
+      }));
+    } else {
+      this.progress.value += 50;
+      this.cd.detectChanges();
+      return Observable.create(observer => observer.next());
+    }
   }
 
   get_updateBugData(bug): UpdateBugParams {
@@ -179,7 +188,7 @@ export class BugDetailsComponent implements OnInit {
     const newSeverityControlValue = this.newCommentFormGroup.controls.newSeverityControl.value
     const severityСheck: boolean = this.severity_check(bug.severity, newSeverityControlValue);
     if (!severityСheck) {
-       updateBugData.severity = this.severities[newSeverityControlValue].realName;
+      updateBugData.severity = this.severities[newSeverityControlValue].realName;
     }
     const newStatusControlValue = this.newCommentFormGroup.controls.newStatusControl.value;
     const statusСheck: boolean = this.status_check(bug.status, newStatusControlValue);
