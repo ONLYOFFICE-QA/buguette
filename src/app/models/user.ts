@@ -59,7 +59,7 @@ export class User {
   }
 
   get_username(email: string) {
-    return email?.split('@')[0];
+    return email?.split('@')[0].toLowerCase();
   }
 
   get_saved_searches(savedSearchesData: SavedSearchObject[]) {

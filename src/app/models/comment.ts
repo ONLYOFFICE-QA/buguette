@@ -49,7 +49,7 @@ export class Comment {
   }
 
   get_creator_username(email: string) {
-    return email.split('@')[0];
+    return email.split('@')[0].toLowerCase();
   }
 
   get_attachment_name(text: string): string {
