@@ -259,7 +259,11 @@ export class SearchPageComponent implements OnInit {
       if (this.createrControl.value?.username) {
         this.keep_current_search_to_query({ creator: creator.username });
       } else {
-        this.keep_current_search_to_query({ creator: this.createrControl.value });
+        if (this.createrControl.value) {
+          this.keep_current_search_to_query({ creator: this.createrControl.value });
+        } else {
+          this.keep_current_search_to_query({ creator: null });
+        }
       }
     });
 
@@ -267,7 +271,11 @@ export class SearchPageComponent implements OnInit {
       if (this.assignedToControl.value?.username) {
         this.keep_current_search_to_query({ assigned: assigner.username });
       } else {
-        this.keep_current_search_to_query({ assigned: this.assignedToControl.value });
+        if (this.assignedToControl.value) {
+          this.keep_current_search_to_query({ assigned: this.assignedToControl.value });
+        } else {
+          this.keep_current_search_to_query({ assigned: null });
+        }
       }
     });
 
