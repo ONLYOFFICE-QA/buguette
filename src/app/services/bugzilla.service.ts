@@ -346,7 +346,7 @@ export class BugzillaService {
       const users = {};
       JSON.parse(result[0].text).forEach((userData: {email: string, real_name: string}) => {
         const newUser = new User(userData);
-        newUser.avatar = avatars[newUser.username];
+        newUser.avatar = avatars[newUser.username.toLowerCase()];
         users[newUser.username] = newUser;
       });
       this.users$.next(users);
@@ -357,7 +357,7 @@ export class BugzillaService {
   restructure_attachments(attachments: AttachmentResponce): {[key: string]: SafeUrl} {
     const restructuredAttachments = {};
     attachments.bugs[StaticData.BUG_WITH_ATTACHMENTS].filter(attachment => attachment.is_obsolete === 0).forEach(attachment => {
-      restructuredAttachments[attachment.summary] = this.sanitizer_data(attachment);
+      restructuredAttachments[attachment.summary.toLowerCase()] = this.sanitizer_data(attachment);
     });
     return restructuredAttachments;
   }

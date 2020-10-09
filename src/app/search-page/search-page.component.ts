@@ -328,8 +328,13 @@ export class SearchPageComponent implements OnInit {
     if (creator instanceof User) {
       this.createrControl.setValue(users[creator.username]);
     } else {
-      let tempUser = new User({email: creator, real_name: creator})
-      this.createrControl.setValue(tempUser);
+      const tmpUserName = Object.keys(users).find(user => user.toLowerCase() === creator.toLowerCase());
+      if (tmpUserName) {
+        this.createrControl.setValue(users[tmpUserName]);
+      } else {
+        let tempUser = new User({email: creator, real_name: creator})
+        this.createrControl.setValue(tempUser);
+      }
     }
   }
 
@@ -337,8 +342,13 @@ export class SearchPageComponent implements OnInit {
     if (assignedTo instanceof User) {
       this.assignedToControl.setValue(users[assignedTo.username]);
     } else {
-      let tempUser = new User({email: assignedTo, real_name: assignedTo})
-      this.assignedToControl.setValue(tempUser);
+      const tmpUserName = Object.keys(users).find(user => user.toLowerCase() === assignedTo.toLowerCase());
+      if (tmpUserName) {
+        this.assignedToControl.setValue(users[tmpUserName]);
+      } else {
+        let tempUser = new User({email: assignedTo, real_name: assignedTo})
+        this.assignedToControl.setValue(tempUser);
+      }
     }
   }
 
