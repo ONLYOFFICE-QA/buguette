@@ -122,7 +122,7 @@ export class Bug {
 
   get_user_detail(data: UserDetail): UserDetail {
     const detail = data;
-    detail.username = data.email.split('@')[0];
+    detail.username = data.email.split('@')[0].toLowerCase();
     detail.realName = data.real_name;
     return detail;
   }
