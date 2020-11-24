@@ -19,7 +19,7 @@ For easy update you need to use
 ```shell
 git pull
 docker-compose build --no-cache buguette-build
-docker-compose up -d buguette-build
+docker-compose up buguette-build
 ```
 
 ## Adding new users
