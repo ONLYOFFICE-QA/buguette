@@ -12,5 +12,5 @@ jobs:
         markdownlint *.md
     - name: Build default Dockerfile
       run: |
-        docker build . --name buguette_builder
+        docker build --tag buguette_builder .
         docker run buguette_builder npm run build
