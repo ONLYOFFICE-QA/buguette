@@ -22,17 +22,18 @@ docker-compose up buguette-build
   Adding new users for buguette consists of 2 steps: adding avatars, and adding emails. 
   
 ### Adding emails
-  All users for buguette is placed to one comment in bugzilla. Id of this comment is placed in static data - `COMMENT_WITH_USER_DATA`.
+  All users for buguette is placed to one comment in bugzilla. Id of this comment is placed in [static data](https://github.com/ONLYOFFICE-QA/buguette/blob/master/src/app/static-data.ts) - `COMMENT_WITH_USER_DATA`. This comment usually located at [`BUG_WITH_ATTACHMENTS`](https://github.com/ONLYOFFICE-QA/buguette/blob/master/src/app/static-data.ts#L3)
+  
   This is comment for bug `BUG_WITH_ATTACHMENTS`, and you can open this bug, and find comment in source code of bug page (open development tools on your browser, open `Elements` tab, then `CTRL + F` and paste comment id)
 
   If you want to update list of users, you need to create new comment in this bug and then update `COMMENT_WITH_USER_DATA` from statis data. 
 
-  1. Create new comment
+  1. Open bug with comment with user list (probably `BUG_WITH_ATTACHMENTS`)
   2. Paste list of users by format `[{"email": "email@gmail.com", "real_name": "Ivanov Ivan"},...]`*
     Do not forget to use double quotes, because it is json data.
 
-  3. Save comment
-  4. Get `comment id`. The easest way - is a inspect if `tab` link in created comment. 
+  3. Create comment
+  4. Get `comment id`. The easest way - is a inspect if `tag` link in created comment. 
     Example: `<a href="#" onclick="YAHOO.bugzilla.commentTagging.toggle(172072, 3);return false">tag</a>`
     `172072` - is a id of comment
   5. Update `COMMENT_WITH_USER_DATA` in static data
