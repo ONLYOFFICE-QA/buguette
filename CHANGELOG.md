@@ -2,6 +2,10 @@
 
 ## master (unreleased)
 
+### Changes
+
+* Always restart `nginx` container
+
 ### v1.0.0 (2020-11-24)
 
 Last version with Dmitry.Rotaty as stuff member
