@@ -22,6 +22,17 @@ docker-compose build --no-cache buguette-build
 docker-compose up buguette-build
 ```
 
+## Update nginx container
+
+If you need to update nginx container steps are different
+
+```shell
+git pull
+docker-compose stop
+docker rm buguette_buguette-server_1
+docker-compose up -d buguette-server
+```
+
 ## Adding new users
 
 Adding new users for buguette consists of 2 steps: adding avatars, and adding emails.

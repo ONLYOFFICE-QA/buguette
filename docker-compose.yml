@@ -1,7 +1,7 @@
 version: '3'
 services:
   buguette-server:
-    image: nginx:1.16.0
+    image: nginx:1.18.0-alpine
     ports:
       - "80:80"
       - "443:443"
