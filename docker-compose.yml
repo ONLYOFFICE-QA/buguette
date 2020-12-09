@@ -10,7 +10,7 @@ services:
     volumes:
       - ./buguette-https.conf/:/etc/nginx/conf.d/default.conf
       - ./dist/:/buguette/dist/
-      - /root/letsencrypt/:/etc/letsencrypt
+      - /etc/letsencrypt/:/etc/letsencrypt
   buguette-build:
     build: .
     volumes:
