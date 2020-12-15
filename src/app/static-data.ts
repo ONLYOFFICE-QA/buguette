@@ -11,7 +11,7 @@ export class StaticData {
   'Office Canvas Presentation Editor': { id: 4, name: 'Presentations', color: '#ffa7a7', active: false, realName: 'Office Canvas Presentation Editor' },
   'Chromium Desktop Editors': { id: 5, name: 'Desktop', color: '#ff8b15', active: false, realName: 'Chromium Desktop Editors' },
   'R7 Office': { id: 6, name: 'R7', color: '#c49000', active: false, realName: 'R7 Office' },
-  'documenteditors plugins': { id: 7, name: 'Plugins', color: '#ff8ee2', active: false, realName: 'documenteditors plugins' },
+  'documenteditors plugins': { id: 7, name: 'Plugins', color: '#ff8ee2', active: false, realName: 'Document Editors Plugins' },
   DocumentBuilder: { id: 8, name: 'Builder', color: '#feffba', active: false, realName: 'DocumentBuilder' },
   'Documents iOS App': { id: 9, name: 'iOS', color: '#849fff', active: false, realName: 'Documents iOS App' },
   'ONLYOFFICE Projects App iOS': { id: 10, name: 'iOS Projects', color: '#00dedd', active: false, realName: 'ONLYOFFICE Projects App iOS' },
