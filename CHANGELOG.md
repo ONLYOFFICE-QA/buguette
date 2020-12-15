@@ -2,6 +2,10 @@
 
 ## master (unreleased)
 
+### Fixes
+
+* Fix incorrect product name for plugins
+
 ### Changes
 
 * Always restart `nginx` container
