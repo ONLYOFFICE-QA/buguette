@@ -11,6 +11,7 @@
 * Always restart `nginx` container
 * Use `alpine` as base of `nginx` container
 * Actualize nginx container version to 1.18
+* Replace deprecated `--prod=true` command on build
 
 ### v1.0.0 (2020-11-24)
 
