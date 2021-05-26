@@ -363,7 +363,7 @@ export class SearchPageComponent implements OnInit {
   get_active_objects(objects$, searchBy) {
     return objects$.getValue().map(obj => {
       let searchByArray:(string | number)[];;
-      if (!searchBy?.length) {
+      if (Array.isArray(searchBy)) {
         searchByArray = searchBy.map(x => +x);
       } else {
         searchByArray = [searchBy].map(x => +x);
