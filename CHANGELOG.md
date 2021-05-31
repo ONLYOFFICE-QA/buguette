@@ -15,7 +15,7 @@
 * Replace deprecated `--prod=true` command on build
 * Remove one Docker layer with COPY
 
-### v1.0.0 (2020-11-24)
+## v1.0.0 (2020-11-24)
 
 Last version with Dmitry.Rotaty as stuff member
 
