@@ -4,6 +4,8 @@
 
 ### New Features
 
+* Add `About` window with versioning info
+
 ### Fixes
 
 * Fix incorrect product name for plugins
