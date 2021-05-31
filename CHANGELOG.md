@@ -2,6 +2,8 @@
 
 ## master (unreleased)
 
+### New Features
+
 ### Fixes
 
 * Fix incorrect product name for plugins

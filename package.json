@@ -7,7 +7,8 @@
     "build": "ng build --aot=true --configuration production --serviceWorker=true --sourceMap=false",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "postinstall": "node src/version.js"
   },
   "private": true,
   "dependencies": {
@@ -22,6 +23,8 @@
     "@angular/platform-browser-dynamic": "^12.0.0",
     "@angular/router": "^12.0.0",
     "@angular/service-worker": "^12.0.0",
+    "fs-extra": "^10.0.0",
+    "git-describe": "^4.0.4",
     "rxjs": "^6.6.7",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.4"

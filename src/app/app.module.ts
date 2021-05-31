@@ -20,6 +20,7 @@ import { BugDetailService } from './bug-details/bug-detail.service';
 import { DetailAttachmentComponent } from './bug-details/detail-attachment/detail-attachment.component';
 import { DetailCommentTextComponent } from './bug-details/detail-comment-text/detail-comment-text.component';
 import { BookmarksService } from './services/bookmarks.service';
+import { AboutComponent } from './about/about.component';
 
 
 @NgModule({
@@ -31,6 +32,7 @@ import { BookmarksService } from './services/bookmarks.service';
     BugDetailsComponent,
     DetailAttachmentComponent,
     DetailCommentTextComponent,
+    AboutComponent,
   ],
   imports: [
     HttpClientModule,

@@ -9,6 +9,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { StaticData } from '../static-data';
 import { FormControl, Validators } from '@angular/forms';
 import { SavedSearchObject } from '../models/user';
+import { AboutComponent } from '../about/about.component'
 
 @Component({
   selector: 'app-main-page',
@@ -42,6 +43,10 @@ export class MainPageComponent implements OnInit {
 
   settingsOpen() {
     this.dialog.open(MainPageDialogSettingsComponent);
+  }
+
+  aboutOpen() {
+    this.dialog.open(AboutComponent);
   }
 
   apply_search(bookmark) {
