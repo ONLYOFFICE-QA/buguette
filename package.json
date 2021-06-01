@@ -21,7 +21,7 @@
     "@angular/material": "^12.0.2",
     "@angular/platform-browser": "^12.0.0",
     "@angular/platform-browser-dynamic": "^12.0.0",
-    "@angular/router": "^12.0.0",
+    "@angular/router": "^12.0.2",
     "@angular/service-worker": "^12.0.0",
     "fs-extra": "^10.0.0",
     "git-describe": "^4.0.4",
