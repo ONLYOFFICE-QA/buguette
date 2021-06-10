@@ -18,8 +18,7 @@ For easy update you need to use
 
 ```shell
 git pull
-docker-compose build --no-cache buguette-build
-docker-compose up buguette-build
+docker-compose up --build
 ```
 
 ## Update nginx container
@@ -30,7 +29,7 @@ If you need to update nginx container steps are different
 git pull
 docker-compose stop
 docker rm buguette_buguette-server_1
-docker-compose up -d buguette-server
+docker-compose up -d
 ```
 
 ## Adding new users
