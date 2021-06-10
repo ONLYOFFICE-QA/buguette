@@ -18,7 +18,7 @@ For easy update you need to use
 
 ```shell
 git pull
-docker-compose up buguette-server --build
+docker-compose up --build
 ```
 
 ## Update nginx container
