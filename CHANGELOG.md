@@ -18,6 +18,7 @@
 * Actualize nginx container version to 1.18
 * Replace deprecated `--prod=true` command on build
 * Remove one Docker layer with COPY
+* Use multistage `Dockerfile`, instead of complicated `docker-compose`
 
 ## v1.0.0 (2020-11-24)
 

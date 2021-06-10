@@ -1,4 +1,3 @@
-### STAGE 1: Build ###
 FROM node:16.3.0-alpine AS build
 
 RUN apk update && \
@@ -8,3 +7,7 @@ ENV NODE_OPTIONS=--max-old-space-size=1024
 WORKDIR /buguette
 COPY . .
 RUN npm install
+RUN npm run build
+
+FROM nginx:1.18.0-alpine AS serve
+COPY --from=build /buguette/dist/ /buguette/dist/
