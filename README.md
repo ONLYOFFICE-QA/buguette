@@ -18,7 +18,7 @@ For easy update you need to use
 
 ```shell
 git pull
-docker-compose up --build
+docker-compose up --build -d
 ```
 
 ## Update nginx container
