@@ -106,21 +106,82 @@ export class StaticData {
 
   public static readonly SEVERITIES =
     {
-      critical: { id: 1, name: 'Critical/Blocker', realName: 'critical', addition: ['blocker'], color: '#ff0000', active: false },
-      major: { id: 2, name: 'Major', realName: 'major', color: '#ff8922', active: false, addition: [] },
-      normal: { id: 3, name: 'Normal', realName: 'normal', color: '#000000', active: false, addition: [] },
-      minor: { id: 4, name: 'Minor/Trivial', realName: 'minor', addition: ['trivial'], color: '#8d8d8d', active: false },
-      enhancement: { id: 5, name: 'Enhancement', realName: 'enhancement', isFeature: true, color: '#30ac09', active: false, addition: [] }
+      critical:
+      {
+        id: 1,
+        name: 'Critical/Blocker',
+        realName: 'critical',
+        addition: ['blocker'],
+        color: '#ff0000',
+        active: false
+      },
+      major:
+      {
+        id: 2,
+        name: 'Major',
+        realName: 'major',
+        color: '#ff8922',
+        active: false,
+        addition: []
+      },
+      normal:
+      {
+        id: 3,
+        name: 'Normal',
+        realName: 'normal',
+        color: '#000000',
+        active: false,
+        addition: []
+      },
+      minor:
+      {
+        id: 4,
+        name: 'Minor/Trivial',
+        realName: 'minor',
+        addition: ['trivial'],
+        color: '#8d8d8d',
+        active: false
+      },
+      enhancement:
+      {
+        id: 5,
+        name: 'Enhancement',
+        realName: 'enhancement',
+        isFeature: true,
+        color: '#30ac09',
+        active: false,
+        addition: []
+      }
     };
 
   public static readonly STATUSES =
     {
       NEW: {
-        id: 1, name: 'New/Assigned/Reopen', realName: 'NEW', addition: ['ASSIGNED', 'REOPENED'],
-        active: false, nextStatus: ['FIXED', 'INVALID', 'WANTFIX']
+        id: 1,
+        name: 'New/Assigned/Reopen',
+        realName: 'NEW',
+        addition: ['ASSIGNED', 'REOPENED'],
+        active: false,
+        nextStatus: ['FIXED', 'INVALID', 'WANTFIX']
       },
-      RESOLVED: { id: 2, name: 'Resolved', realName: 'RESOLVED', active: false, nextStatus: ['VERIFIED', 'NEW'], addition: [] },
-      VERIFIED: { id: 3, name: 'Verified/Closed', realName: 'VERIFIED', addition: ['CLOSED'], active: false, nextStatus: ['NEW', 'RESOLVED'] }
+      RESOLVED:
+      {
+        id: 2,
+        name: 'Resolved',
+        realName: 'RESOLVED',
+        active: false,
+        nextStatus: ['VERIFIED', 'NEW'],
+        addition: []
+      },
+      VERIFIED:
+      {
+        id: 3,
+        name: 'Verified/Closed',
+        realName: 'VERIFIED',
+        addition: ['CLOSED'],
+        active: false,
+        nextStatus: ['NEW', 'RESOLVED']
+      }
     };
 
   public static readonly PRIORITIES =
