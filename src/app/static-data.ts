@@ -65,7 +65,7 @@ export class StaticData {
       'Documents iOS App':
       {
         id: 9,
-        name: 'iOS',
+        name: 'Documents iOS',
         color: '#849fff',
         active: false,
         realName: 'Documents iOS App'
@@ -73,7 +73,7 @@ export class StaticData {
       'ONLYOFFICE Projects App iOS':
       {
         id: 10,
-        name: 'iOS Projects',
+        name: 'Projects iOS',
         color: '#00dedd',
         active: false,
         realName: 'ONLYOFFICE Projects App iOS'
