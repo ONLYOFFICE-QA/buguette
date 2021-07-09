@@ -81,10 +81,18 @@ export class StaticData {
       'Documents Android App':
       {
         id: 11,
-        name: 'Android',
+        name: 'Documents Android',
         color: '#00c93e',
         active: false,
         realName: 'Documents Android App'
+      },
+      'Projects Android App':
+      {
+        id: 14,
+        name: 'Projects Android',
+        color: '#e4d8d0',
+        active: false,
+        realName: 'Projects Android App'
       },
       OnlyOffice:
       {

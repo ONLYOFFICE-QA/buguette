@@ -5,6 +5,7 @@
 ### New Features
 
 * Add `About` window with versioning info
+* Add `Android Projects App` product
 
 ### Fixes
 
