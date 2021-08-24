@@ -38,6 +38,14 @@ export class StaticData {
         active: false,
         realName: 'Chromium Desktop Editors'
       },
+      'DocumentServer Installation':
+      {
+        id: 14,
+        name: 'DS Installation',
+        color: '#e2de97',
+        active: false,
+        realName: 'DocumentServer Installation'
+      },
       'R7 Office':
       {
         id: 6,
