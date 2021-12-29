@@ -9,5 +9,5 @@ COPY . .
 RUN npm install
 RUN npm run build
 
-FROM nginx:1.21.4-alpine AS serve
+FROM nginx:1.21.5-alpine AS serve
 COPY --from=build /buguette/dist/ /buguette/dist/
