@@ -22,6 +22,7 @@
 * Replace deprecated `--prod=true` command on build
 * Remove one Docker layer with COPY
 * Use multistage `Dockerfile`, instead of complicated `docker-compose`
+* Check `dependabot` at 8:00 Moscow time daily
 
 ## v1.0.0 (2020-11-24)
 
