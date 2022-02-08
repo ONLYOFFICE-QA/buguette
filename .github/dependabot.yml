@@ -1,15 +1,15 @@
 version: 2
 updates:
-- package-ecosystem: npm
-  directory: "/"
-  schedule:
-    interval: daily
-    time: "08:00"
-    timezone: "Europe/Moscow"
-  open-pull-requests-limit: 20
-- package-ecosystem: docker
-  directory: "/"
-  schedule:
-    interval: daily
-    time: "08:00"
-    timezone: "Europe/Moscow"
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: daily
+      time: "08:00"
+      timezone: "Europe/Moscow"
+    open-pull-requests-limit: 20
+  - package-ecosystem: docker
+    directory: "/"
+    schedule:
+      interval: daily
+      time: "08:00"
+      timezone: "Europe/Moscow"
