@@ -7,6 +7,7 @@
 * Add `About` window with versioning info
 * Add `Android Projects App` product
 * Add `DocumentServer Installation` product
+* Add `yamllint` in CI
 
 ### Fixes
 
