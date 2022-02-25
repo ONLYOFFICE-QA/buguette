@@ -8,6 +8,7 @@
 * Add `Android Projects App` product
 * Add `DocumentServer Installation` product
 * Add `yamllint` in CI
+* Add `/.angular/cache` to `.gitignore`
 
 ### Fixes
 
