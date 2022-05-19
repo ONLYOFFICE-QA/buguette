@@ -1,4 +1,4 @@
-FROM node:18.1.0-alpine AS build
+FROM node:18.2.0-alpine AS build
 
 RUN apk update && \
     apk upgrade && \
