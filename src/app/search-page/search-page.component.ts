@@ -390,13 +390,27 @@ export class SearchPageComponent implements OnInit {
       params.creator = this.get_active_creater();
       params.assigned_to = this.get_active_assigned_to();
       params.versions = this.get_active_versions();
-      params.quicksearch = this.quickFilterControl.value;
+      params.quicksearch = this.escape_quick_search(this.quickFilterControl.value);
       params.creator_and_commentator = this.settings.settingsData$.getValue().comment_and_creator;
     }
     this.loading = true;
     this.bugzilla.get_bugs(params).subscribe(_ => {
       this.loading = false;
     });
+  }
+
+  /**
+   * Escape search values for bugzilla
+   *
+   * @param {string} value - A string to cleanup
+   * @return {string} Cleaned string
+   *
+   * @example
+   *
+   *     escape_quick_search('hello:world')
+   */
+  escape_quick_search(value: string): string {
+    return value.replace(':', '%3A');
   }
 
   get_details(bug: Bug): void {
