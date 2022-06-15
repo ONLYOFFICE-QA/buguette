@@ -402,15 +402,15 @@ export class SearchPageComponent implements OnInit {
   /**
    * Escape search values for bugzilla
    *
-   * @param {string} value - A string to cleanup
+   * @param {string | undefined} value - A string to cleanup
    * @return {string} Cleaned string
    *
    * @example
    *
    *     escape_quick_search('hello:world')
    */
-  escape_quick_search(value: string): string {
-    return value.replace(':', '%3A');
+  escape_quick_search(value: string | undefined): string {
+    return value?.replace(':', '%3A');
   }
 
   get_details(bug: Bug): void {
