@@ -15,7 +15,8 @@
 * Fix incorrect product name for plugins
 * Fix search terms reset on page refresh (#213)
 * Actualize `nodejs` version in CI
-* Fix error on quick serach with `:` symbol
+* Fix error on quick search with `:` symbol
+* Fix error in quick search if no text entered
 
 ### Changes
 
