@@ -73,3 +73,12 @@ avatars for new users like new attachments, but you need to use some rules for i
 *Size of image is important because bugzilla can not to send
  only some attachments of all. Take all or take nothing. And it will be good
  to make attachments not very big
+
+## Troubles and workarounds
+
+### `certbot` certificate is expired
+
+Usually this error can be fixed by service restart and new cert
+file is used after that. You can fully reboot server or
+just restart some container (not 100% about restart container solution,
+but server reboot 100% works)
