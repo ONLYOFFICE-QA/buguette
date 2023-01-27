@@ -26,7 +26,7 @@
     "fs-extra": "^10.1.0",
     "git-describe": "^4.1.1",
     "rxjs": "^7.5.7",
-    "tslib": "^2.4.1",
+    "tslib": "^2.5.0",
     "zone.js": "~0.11.8"
   },
   "devDependencies": {
