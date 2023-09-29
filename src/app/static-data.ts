@@ -30,6 +30,14 @@ export class StaticData {
         active: false,
         realName: 'Office Canvas Presentation Editor'
       },
+      'PDF Editor':
+      {
+        id: 15,
+        name: 'PDF Editor',
+        color: '#cc0000',
+        active: false,
+        realName: 'PDF Editor'
+      },
       'Chromium Desktop Editors':
       {
         id: 5,
