@@ -9,7 +9,7 @@ import { switchMap, map, distinctUntilChanged, take } from 'rxjs/operators';
 import { SettingsService } from '../services/settings.service';
 import { User } from '../models/user';
 import { Comment } from '../models/comment';
-import { FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-bug-details',
@@ -33,10 +33,10 @@ export class BugDetailsComponent implements OnInit {
   newCommentLoading = false;
   progress = { mode: 'buffer', value: 0 };
 
-  newCommentFormGroup = new FormGroup({
-    newSeverityControl: new FormControl(),
-    newStatusControl: new FormControl({ value: '', disabled: true }),
-    newCommentControl: new FormControl(''),
+  newCommentFormGroup = new UntypedFormGroup({
+    newSeverityControl: new UntypedFormControl(),
+    newStatusControl: new UntypedFormControl({ value: '', disabled: true }),
+    newCommentControl: new UntypedFormControl(''),
   })
 
   constructor(private activatedRoute: ActivatedRoute,
