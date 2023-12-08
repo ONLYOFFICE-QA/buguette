@@ -2,7 +2,7 @@
   <div class="actions-for-filter">
     <div class="filter-block">
       <div class="product-select-block">
-        <mat-card class="filter-item" (click)="change_product_active(product)"
+        <mat-card appearance="outlined" class="filter-item" (click)="change_product_active(product)"
           *ngFor="let product of productsArray$ | async"
           [ngClass]="{'mat-elevation-z7': product.active, 'mat-elevation-z0': !product.active}"
           [matTooltip]="'+ ' + product.addition?.join()" [matTooltipDisabled]="!product.addition"
@@ -36,7 +36,7 @@
     <mat-divider class="filter-block-divider" [vertical]="true"></mat-divider>
     <div class="filter-block">
       <div class="statuses-block">
-        <mat-card class="filter-item" (click)="change_status_active(status)"
+        <mat-card appearance="outlined" class="filter-item" (click)="change_status_active(status)"
           *ngFor="let status of statusesArray$ | async"
           [ngClass]="{'mat-elevation-z10 active': status.active, 'mat-elevation-z0': !status.active}"
           [ngStyle]="{'background-color': status.active?'white':'#e2e2e2'}">
@@ -159,7 +159,7 @@
       <cdk-virtual-scroll-viewport [itemSize]="50" class="result-list-view" #bugList>
         <a *cdkVirtualFor="let bug of bugs" onclick="return false" routerLink="/bug/{{bug.id}}" target="_blank"
           class="bug-list-link-wrapper">
-          <mat-card (click)="get_details(bug)" [ngClass]="{'mat-elevation-z10': (bugDetail$ | async)?.id == bug.id}"
+          <mat-card appearance="outlined" (click)="get_details(bug)" [ngClass]="{'mat-elevation-z10': (bugDetail$ | async)?.id == bug.id}"
             [ngStyle]="{'border-left': '0.4em solid ' + products[bug.product]?.color}" routerLinkActive="active"
             class="result-item">
             <mat-icon class="bug-severity" matTooltip={{bug.severity}} aria-hidden="false"

@@ -12,7 +12,7 @@ import { SettingsService, SettingsInterface } from '../services/settings.service
 import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
 import { BookmarksService } from '../services/bookmarks.service';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { MainPageDialogSettingsComponent } from '../main-page/main-page.component';
 
 export interface Counters {

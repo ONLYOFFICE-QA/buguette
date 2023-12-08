@@ -5,7 +5,7 @@ import { BookmarksService } from '../services/bookmarks.service';
 import { SettingsService } from '../services/settings.service';
 import { AuthGuardService } from '../guards/auth-guard.service';
 import { switchMap, pluck, take, map } from 'rxjs/operators';
-import { MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { StaticData } from '../static-data';
 import { UntypedFormControl, Validators } from '@angular/forms';
 import { SavedSearchObject } from '../models/user';
