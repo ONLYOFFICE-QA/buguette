@@ -14,6 +14,7 @@
   "dependencies": {
     "@angular/animations": "^13.0.0",
     "@angular/cdk": "^12.2.2",
+    "@angular/cli": "^13.1.1",
     "@angular/common": "^13.0.0",
     "@angular/compiler": "^13.0.0",
     "@angular/core": "^13.0.0",
@@ -31,7 +32,6 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^13.1.1",
-    "@angular/cli": "^13.1.1",
     "@angular/compiler-cli": "^13.0.0",
     "@types/jasmine": "~5.1.4",
     "@types/jasminewd2": "~2.0.13",
