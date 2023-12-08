@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Router, CanActivate } from '@angular/router';
+import { Router } from '@angular/router';
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { BugzillaService } from '../services/bugzilla.service';
 import { map } from 'rxjs/operators';
 
 @Injectable()
-export class AuthGuardService implements CanActivate {
+export class AuthGuardService  {
   public loader$ = new BehaviorSubject<boolean>(false);
 
   constructor(public router: Router, private bugzilla: BugzillaService) {}
