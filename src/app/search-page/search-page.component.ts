@@ -4,7 +4,7 @@ import { BugDetailService } from '../bug-details/bug-detail.service';
 import { ReplaySubject, Observable, merge, BehaviorSubject } from 'rxjs';
 import { Bug, UserDetail } from '../models/bug';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormControl, AbstractControl, ValidationErrors, FormGroupDirective, NgForm, FormGroup } from '@angular/forms';
+import { UntypedFormControl, AbstractControl, ValidationErrors, FormGroupDirective, NgForm, FormGroup } from '@angular/forms';
 import { StaticData } from '../static-data';
 import { User } from '../models/user';
 import { startWith, map, switchMap, take } from 'rxjs/operators';
@@ -31,7 +31,7 @@ export class UserRegistrationFormValidators {
 }
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+  isErrorState(control: UntypedFormControl | null, form: FormGroupDirective | NgForm | null): boolean {
     const isSubmitted = form && form.submitted;
     return control?.value && control?.invalid;
   }
@@ -66,12 +66,12 @@ export class SearchPageComponent implements OnInit {
   severitySelected = {};
   smallForm = false;
 
-  priorityControl = new FormControl();
-  createrControl = new FormControl({value: '', disabled: true});
-  assignedToControl = new FormControl({value: '', disabled: true});
-  quickFilterControl = new FormControl();
-  versionControl = new FormControl();
-  sortingControl = new FormControl();
+  priorityControl = new UntypedFormControl();
+  createrControl = new UntypedFormControl({value: '', disabled: true});
+  assignedToControl = new UntypedFormControl({value: '', disabled: true});
+  quickFilterControl = new UntypedFormControl();
+  versionControl = new UntypedFormControl();
+  sortingControl = new UntypedFormControl();
 
   filteredBugs: Observable<Bug[]>;
   filteredCreator: Observable<User[]>;

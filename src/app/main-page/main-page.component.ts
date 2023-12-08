@@ -7,7 +7,7 @@ import { AuthGuardService } from '../guards/auth-guard.service';
 import { switchMap, pluck, take, map } from 'rxjs/operators';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { StaticData } from '../static-data';
-import { FormControl, Validators } from '@angular/forms';
+import { UntypedFormControl, Validators } from '@angular/forms';
 import { SavedSearchObject } from '../models/user';
 import { AboutComponent } from '../about/about.component'
 
@@ -65,7 +65,7 @@ export interface SettingsDataInterface {
 })
 export class MainPageDialogSettingsComponent {
   products = Object.values(StaticData.PRODUCTS);
-  bookmarkNewControl = new FormControl('', Validators.required);
+  bookmarkNewControl = new UntypedFormControl('', Validators.required);
 
   constructor(
     public dialogRef: MatDialogRef<MainPageDialogSettingsComponent>,
