@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BugzillaService, UserData, UserParams } from '../services/bugzilla.service';
 import { User } from '../models/user';
@@ -17,8 +17,8 @@ export interface FormStatusInterface {
   styleUrls: ['./login-page.component.scss']
 })
 export class LoginPageComponent implements OnInit {
-  form: FormGroup;
-  formKey: FormGroup;
+  form: UntypedFormGroup;
+  formKey: UntypedFormGroup;
   public loginInvalid: boolean;
   public tokenInvalid: boolean;
   public emailInvalid: boolean;
@@ -26,7 +26,7 @@ export class LoginPageComponent implements OnInit {
   public buttonsDisableFlag = false;
   public formStatus: FormStatusInterface = { loading: 'waiting' };
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private router: Router,
     private bugzilla: BugzillaService,
     public auth: AuthGuardService
