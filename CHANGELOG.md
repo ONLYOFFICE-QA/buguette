@@ -18,6 +18,7 @@
 * Actualize `nodejs` version in CI
 * Fix error on quick search with `:` symbol
 * Fix error in quick search if no text entered
+* Fix request for getting product versions ([#1251](https://github.com/ONLYOFFICE-QA/buguette/issues/1251))
 
 ### Changes
 
