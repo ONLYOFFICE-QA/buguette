@@ -18,7 +18,9 @@ export class DetailAttachmentComponent implements OnInit, OnChanges {
   constructor(private bugzilla: BugzillaService,
               private filehelper: FileHelperService) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log('DetailAttachmentComponent initialized');
+  }
 
   ngOnChanges(changes: { id: SimpleChange, bugData: SimpleChange, imageAutoload: SimpleChange }) {
     if (this.bugData?.attachmentIsImage && changes.imageAutoload?.currentValue) {

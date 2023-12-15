@@ -8,10 +8,11 @@ import { VERSION } from '../../environments/version';
 })
 export class AboutComponent implements OnInit {
   version = VERSION;
-  
+
   constructor() { }
 
   ngOnInit(): void {
+    console.log('AboutComponent initialized');
   }
 
 }
