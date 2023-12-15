@@ -13,16 +13,16 @@ export interface BugResponceData {
   creation_time?: string;
   version?: string;
   last_change_time?: string;
-  assigned_to?: string; // eslint-disable-line variable-name
-  creator?: string; // eslint-disable-line variable-name
-  qa_contact?: string; // eslint-disable-line variable-name
-  qa_contact_detail?: UserDetail; // eslint-disable-line variable-name
-  assigned_to_detail?: UserDetail; // eslint-disable-line variable-name
-  creator_detail?: UserDetail; // eslint-disable-line variable-name
+  assigned_to?: string;
+  creator?: string;
+  qa_contact?: string;
+  qa_contact_detail?: UserDetail;
+  assigned_to_detail?: UserDetail;
+  creator_detail?: UserDetail;
 }
 
 export interface UserDetail {
-  real_name: string; // eslint-disable-line variable-name
+  real_name: string;
   realName: string;
   id: number;
   email: string;
