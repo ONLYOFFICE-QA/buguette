@@ -1,10 +1,20 @@
 name: ci
 on: [push]
 jobs:
-  ci:
+  docker-build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Build default Dockerfile
         run: |
           docker build .
+  linting:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Dependencies
+        run: |
+          npm install
+      - name: Run lint task
+        run: |
+          npm run lint

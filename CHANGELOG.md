@@ -10,6 +10,7 @@
 * Add `PDF Editor` product
 * Add `yamllint` in CI
 * Add `/.angular/cache` to `.gitignore`
+* Add linting to CI
 
 ### Fixes
 
