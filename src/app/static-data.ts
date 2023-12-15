@@ -108,7 +108,7 @@ export class StaticData {
         name: 'OnlyOffice',
         color: '#ffc800',
         active: false,
-        realName: 'OnlyOffice'
+        realName: 'ONLYOFFICE'
       },
       'OnlyOffice Install':
       {

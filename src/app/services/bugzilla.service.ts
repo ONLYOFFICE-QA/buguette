@@ -316,12 +316,17 @@ export class BugzillaService {
     }));
   }
 
+  /**
+   * Retrieves product versions by making a GET request to '/product'.
+   * The request includes parameters for each product's realName.
+   *
+   * @returns An observable of the structured versions.
+   */
   get_product_versions() {
     let params = new HttpParams();
-    const names = Object.keys(StaticData.PRODUCTS);
-    names.forEach(name => {
-      params = params.append('names', name);
-    });
+    for (const product of Object.values(StaticData.PRODUCTS)) {
+      params = params.append('names', product.realName);
+    }
     return this.httpService.getRequest('/product', params).pipe(map((res: ProductResponce) => {
       return this.get_structured_versions(res);
     }));
