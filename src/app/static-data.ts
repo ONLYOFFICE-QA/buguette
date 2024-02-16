@@ -38,6 +38,14 @@ export class StaticData {
         active: false,
         realName: 'PDF Editor'
       },
+      'PDF Form':
+      {
+        id: 16,
+        name: 'PDF Form',
+        color: '#fa0000',
+        active: false,
+        realName: 'PDF Form'
+      },
       'Chromium Desktop Editors':
       {
         id: 5,

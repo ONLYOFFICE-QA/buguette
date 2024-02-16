@@ -8,6 +8,7 @@
 * Add `Android Projects App` product
 * Add `DocumentServer Installation` product
 * Add `PDF Editor` product
+* Add `PDF Form` product
 * Add `yamllint` in CI
 * Add `/.angular/cache` to `.gitignore`
 
