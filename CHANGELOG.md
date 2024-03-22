@@ -11,6 +11,7 @@
 * Add `PDF Form` product
 * Add `yamllint` in CI
 * Add `/.angular/cache` to `.gitignore`
+* Add `github-actions` check to `dependabot`
 
 ### Fixes
 
