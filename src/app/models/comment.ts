@@ -5,9 +5,9 @@ export interface CommentResponce {
 
 export interface CommentResponceData {
   id: number;
-  bug_id: number; // eslint-disable-line variable-name
-  attachment_id: number; // eslint-disable-line variable-name
-  creation_time: string; // eslint-disable-line variable-name
+  bug_id: number;
+  attachment_id: number;
+  creation_time: string;
   creator: string;
   text: string;
   count: string;
