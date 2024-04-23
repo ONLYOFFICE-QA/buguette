@@ -13,7 +13,7 @@ export interface BugResponceData {
   creation_time?: string;
   version?: string;
   last_change_time?: string;
-  assigned_to?: string; // eslint-disable-line variable-name
+  assigned_to?: string;
   creator?: string; // eslint-disable-line variable-name
   qa_contact?: string; // eslint-disable-line variable-name
   qa_contact_detail?: UserDetail; // eslint-disable-line variable-name
