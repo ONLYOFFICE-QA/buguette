@@ -37,10 +37,10 @@
     <div class="text">
       Check account data:
     </div>
-    <div *ngIf="formStatus?.loading == 'start'">
+    <div *ngIf="formStatus?.loading === 'start'">
       <mat-spinner style="margin: auto;" [diameter]="25"></mat-spinner>
     </div>
-    <div *ngIf="formStatus?.loading == 'complite'">
+    <div *ngIf="formStatus?.loading === 'complite'">
       Ok
     </div>
   </div>

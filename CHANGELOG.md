@@ -12,6 +12,7 @@
 * Add `yamllint` in CI
 * Add `/.angular/cache` to `.gitignore`
 * Add `github-actions` check to `dependabot`
+* Add `eslint` as CI stage
 
 ### Fixes
 
@@ -21,6 +22,7 @@
 * Fix error on quick search with `:` symbol
 * Fix error in quick search if no text entered
 * Fix request for getting product versions ([#1251](https://github.com/ONLYOFFICE-QA/buguette/issues/1251))
+* Fix several eslint errors
 
 ### Changes
 
