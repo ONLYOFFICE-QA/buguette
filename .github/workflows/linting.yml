@@ -36,4 +36,4 @@ jobs:
       - name: Angular Lint
         run: |
           npm install
-          ng lint
+          npm run ng lint
