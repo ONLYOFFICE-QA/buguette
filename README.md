@@ -7,7 +7,7 @@ This is a web application for working with bugzilla
 To build and run this all, you need to use
 
 ```shell
-docker-compose up
+docker compose up
 ```
 
 By default, app using 443 port, it must be free before run;
@@ -18,19 +18,19 @@ For easy update you need to use
 
 ```shell
 git pull
-docker-compose up --build -d
+docker compose up --build -d
 ```
 
 ## Adding new users
 
 Adding new users for buguette consists of 2 steps: adding avatars, and adding emails.
-  
+
 ### Adding emails
 
 All users for buguette is placed to one comment in bugzilla.
 Id of this comment is placed in `src/app/static-data.ts` - `COMMENT_WITH_USER_DATA`.
 This comment usually located at [`BUG_WITH_ATTACHMENTS`](https://github.com/ONLYOFFICE-QA/buguette/blob/master/src/app/static-data.ts#L3)
-  
+
 This is comment for bug `BUG_WITH_ATTACHMENTS`, and you can open this bug,
 and find comment in source code of bug page
 (open development tools on your browser, open `Elements` tab, then `CTRL + F`
