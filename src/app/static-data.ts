@@ -1,7 +1,7 @@
 export class StaticData {
 
   public static readonly BUG_WITH_ATTACHMENTS = 45649;
-  public static readonly COMMENT_WITH_USER_DATA = 263681;
+  public static readonly COMMENT_WITH_USER_DATA = 275668;
   public static readonly BUGZILLA_LINK = 'https://bugzilla.onlyoffice.com';
 
   public static readonly PRODUCTS =
