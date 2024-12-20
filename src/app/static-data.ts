@@ -125,6 +125,14 @@ export class StaticData {
         color: '#ff6e6e',
         active: false,
         realName: 'OnlyOffice Install'
+      },
+      'Visio':
+      {
+        id: 14,
+        name: 'Visio',
+        color: '#2b7cd3',
+        active: false,
+        realName: 'Visio'
       }
     };
 
